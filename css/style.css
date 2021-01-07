@@ -68,6 +68,24 @@ ul li.active a{
   font-size: 25px;
 }
 
+.title h3{
+  position: absolute;
+  top: 20%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  color: #ddd;
+  font-size: 25px;
+}
+
+.title h4{
+  position: absolute;
+  top: 25%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  color: #aaa;
+  font-size: 15px;
+}
+
 .button{
   position: absolute;
   top: 60%;
