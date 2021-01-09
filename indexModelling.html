@@ -22,6 +22,31 @@
       <div class="title">
         <h3>A Tool for Classification and Prediction of Autism with STA</h3>
         <h4>Add required eye tracking files for each ASD Group and Control Group to create your modelling set. Files should be in .txt form. You can name your modeling sets.</h4>
+        <div class="container">
+          <div class="button-wrap">
+            <p>Autistic Group</p>
+            <br>
+               <form id = "demo" method = "post" action="javascript:read(inputfile)">
+                   <label class ="new-button"> Upload Files <input type="file" accept=".txt" name="inputfile" id="inputfile" multiple></label>
+                   <label class ="mybutton"></label><input type="submit" value = "ADD" id="inputbutton"/></label>
+               </form>
+               <br>
+               <p>Control Group</p>
+               <br>
+               <form id = "demo1" method = "post" action="javascript:read(inputfile1)">
+                   <label class ="new-button"> Upload Files <input type="file" accept=".txt" name="inputfile1" id="inputfile1" multiple></label>
+                   <label class ="mybutton"></label><input type="submit" value = "ADD" id="inputbutton"/></label>
+               </form>
+               <br>
+               <p>New Comer</p>
+               <br>
+               <form id = "demo1" method = "post" action="#">
+                   <label class ="new-button"> Upload File  <input type="file" accept=".txt" name="inputfile2" id="inputfile2"></label>
+                   <label class ="mybutton"></label><input type="submit" value = "ADD" id="inputbutton"/></label>
+               </form>
+               <div>
+              </div>
+              <script src="reader.js" type="text/javascript"></script>
       </div>
     </header>
   </body>
