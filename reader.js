@@ -44,20 +44,21 @@ function read(file_autistic, file_control){
 
       var fileHeaders = new Array();
       fileHeaders = lines[0].split(/\t/);
-
+      
       var tmp = -1;
       for (var i = 1; lines.length > i; i++){
 
         var test = 1;
         var temp = lines[i].split(/\t/);
         if ((temp != "") & (temp[5].length > 11)) {
-
+          
           if(lines.length - 1 == i){
             temp[5] = temp[5].substr(1, temp[5].length - 1);
           }
           else{
             temp[5] = temp[5].substr(1, temp[5].length - 2);
           }
+
           var position = temp[5].search("http");
           temp[5] = temp[5].substr(position, temp[5].length);
           position = stimuli_name === temp[5];
@@ -152,6 +153,7 @@ function read(file_autistic, file_control){
                   }
                 }
               }
+
               if (test == 1){
                 tmp = fileData_Autistic.length;
                 fileData_Autistic[tmp] = new Array();
@@ -194,6 +196,7 @@ function read(file_autistic, file_control){
         for (var p = 0; fileData_Control[n][1].length > p; p++){
             for (var v = 0; fileData_Control[n][1][p][1].length > v; v++){
               console.log("Model Name: " + fileData_Control[n][0] + "\nFor " + "Model Array:Participant Array:ObjectArray: " + n + p + v +  "\nID: " + fileData_Control[n][1][p][0] +  " Stimuli Name: " + fileData_Control[n][1][p][1][v].stimuliName + " x: " + fileData_Control[n][1][p][1][v].x + " y: " + fileData_Control[n][1][p][1][v].y + " duration: " + fileData_Control[n][1][p][1][v].duration + " ID: " + fileData_Control[n][1][p][1][v].partID);
+
             }
         }
       }
