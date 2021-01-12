@@ -1,67 +1,61 @@
 <DOCTYPE <!DOCTYPE html>
-<html>
-  <head>
-    <title>Modelling</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-  </head>
-  <body>
-    <header>
-      <div class="modelling">
-        <div class="logo">
-          <img src="logo.jpg">
-        </div>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li class="active"><a href="indexModelling.html">Modelling</a></li>
-          <li><a href="indexPrediction.html">Prediction</a></li>
-          <li><a href="indexAbout.html">About</a></li>
-          <li><a href="indexContact.html">Contact</a></li>
-        </ul>
-      </div>
-      <div class="title">
-        <h3>A Tool for Classification and Prediction of Autism with STA</h3>
-        <h4>Add required eye tracking files for each ASD Group and Control Group to create your modelling set. Files should be in .txt form. You can name your modeling sets.</h4>
-        <div class="container">
-          <div class="button-wrap">
-            <p>Autistic Group</p>
-            <br>
-               <form id = "demo" method = "post" action="javascript:read(inputfile)">
-                   <label class ="new-button"> Upload Files <input type="file" accept=".txt" name="inputfile" id="inputfile" multiple></label>
-                   <label class ="mybutton"></label><input type="submit" value = "ADD" id="inputbutton"/></label>
-               </form>
-               <br>
-               <p>Control Group</p>
-               <br>
-               <form id = "demo1" method = "post" action="javascript:read(inputfile1)">
-                   <label class ="new-button"> Upload Files <input type="file" accept=".txt" name="inputfile1" id="inputfile1" multiple></label>
-                   <label class ="mybutton"></label><input type="submit" value = "ADD" id="inputbutton"/></label>
-               </form>
-               <br>
-               <form action="/action_page.php"> <!-- action should be changed -->
-                 <label for="stimuli names">Choose stimuli name:</label>
-                 <select name="stimuli" id="stimuli">
-                   <option value="screenRec">ScreenRec</option>
-                   <option value="bbc">http://emine.ncc.metu.edu.tr/survey/web/pages/http/www.bbc.co.uk/</option>
-                   <option value="godaddy">http://emine.ncc.metu.edu.tr/survey/web/pages2/http/www.godaddy.com/</option>
-                   <option value="avg">http://emine.ncc.metu.edu.tr/survey/web/pages/http/www.avg.com/us-en/index.html</option>
-                   <option value="yahoo">http://emine.ncc.metu.edu.tr/survey/web/pages2/http/uk.yahoo.com/</option>
-                   <option value="apple">http://emine.ncc.metu.edu.tr/survey/web/pages/http/www.apple.com/</option>
-                   <option value="babylon">http://emine.ncc.metu.edu.tr/survey/web/pages2/http/www.babylon.com/</option>
-                 </select>
-                 <br><br>
-                 <form action="/action_page.php"> <!-- action should be changed -->
-                   <label for="width">Width:  </label>
-                   <input type="text" id="width" name="width"><br><br>
-                   <label for="height">Height:</label>
-                   <input type="text" id="height" name="height"><br><br>
-                 <input type="submit" value="Submit"> <!-- Click the "Submit" button and the form-data will be sent to a page on the server called "action_page.php". -->
-               </form>
-               <div>
-              </div>
-              <script src="reader.js" type="text/javascript"></script>
-            </div>
+  <html>
+    <head>
+      <title>Modelling</title>
+      <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <body>
+      <header>
+        <div class="modelling">
+          <div class="logo">
+            <img src="logo.jpg">
           </div>
-      </div>
-    </header>
-  </body>
-  </html>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li class="active"><a href="indexModelling.html">Modelling</a></li>
+            <li><a href="indexPrediction.html">Prediction</a></li>
+            <li><a href="indexAbout.html">About</a></li>
+            <li><a href="indexContact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="title">
+          <h3>A Tool for Classification and Prediction of Autism with STA</h3>
+          <h4>Add required eye tracking files for each ASD Group and Control Group to create your modelling set. Files should be in .txt form. You can name your modeling sets.</h4>
+          <div class="container">
+            <div class="button-wrap">
+              <br>
+                 <form id = "demo" method = "post" action="javascript:read(inputfile, inputfile1)">
+                     <label class ="new-button"> Upload Files-Autistic Group <input type="file" accept=".txt" name="inputfile" id="inputfile" multiple></label>
+                     <br>
+                     <br>
+                     <label class ="new-button"> Upload Files-Control Group <input type="file" accept=".txt" name="inputfile1" id="inputfile1" multiple></label>
+                     <br><br>
+                     <label>Model:  </label>
+                     <input type="text" id="model" name="model"><br><br>
+                     <label for="stimuli names">Choose stimuli name:</label>
+                  <select name="stimuli" id="stimuli">
+                     <option value="http/www.bbc.co.uk/">http/www.bbc.co.uk/</option>
+                     <option value="http/www.godaddy.com/">http/www.godaddy.com/</option>
+                     <option value="http/www.avg.com/us-en/index.html">http/www.avg.com/us-en/index.html</option>
+                     <option value="http/uk.yahoo.com/">http/uk.yahoo.com/</option>
+                     <option value="http/www.apple.com/">http/www.apple.com/</option>
+                     <option value="http/www.babylon.com/">http/www.babylon.com/</option>
+                   </select>
+                   <br><br>
+                   <form method = "post"> <!-- action should be changed -->
+                     <label for="width">Width:  </label>
+                     <input type="text" id="width" name="width"><br><br>
+                     <label for="height">Height:</label>
+                     <input type="text" id="height" name="height"><br><br>
+                     <input type="submit" value="Submit">
+                    <!-- Click the "Submit" button and the form-data will be sent to a page on the server called "action_page.php". -->
+                 </form>
+                 <div>
+                </div>
+                <script src="reader.js" type="text/javascript"></script>
+              </div>
+            </div>
+        </div>
+      </header>
+    </body>
+    </html>
