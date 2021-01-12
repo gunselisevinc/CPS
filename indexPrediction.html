@@ -4,6 +4,7 @@
     <title>Prediction</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
   </head>
+  </html>
   <body>
     <header>
       <div class="prediction">
@@ -14,38 +15,13 @@
           <li><a href="index.html">Home</a></li>
           <li><a href="indexModelling.html">Modelling</a></li>
           <li class="active"><a href="indexPrediction.html">Prediction</a></li>
-          <li><a href="indexAbout.html">About</a></li>
-          <li><a href="indexContact.html">Contact</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
         </ul>
       </div>
       <div class="title">
         <h3>A Tool for Classification and Prediction of Autism with STA</h3>
         <h4>Add required eye tracking files for new participant. Files should be in .txt form. Select the modelling set to be compared.</h4>
-        <div class="container">
-          <div class="button-wrap">
-            <p>Unknown User</p>
-            <br>
-               <form id = "demo" method = "post" action="javascript:read(inputfile)">
-                   <label class ="new-button"> Upload Files <input type="file" accept=".txt" name="inputfile" id="inputfile" multiple></label>
-                   <label class ="mybutton"></label><input type="submit" value = "ADD" id="inputbutton"/></label>
-               </form>
-               <br>
-                <form action="/action_page.php"> <!-- action should be changed -->
-                 <p>Select a Modelling Set</p>
-                 <input type="radio" id="m1" name="modellingSet" value="m1">
-                 <label for="m1">Modelling Set 1</label><br>
-                 <input type="radio" id="m2" name="modellingSet" value="m2">
-                 <label for="m2">Modelling Set 2</label><br>
-                 <input type="radio" id="m3" name="modellingSet" value="m3">
-                 <label for="m3">Modelling Set 3</label><br><br>
-                 <input type="submit" value="Submit"> <!-- Click the "Submit" button and the form-data will be sent to a page on the server called "action_page.php". -->
-               </form>
-               <div>
-              </div>
-              <script src="reader.js" type="text/javascript"></script>
-            </div>
-          </div>
       </div>
     </header>
   </body>
-  </html>
