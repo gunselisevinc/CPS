@@ -12,7 +12,7 @@ var counter_control = 0;
 var counter_autistic = 0;
 var ID_finder = 1;
 
-function read(file_autistic, file_control){ 
+function read(file_autistic, file_control){
   console.log("RUN");
   var C_Data = 0;
   var stimuli_name = document.getElementById("inputstimuli").value;
@@ -27,7 +27,7 @@ function read(file_autistic, file_control){
     C_Data = 1;
   }
 
-  for (var z = 0; file.files.length > z; z++){ 
+  for (var z = 0; file.files.length > z; z++){
     var Part_finder = -1;
     var Part_index = -1;
     var reader = new FileReader();
@@ -37,27 +37,27 @@ function read(file_autistic, file_control){
         counter_control = counter_control + 1;
       }
       else{
-        counter_autistic = counter_autistic + 1; 
+        counter_autistic = counter_autistic + 1;
       }
       var fileContent = event.target.result;
       var lines = fileContent.split(/\n/);
 
       var fileHeaders = new Array();
       fileHeaders = lines[0].split(/\t/);
-      
+
       var tmp = -1;
       for (var i = 1; lines.length > i; i++){
 
         var test = 1;
         var temp = lines[i].split(/\t/);
         if ((temp != "") & (temp[5].length > 11)) {
-          
+
           if(lines.length - 1 == i){
             temp[5] = temp[5].substr(1, temp[5].length - 1);
           }
           else{
             temp[5] = temp[5].substr(1, temp[5].length - 2);
-          }         
+          }
           var position = temp[5].search("http");
           temp[5] = temp[5].substr(position, temp[5].length);
           position = stimuli_name === temp[5];
@@ -167,7 +167,7 @@ function read(file_autistic, file_control){
                 fileData_Autistic[tmp][1][0][1][0].stimuliName = temp[5];
                 fileData_Autistic[tmp][1][0][1][0].partID = counter_autistic;
               }
-            }           
+            }
           }
         }
       }
@@ -180,30 +180,30 @@ function read(file_autistic, file_control){
         }
       }
       ID_finder = 1;
-       
+
       console.log("AUTISTIC:")
       for (var n = 0; fileData_Autistic.length > n; n++){
         for (var p = 0; fileData_Autistic[n][1].length > p; p++){
             for (var v = 0; fileData_Autistic[n][1][p][1].length > v; v++){
               console.log("Model Name: " + fileData_Autistic[n][0] + "\nFor " + "Model Array:Participant Array:ObjectArray: " + n + p + v +  "\nID: " + fileData_Autistic[n][1][p][0] +  " Stimuli Name: " + fileData_Autistic[n][1][p][1][v].stimuliName + " x: " + fileData_Autistic[n][1][p][1][v].x + " y: " + fileData_Autistic[n][1][p][1][v].y + " duration: " + fileData_Autistic[n][1][p][1][v].duration + " ID: " + fileData_Autistic[n][1][p][1][v].partID);
             }
-          }       
+          }
       }
       console.log("CONTROL:")
       for (var n = 0; fileData_Control.length > n; n++){
         for (var p = 0; fileData_Control[n][1].length > p; p++){
             for (var v = 0; fileData_Control[n][1][p][1].length > v; v++){
               console.log("Model Name: " + fileData_Control[n][0] + "\nFor " + "Model Array:Participant Array:ObjectArray: " + n + p + v +  "\nID: " + fileData_Control[n][1][p][0] +  " Stimuli Name: " + fileData_Control[n][1][p][1][v].stimuliName + " x: " + fileData_Control[n][1][p][1][v].x + " y: " + fileData_Control[n][1][p][1][v].y + " duration: " + fileData_Control[n][1][p][1][v].duration + " ID: " + fileData_Control[n][1][p][1][v].partID);
-            } 
+            }
         }
       }
-      
+
     };
     reader.readAsText(file.files[z]);
   }
-  
-  document.getElementById("inputfile1").value = ""; 
-  document.getElementById("inputfile").value = ""; 
+
+  document.getElementById("inputfile1").value = "";
+  document.getElementById("inputfile").value = "";
   document.getElementById("inputstimuli").value = "";
   document.getElementById("inputmodel").value = "";
 }
