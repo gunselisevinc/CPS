@@ -5,7 +5,11 @@
 }
 
 header{
+<<<<<<< HEAD
   background-image: url(../1.jpg);
+=======
+  background-image: url(../2.jpg);
+>>>>>>> 08dc2d4b35584eeeba4850178f30878f70e6f45f
   height: 100vh;
   background-size: cover;
   background-position: center;
@@ -68,6 +72,27 @@ ul li.active a{
   font-size: 25px;
 }
 
+<<<<<<< HEAD
+=======
+.title h3{
+  position: absolute;
+  top: 20%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  color: #ddd;
+  font-size: 25px;
+}
+
+.title h4{
+  position: absolute;
+  top: 25%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  color: #aaa;
+  font-size: 15px;
+}
+
+>>>>>>> 08dc2d4b35584eeeba4850178f30878f70e6f45f
 .button{
   position: absolute;
   top: 60%;
@@ -87,3 +112,69 @@ ul li.active a{
   background-color: #fff;
   color: #000;
 }
+<<<<<<< HEAD
+=======
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 90vh;
+}
+
+input[type="file"] {
+  position: absolute;
+  z-index: -1;
+  top: 6px;
+  left: 0px;
+  font-size: 15px;
+  color: rgb(153,153,153);
+  display: none;
+  
+}
+
+input[type="submit"] {
+  display: inline-block;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #000000;
+    font-size: 16px;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 10px 20px;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.6s ease;
+}
+
+input[type="submit"]:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.button-wrap {
+  position: relative;
+}
+
+.new-button {
+    display: inline-block;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #343632;
+    font-size: 16px;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 10px 30px;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.6s ease;
+}
+
+p{
+  font-size: 25px;
+  color: #fff;
+}
+>>>>>>> 08dc2d4b35584eeeba4850178f30878f70e6f45f
