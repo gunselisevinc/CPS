@@ -1,0 +1,210 @@
+.button {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f4511e;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 28px;
+  padding: 20px;
+  width: 300px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+border-radius: 50%;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 0.5;
+  right: 0;
+}
+
+.button1:hover {
+    background-color: black;
+    opacity: 1;
+    color: white;
+    /*border: 2px solid #4CAF50; /* Green */}
+
+.buttonk {
+    /*background-color: #FFFFFF; /* Green */
+    border: 2px groove #130436;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: ButtonText;
+    opacity:0.6;
+}
+.buttonkk {
+    /*border: 2px solid #FFFFFF;*/
+    color: black;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+
+}
+
+/*visualization methods buttons*/
+
+.buttona {
+    border: dashed;
+    color: white;
+    padding: 8px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 90px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.buttona1 {
+    background-color: white;
+    color: black;
+    border: 2px solid darkslategray;
+}
+
+    .buttona1:hover {
+        background-color: darkslategray;
+        color: white;
+    }
+
+.glowing-border {
+    border: 2px solid #dadada;
+    border-radius: 7px;
+}
+
+    .glowing-border:focus {
+        outline: none;
+        border-color: #9ecaed;
+        box-shadow: 0 0 10px #9ecaed;
+    }
+
+/* Popup box BEGIN */
+.hover_bkgr_fricc {
+    background: rgba(0,0,0,.4);
+    cursor: pointer;
+    display: none;
+    height: 100%;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 10000;
+}
+
+    .hover_bkgr_fricc .helper {
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+
+    .hover_bkgr_fricc > div {
+        background-color: #fff;
+        box-shadow: 10px 10px 60px #555;
+        display: inline-block;
+        height: auto;
+        max-width: 551px;
+        min-height: 100px;
+        vertical-align: middle;
+        width: 60%;
+        position: relative;
+        border-radius: 8px;
+        padding: 15px 5%;
+    }
+
+.popupCloseButton {
+    background-color: #fff;
+    border: 3px solid #999;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial;
+    font-weight: bold;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 25px;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+
+    .popupCloseButton:hover {
+        background-color: #ccc;
+    }
+
+.trigger_popup_fricc {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 20px;
+    display: inline-block;
+    font-weight: bold;
+}
+/* Popup box BEGIN */
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    /*border-bottom: 1px dotted black;*/
+}
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 160px;
+        height: 50px;
+        background-color: lightpink;
+        color: darkred;
+        text-align: center;
+        border-radius: 20px;
+        border-color: black;
+        padding: -5px 0px;
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+        top: -8px;
+        left: 105%;
+        font-size:small;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+    }
+
+
+    /*for pop up*/

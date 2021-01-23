@@ -2,6 +2,8 @@
   <html>
     <head>
       <title>Modelling</title>
+      <script src="dependencies/jquery/jquery.min.js"></script>
+      <script src="dependencies/vis/vis-network.min.js"></script>
       <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
@@ -32,16 +34,8 @@
                      <br><br>
                      <label>Model:  </label>
                      <input type="text" id="model" name="model"><br><br>
-                     <label for="stimuli names">Choose stimuli name:</label>
-                  <select name="stimuli" id="stimuli">
-                     <option value="http/www.bbc.co.uk/">http/www.bbc.co.uk/</option>
-                     <option value="http/www.godaddy.com/">http/www.godaddy.com/</option>
-                     <option value="http/www.avg.com/us-en/index.html">http/www.avg.com/us-en/index.html</option>
-                     <option value="http/uk.yahoo.com/">http/uk.yahoo.com/</option>
-                     <option value="http/www.apple.com/">http/www.apple.com/</option>
-                     <option value="http/www.babylon.com/">http/www.babylon.com/</option>
-                   </select>
-                   <br><br>
+                     <label>Stimuli Name:  </label>
+                     <input type="text" id="stimuli" name="stimuli"><br><br>
                    <form method = "post"> <!-- action should be changed -->
                      <label for="width">Width:  </label>
                      <input type="text" id="width" name="width"><br><br>
