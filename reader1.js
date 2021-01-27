@@ -13,6 +13,9 @@ var fileData_Control = new Array();
 var counter_control = 0;
 var counter_autistic = 0;
 var ID_finder = 1;
+var path_control = '';
+var path_autistic = '';
+var fileWrite = '';
 
 function read(file_autistic, file_control){
   console.log("RUN");
@@ -103,6 +106,13 @@ function read(file_autistic, file_control){
     };
     reader.readAsText(file.files[z]);
   }
+  if(fileData_Autistic.length){
+    fileWrite = fileWrite.concat(model_name);
+    fileWrite = fileWrite.concat(",");
+    var grid = addGrid(1);
+    var path_autistic = sendSta(grid, stimuli_name, fileData_Autistic);
+    console.log("Autistic path: " + path_autistic);
+  }
   //////////////////////////////////////////////////////////////////////////
   file = file_control;
   for (var z = 0; file.files.length > z; z++){
@@ -186,39 +196,24 @@ function read(file_autistic, file_control){
       ID_finder = 1;
     };
     reader.readAsText(file.files[z]);
-    if(fileData_Control.length){
-      var grid = addGrid();
-      sendSta(grid, stimuli_name);
-
-    }
   }
+  if(fileData_Control.length){
+    var grid = addGrid(0);
+    var path_control = sendSta(grid, stimuli_name, fileData_Control);
+    console.log("Control path: " + path_control);
+    fileWrite = fileWrite.concat(stimuli_name);
+    fileWrite = fileWrite.concat(",");
+    fileWrite = fileWrite.concat(path_autistic);
+    fileWrite = fileWrite.concat(",");
+    fileWrite = fileWrite.concat(path_control);
+    fileWrite = fileWrite.concat(",\n");
+    console.log(fileWrite);
 
-/*
-  document.getElementById("inputfile1").value = "";
-  document.getElementById("inputfile").value = "";
-  document.getElementById("stimuli").value = "";
-  document.getElementById("model").value = "";*/
-  
- // print();
-}
-
-function print(){
-  console.log("AUTISTIC:")
-      for (var n = 0; fileData_Autistic.length > n; n++){
-        for (var p = 0; fileData_Autistic[n].length > p; p++){
-            for (var v = 0; fileData_Autistic[n][p].length > v; v++){
-              console.log("For " + "Model Array:Participant Array:ObjectArray: " + n + p + v + " Stimuli Name: " + fileData_Autistic[n][p][v].stimuliName + " x: " + fileData_Autistic[n][p][v].x + " y: " + fileData_Autistic[n][p][v].y + " duration: " + fileData_Autistic[n][p][v].duration + " ID: " + fileData_Autistic[n][p][v].partID + " index: " + fileData_Autistic[n][p][v].index + " fixed: " + fileData_Autistic[n][p][v].timeStamp);
-            }
-          }
-      }
-      console.log("CONTROL:")
-      for (var n = 0; fileData_Control.length > n; n++){
-        for (var p = 0; fileData_Control[n].length > p; p++){
-            for (var v = 0; fileData_Control[n][p].length > v; v++){
-              console.log("For " + "Model Array:Participant Array:ObjectArray: " + n + p + v + " Stimuli Name: " + fileData_Control[n][p][v].stimuliName + " x: " + fileData_Control[n][p][v].x + " y: " + fileData_Control[n][p][v].y + " duration: " + fileData_Control[n][p][v].duration + " ID: " + fileData_Control[n][p][v].partID + " index: " + fileData_Control[n][p][v].index + " fixed: " + fileData_Control[n][p][v].timeStamp);
-            }
-        }
-      }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){}
+    xhttp.open("GET","fileWrite.py?q="+fileWrite, true);
+    xhttp.send();
+  }
 }
 
 var newComerData = new Array();
@@ -268,7 +263,7 @@ function newComerRead(file){
             }
           }
         }
-      }      
+      }
     };
     reader.readAsText(file.files[0]);
     document.getElementById("inputfile").value = "";
@@ -283,6 +278,9 @@ function newComerRead(file){
         data = lines[i].split(',');
         if(data[0] === myModel){
           singlePathCreator(data[1], data[2], data[3]);
+          console.log(data[5]);
+          console.log(data[4]);
+          prediction(unknownPath, data[5], data[4]);
         }
       }
     } )
@@ -298,9 +296,16 @@ var grid = {
     stimuli: ' '
 };
 
-function addGrid() {
+function addGrid(checker) {
 		var width = document.getElementById("width").value;
     var height = document.getElementById("height").value;
+
+    if(checker){
+      fileWrite = fileWrite.concat(width);
+      fileWrite = fileWrite.concat(",");
+      fileWrite = fileWrite.concat(height);
+      fileWrite = fileWrite.concat(",");
+    }
 
 		var startX = 0;
     var startY = 0;
@@ -334,7 +339,7 @@ function addGrid() {
     return Grids;
 }
 
-var unknownPath = ' ';
+var unknownPath = '';
 function singlePathCreator(width, height, stimuliUsed){
 
   var startX = 0;
@@ -386,12 +391,11 @@ function singlePathCreator(width, height, stimuliUsed){
 }
 
 
-function sendSta(grid, stimuli){
+function sendSta(grid, stimuli, arr){
   var indx = -1;
   var points = new Array();
   var rwData = {};
   var t;
-  arr = fileData_Control;
   for(var i = 0; i < arr.length; i++){
     arr[i][0][0].stimuliName = arr[i][0][0].stimuliName.replace("\r","");
     if(arr[i][0][0].stimuliName === stimuli){
@@ -428,14 +432,6 @@ function sendSta(grid, stimuli){
     rwData[t] = points;
     points = [];
   }
-  
-  for(var k in rwData){
-    console.log(rwData[k]);
-  }
-
-  for(var k in grid){
-    console.log(grid[k]);
-  }
 
   var setting = {
     sta: {
@@ -450,11 +446,6 @@ function sendSta(grid, stimuli){
     staAddress: "http://127.0.0.1:5000"
 };
 
-
-  for(var k in setting){
-    console.log(setting[k]);
-  }
-
   var postData = {
     areaData: grid,
     rawData: rwData,
@@ -463,9 +454,6 @@ function sendSta(grid, stimuli){
 
 var jsondata = JSON.stringify(postData);
 var dataResponse;
-
-//$(document).ready(function (){
-  //});
     $.ajax({
       type: "POST",
       url: setting["staAddress"],
@@ -473,8 +461,82 @@ var dataResponse;
       crossDomain: true,
       success: function (response) {
         dataResponse = response;
-        window.alert(dataResponse);
       },
       async: false
     });
+    dataResponse = JSON.parse(dataResponse);
+    dataResponse = JSON.stringify(dataResponse);
+    if(dataResponse != " "){
+      var path = dataResponse[2];
+      var temp = 6;
+      for(var i = 6; i < dataResponse.length; i++){
+        if(i === temp){
+          path = path.concat(dataResponse[i]);
+          temp = temp + 4;
+        }
+      }
+    }
+    return path;
+}
+
+function levenshtein(a, b) {
+    if(a.length === 0){
+      return b.length;
+    }
+    if(b.length === 0){
+      return a.length;
+    }
+
+    var matrix = [];
+
+    // increment along the first column of each row
+    var i;
+    for(i = 0; i <= b.length; i++){
+        matrix[i] = [i];
+    }
+
+    // increment each column in the first row
+    var j;
+    for(j = 0; j <= a.length; j++){
+        matrix[0][j] = j;
+    }
+
+    // Fill in the rest of the matrix
+    for(i = 1; i <= b.length; i++){
+        for(j = 1; j <= a.length; j++){
+            if(b.charAt(i-1) == a.charAt(j-1)){
+                matrix[i][j] = matrix[i-1][j-1];
+            } else {
+                matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
+                               Math.min(matrix[i][j-1] + 1, // insertion
+                                        matrix[i-1][j] + 1)); // deletion
+            }
+        }
+    }
+
+    return matrix[b.length][a.length];
+}
+
+function prediction(unknown,autistic,normal){
+    var comparisonUnknownAutistic = levenshtein(unknown,autistic);
+    var comparisonUnknownNormal = levenshtein(unknown,normal);
+    var similarityRate;
+    var result = '';
+    if(comparisonUnknownNormal < comparisonUnknownAutistic){
+        similarityRate = 1 - (comparisonUnknownNormal/Math.max(unknown.length,normal.length));
+        console.log("NORMAL " + similarityRate);
+        result.concat("NOT AUTISTIC " + similarityRate);
+    }
+
+    else if (comparisonUnknownAutistic < comparisonUnknownNormal) {
+        similarityRate = 1 - (comparisonUnknownAutistic/Math.max(unknown.length,autistic.length));
+        console.log("AUTISTIC " + similarityRate);
+        result.concat("AUTISTIC " + similarityRate);
+    }
+
+    else {
+        similarityRate = 1 - (comparisonUnknownAutistic/Math.max(unknown.length,autistic.length));
+        console.log("SYSTEM CANNOT DECIDE " + similarityRate);
+        result.concat("SYSTEM CANNOT DECIDE " + similarityRate);
+    }
 }
