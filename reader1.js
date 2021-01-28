@@ -525,18 +525,27 @@ function prediction(unknown,autistic,normal){
     if(comparisonUnknownNormal < comparisonUnknownAutistic){
         similarityRate = 1 - (comparisonUnknownNormal/Math.max(unknown.length,normal.length));
         console.log("NORMAL " + similarityRate);
-        result.concat("NOT AUTISTIC " + similarityRate);
+        similarityRate = 100*similarityRate;
+        result = result.concat("Not Autistic," + similarityRate);
     }
 
     else if (comparisonUnknownAutistic < comparisonUnknownNormal) {
         similarityRate = 1 - (comparisonUnknownAutistic/Math.max(unknown.length,autistic.length));
         console.log("AUTISTIC " + similarityRate);
-        result.concat("AUTISTIC " + similarityRate);
+        similarityRate = 100*similarityRate;
+        result = result.concat("Autistic," + similarityRate);
     }
 
     else {
         similarityRate = 1 - (comparisonUnknownAutistic/Math.max(unknown.length,autistic.length));
         console.log("SYSTEM CANNOT DECIDE " + similarityRate);
-        result.concat("SYSTEM CANNOT DECIDE " + similarityRate);
+        similarityRate = 100*similarityRate;
+        result = result.concat("System Cannot Decide," + similarityRate);
     }
+    tmp = result.split(",");
+    tmp[1] = tmp[1].substring(0,4);
+    $(document).ready(function(){
+      $("#myModal").modal();
+      $('#result').html("Closer Group: " + tmp[0] + " Certainty(%): " + tmp[1]);
+    });
 }
