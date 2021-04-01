@@ -2,9 +2,12 @@
   margin: 0;
   padding: 0;
   font-family: Century Gothic;
+  box-sizing: border-box;
+  background-color: #151414
 }
 
 header{
+  background-color: #151414
   background-image: url(../2.jpg);
   height: 100vh;
   background-size: cover;
@@ -185,14 +188,14 @@ label{
   color: #aaa;
 }
 
-.modal-header, h4, .close {
+/* .modal-header, h4, .close {
   color:rgb(255, 255, 255);
   text-align: center;
   font-size: 30px;
 }
 .modal-footer {
   background-color: #000000;
-}
+} */
 
 .mycontainer{
   display: flex;
@@ -200,4 +203,25 @@ label{
   justify-content: center;
   width: 100%;
   height: 90vh;
+}
+
+section{
+  display: inline-block;
+  width: 100%;
+  height: 100vh;
+}
+
+.content .section{
+  background-color: #151414
+}
+
+section .btn a{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  
+  /* position: absolute;
+  left: 50%;
+  transform: translate(-50%,-50%); */
 }
