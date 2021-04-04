@@ -10,10 +10,10 @@ FixationIndex	Timestamp	FixationDuration	MappedFixationPointX	MappedFixationPoin
 8	2411	179	643	200	www.yyy.com
 9	2590	159	686	205	www.zzz.com
 10	2750	559	502	768	www.zzz.com
-11	3308	179	406	607 www.zzz.com
-12	3487	219	374	285 www.zzz.com
-13	3707	439	486	183 www.zzz.com
-14	4145	199	265	132 www.zzz.com
+11	3308	179	406	607     www.zzz.com
+12	3487	219	374	285     www.zzz.com
+13	3707	439	486	183     www.zzz.com
+14	4145	199	265	132     www.zzz.com
 15	4345	159	717	288	www.xyz.com
 16	4504	279	868	520	www.xyz.com
 17	4783	299	669	595	www.xyz.com
