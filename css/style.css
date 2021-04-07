@@ -245,7 +245,7 @@ section .btn a{
   background-color: #fefefe;
   margin: auto;
   padding: 2px;
-  border: 1px transparent #fefefe;
+  border: 1px solid #aaa;
   width: 34%;
 }
 
