@@ -253,5 +253,6 @@ section .btn a{
 .modal-header {
   padding: 2px 16px;
   background-color: #fff;
+  text-align: center;
   color: white;
 }
