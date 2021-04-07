@@ -48,11 +48,6 @@ ul li.active a{
   height: auto;
 }
 
-.main{
-  max-width: 1400px;
-  margin: auto;
-}
-
 .title h1{
   position: absolute;
   top: 45%;
@@ -220,7 +215,7 @@ section .btn a{
   justify-content: center;
   align-items: center;
   height: 100vh;
-  
+
   /* position: absolute;
   left: 50%;
   transform: translate(-50%,-50%); */
