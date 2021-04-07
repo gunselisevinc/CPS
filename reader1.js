@@ -219,6 +219,8 @@ function read(){
   var stimuli_array = new Array();
   var stimuli_name = document.getElementById("stimuli").value;
   var model_name = document.getElementById("model").value;
+  document.getElementById("model").value = "";
+  document.getElementById("stimuli").value = "";
 
   if(control_stimulis.length > autistic_stimulis.length){
     for(var i=0;i<control_stimulis.length;i++){
@@ -265,6 +267,7 @@ function read(){
     xhttp.onreadystatechange = function(){}
     xhttp.open("GET","fileWrite.py?q="+fileWrite, true);
     xhttp.send();
+    fileWrite = "";
   }
 }
 
@@ -355,6 +358,10 @@ function addGrid(checker) {
       fileWrite = fileWrite.concat(",");
       fileWrite = fileWrite.concat(height);
       fileWrite = fileWrite.concat(",");
+    }
+    else{
+      document.getElementById("width").value = "";
+      document.getElementById("height").value = "";
     }
 
 		var startX = 0;
@@ -502,6 +509,8 @@ function sendSta(grid, stimuli, arr){
 };
 
 var jsondata = JSON.stringify(postData);
+
+
 var dataResponse;
     $.ajax({
       type: "POST",
@@ -596,5 +605,6 @@ function prediction(unknown,autistic,normal){
     $(document).ready(function(){
       $("#myModal").modal();
       $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
+    result = "";
     });
 }

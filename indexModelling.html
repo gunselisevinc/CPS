@@ -28,23 +28,23 @@
           <div class="container">
             <div class="button-wrap">
               <br>
-                 <form id = "demo" method = "post" action="javascript:read(inputfile, inputfile1)">
+                 <form id = "demo" method = "post" action="javascript:read()">
                      <label class ="new-button"> Upload Files-Autistic Group <input type="file" accept=".txt" name="inputfile" id="inputfile" multiple></label>
                      <br>
                      <br>
                      <label class ="new-button"> Upload Files-Control Group <input type="file" accept=".txt" name="inputfile1" id="inputfile1" multiple></label>
                      <br><br>
+                     <button class ="new-button" id="myBtn" style="width: 245px"> Advanced Settings </button>
+                     <br><br>
                      <label>Model:  </label>
                      <input type="text" id="model" name="model"><br><br>
                      <label>Stimuli Name:  </label>
                      <input type="text" id="stimuli" name="stimuli"><br><br>
-                   <form method = "post"> <!-- action should be changed -->
                      <label for="width">Width:  </label>
                      <input type="text" id="width" name="width"><br><br>
                      <label for="height">Height:</label>
                      <input type="text" id="height" name="height"><br><br>
                      <input type="submit" value="Submit">
-                    <!-- Click the "Submit" button and the form-data will be sent to a page on the server called "action_page.php". -->
                  </form>
                  <div>
                 </div>
@@ -52,6 +52,110 @@
               </div>
             </div>
         </div>
-      </header>
-    </body>
-    </html>
+
+        <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="close">&times;</span>
+            <p style="color:#000">Manage Advanced Settings</p>
+          </div>
+          <form id = "staSettings" method = "post" action="#">
+            <br>
+            <br>
+            <div>
+            <label for="rWidth" id="widthLabel">Resolution Width</label>
+            <label for="tab8">        </label>
+            <label for="rHeight" id="heightLabel">Resolution Height</label>
+            <br>
+            <input type="number" id="rWidth" value=1280>
+            <input type="number" id="rHeight" value=1024>
+            </div>
+            <br>
+            <br>
+            <div>
+            <label for="screenSize" id="inchLabel">Screen Inch</label>
+            <label for="distance" id="distanceLabel">Distance to Tracker</label>
+            <br>
+            <input type="number" id="screenSize" value=17>
+            <input type="number" id="distance" value=60>
+            </div>
+            <br>
+            <br>
+            <div>
+            <label for="daccuracy" id="accuracyLabel">Degree of Accuracy</label>
+            <label for="Tolarance" id="tolaranceLabel">Tolarance Level</label>
+            <br>
+            <input type="number" id="daccuracy" value=0.5>
+            <input type="number" id="Tolarance" value=1>
+            </div>
+            <br>
+            <br>
+            <div>
+              <label for="grid" id="gridLabel">Grid</label>
+              <br>
+              <input type="number" id="gridX" value=3 style="width: 3.5em">
+              <input type="number" id="gridY" value=3 style="width: 3.5em">
+              <input type="checkbox" id="fidelity" name="fidelity" value="fidelity" checked>
+              <label for="fidelity" id="fidelityLabel"> Highest Fidelity</label>
+            </div>
+            <br>
+            <br>
+            <input type="submit" value="Save" id="saveButton">
+          </div>
+          </form>
+        </div>
+
+      </div>
+
+  <!-- Modal and model inputs' placements and open close functions  -->
+<script>
+document.getElementById("widthLabel").style.margin = "0px 0px 0px 46px";
+document.getElementById("heightLabel").style.margin = "0px 0px 0px 129px";
+document.getElementById("rWidth").style.margin = "0px 0px 0px 46px";
+document.getElementById("rHeight").style.margin = "0px 0px 0px 81px";
+document.getElementById("inchLabel").style.margin = "0px 0px 0px 46px";
+document.getElementById("distanceLabel").style.margin = "0px 0px 0px 167px";
+document.getElementById("screenSize").style.margin = "0px 0px 0px 46px";
+document.getElementById("distance").style.margin = "0px 0px 0px 82px";
+document.getElementById("accuracyLabel").style.margin = "0px 0px 0px 46px";
+document.getElementById("tolaranceLabel").style.margin = "0px 0px 0px 115px";
+document.getElementById("daccuracy").style.margin = "0px 0px 0px 46px";
+document.getElementById("Tolarance").style.margin = "0px 0px 0px 82px";
+document.getElementById("fidelity").style.margin = "0px 0px 0px 183px";
+document.getElementById("fidelityLabel").style.margin = "0px 0px 0px 2px";
+document.getElementById("saveButton").style.margin = "0px 0px 0px 215px";
+document.getElementById("gridLabel").style.margin = "0px 0px 0px 46px";
+document.getElementById("gridX").style.margin = "0px 0px 0px 47px";
+document.getElementById("gridY").style.margin = "0px 0px 0px 0px";
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+</header>
+</body>
+</html>
