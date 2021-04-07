@@ -4,3 +4,4 @@ bbc,1024,1080,http://emine.ncc.metu.edu.tr/survey/web/pages/http/www.bbc.co.uk/,
 =======
 bbc,900,600,http://emine.ncc.metu.edu.tr/survey/web/pages/http/www.bbc.co.uk/,852169824136952896369787878785985878656986587,6213212131316561452121343636962178786821687821587561582157878787892691,
 >>>>>>> e805824f686c05d741c55ebb9fbce11db6e35cf8
+bbc,1024,1080,http://emine.ncc.metu.edu.tr/survey/web/pages2/http/www.bbc.co.uk/,CFKAGHBJKLGOKDOBAJCBABACDPNOCNILONMNMIOIMNMJMJGC,CBCGHIKCDABJNKHCBAJNKAEJGMOLJOJOPFMCHOINCDJHIDPGENMK,
