@@ -1,4 +1,4 @@
-#!D:/python/python.exe
+#!C:\Program Files\Python38\python.exe
 import os
 import urllib
 import cgi, cgitb

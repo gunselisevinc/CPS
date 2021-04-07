@@ -1,7 +1,8 @@
-#!D:\python\python.exe
+#!C:\Program Files\Python38\python.exe
 
 import cgi
 import os
+import urllib
 
 def printHeader(title):
     print("Content-type: text/html")
