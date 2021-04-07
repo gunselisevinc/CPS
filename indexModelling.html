@@ -34,17 +34,16 @@
                      <br>
                      <label class ="new-button"> Upload Files-Control Group <input type="file" accept=".txt" name="inputfile1" id="inputfile1" multiple></label>
                      <br><br>
-                     <button class ="new-button" id="myBtn" style="width: 245px"> Advanced Settings </button>
-                     <br><br>
                      <label>Model:  </label>
-                     <input type="text" id="model" name="model"><br><br>
+                     <input type="text" id="model" name="model" style="color:white"><br><br>
                      <label>Stimuli Name:  </label>
                      <input type="text" id="stimuli" name="stimuli"><br><br>
                      <label for="width">Width:  </label>
                      <input type="text" id="width" name="width"><br><br>
                      <label for="height">Height:</label>
                      <input type="text" id="height" name="height"><br><br>
-                     <input type="submit" value="Submit">
+                     <button class ="btn" id="myBtn" style="height: 41px; width: 155px; font-size: 16px"> Other Settings </button>
+                     <input type="submit" value="Create">
                  </form>
                  <div>
                 </div>
@@ -59,7 +58,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <span class="close">&times;</span>
-            <p style="color:#000">Manage Advanced Settings</p>
+            <p style="color:#fff">Manage Advanced Settings</p>
           </div>
           <form id = "staSettings" method = "post" action="#">
             <br>
@@ -69,8 +68,8 @@
             <label for="tab8">        </label>
             <label for="rHeight" id="heightLabel">Resolution Height</label>
             <br>
-            <input type="number" id="rWidth" value=1280>
-            <input type="number" id="rHeight" value=1024>
+            <input type="number" id="rWidth" value=1280 style="color:white">
+            <input type="number" id="rHeight" value=1024 style="color:white">
             </div>
             <br>
             <br>
@@ -78,8 +77,8 @@
             <label for="screenSize" id="inchLabel">Screen Inch</label>
             <label for="distance" id="distanceLabel">Distance to Tracker</label>
             <br>
-            <input type="number" id="screenSize" value=17>
-            <input type="number" id="distance" value=60>
+            <input type="number" id="screenSize" value=17 style="color:white">
+            <input type="number" id="distance" value=60 style="color:white">
             </div>
             <br>
             <br>
@@ -87,23 +86,24 @@
             <label for="daccuracy" id="accuracyLabel">Degree of Accuracy</label>
             <label for="Tolarance" id="tolaranceLabel">Tolarance Level</label>
             <br>
-            <input type="number" id="daccuracy" value=0.5>
-            <input type="number" id="Tolarance" value=1>
+            <input type="number" id="daccuracy" value=0.5 style="color:white">
+            <input type="number" id="Tolarance" value=1 style="color:white">
             </div>
             <br>
             <br>
             <div>
               <label for="grid" id="gridLabel">Grid</label>
               <br>
-              <input type="number" id="gridX" value=3 style="width: 3.5em">
+              <input type="number" id="gridX" value=3 style="width: 3.5em; color:white">
               <label for="x" id="xLabel">x</label>
-              <input type="number" id="gridY" value=3 style="width: 3.5em">
+              <input type="number" id="gridY" value=3 style="width: 3.5em; color:white">
               <input type="checkbox" id="fidelity" name="fidelity" value="fidelity" checked>
               <label for="fidelity" id="fidelityLabel"> Highest Fidelity</label>
             </div>
             <br>
             <br>
             <input type="submit" value="Save" id="saveButton">
+            <br><br>
           </div>
           </form>
         </div>

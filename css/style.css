@@ -2,9 +2,12 @@
   margin: 0;
   padding: 0;
   font-family: Century Gothic;
+  box-sizing: border-box;
+  background-color: #151414
 }
 
 header{
+  background-color: #151414
   background-image: url(../2.jpg);
   height: 100vh;
   background-size: cover;
@@ -69,6 +72,7 @@ ul li.active a{
 }
 
 .title h3{
+  text-align: center;
   position: absolute;
   top: 20%;
   left:50%;
@@ -78,8 +82,9 @@ ul li.active a{
 }
 
 .title h4{
+  text-align: center;
   position: absolute;
-  top: 25%;
+  top: 27%;
   left:50%;
   transform: translate(-50%,-50%);
   color: #aaa;
@@ -88,7 +93,7 @@ ul li.active a{
 
 .title p{
   position: absolute;
-  top: 50%;
+  top: 55%;
   left:50%;
   transform: translate(-50%,-50%);
   color: #aaa;
@@ -183,6 +188,15 @@ label{
   color: #aaa;
 }
 
+/* .modal-header, h4, .close {
+  color:rgb(255, 255, 255);
+  text-align: center;
+  font-size: 30px;
+}
+.modal-footer {
+  background-color: #000000;
+} */
+
 .mycontainer{
   display: flex;
   align-items: center;
@@ -216,11 +230,11 @@ section .btn a{
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  padding-top: 10px; /* Location of the box */
-  left: 380;
-  top: 150;
-  width: 50%; /* Full width */
-  height: 80%; /* Full height */
+  padding-top: 176px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
@@ -230,9 +244,9 @@ section .btn a{
 .modal-content {
   background-color: #fefefe;
   margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 70%;
+  padding: 2px;
+  border: 1px transparent #fefefe;
+  width: 34%;
 }
 
 /* The Close Button */
@@ -252,7 +266,7 @@ section .btn a{
 
 .modal-header {
   padding: 2px 16px;
-  background-color: #fff;
+  background-color: #000;
   text-align: center;
   color: white;
 }
