@@ -17,10 +17,13 @@ var path_control = '';
 var path_autistic = '';
 var fileWrite = '';
 
+<<<<<<< HEAD
 function read(file_autistic, file_control){
   console.log("RUN");
   var stimuli_name = document.getElementById("stimuli").value;
   var model_name = document.getElementById("model").value;
+=======
+>>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
 var autistic_stimulis = new Array();
 var control_stimulis = new Array();
 
@@ -119,6 +122,7 @@ var FileDone = function(event){
   }
   ID_finder = 1;
 }
+<<<<<<< HEAD
 
   file = file_autistic;
 //Triggerred when a file is uploaded to Autistic Group, Input File Read
@@ -236,63 +240,83 @@ function read(){
   var stimuli_array = new Array();
   var stimuli_name = document.getElementById("stimuli").value;
   var model_name = document.getElementById("model").value;
+=======
 
-        var test = 1;
-        var temp = lines[i].split(/\t/);
-        if (temp != "") {
-          temp[5] = temp[5].replace("\r", "");
-          position = stimuli_name === temp[5];
+//Triggerred when a file is uploaded to Autistic Group, Input File Read
+document.getElementById('inputfile1').addEventListener('change', function(){
+  control_stimulis = [];
+  for (var z = 0; this.files.length > z; z++){
+    var reader=new FileReader();
+    var fileData = new Array();
+    reader.onload = FileDone2;
+    reader.readAsText(this.files[z]);
+  }
+})
 
-          if (position){
-            ID_finder = 0;
-            Part_finder = 0;
-                for (var j = 0; fileData_Autistic.length > j; j++){
-                    if (fileData_Autistic[j][0][0].stimuliName === stimuli_name){
-                      for(var a = 0; a < fileData_Autistic[j].length; a++){
-                        if(fileData_Autistic[j][a][0].partID === counter_autistic){
-                          Part_finder = 1;
-                          Part_index = a;
-                        }
-                      }
-                      if(Part_finder == 1){
-                        tmp = fileData_Autistic[j][Part_index].length;
-                        fileData_Autistic[j][Part_index][tmp] = new Object();
-                        fileData_Autistic[j][Part_index][tmp].x = temp[3];
-                        fileData_Autistic[j][Part_index][tmp].y = temp[4];
-                        fileData_Autistic[j][Part_index][tmp].duration = temp[2];
-                        fileData_Autistic[j][Part_index][tmp].stimuliName = temp[5];
-                        fileData_Autistic[j][Part_index][tmp].partID = counter_autistic;
-                        fileData_Autistic[j][Part_index][tmp].index = temp[0];
-                        fileData_Autistic[j][Part_index][tmp].timeStamp = temp[1];
-                        test = 0;
-                      }
-                      else{
-                        tmp = fileData_Autistic[j].length;
-                        fileData_Autistic[j][tmp] = new Array();
-                        fileData_Autistic[j][tmp][0] = new Object();
-                        fileData_Autistic[j][tmp][0].x = temp[3];
-                        fileData_Autistic[j][tmp][0].y = temp[4];
-                        fileData_Autistic[j][tmp][0].duration = temp[2];
-                        fileData_Autistic[j][tmp][0].stimuliName = temp[5];
-                        fileData_Autistic[j][tmp][0].partID = counter_autistic;
-                        fileData_Autistic[j][tmp][0].index = temp[0];
-                        fileData_Autistic[j][tmp][0].timeStamp = temp[1];
-                        test = 0;
-                      }
-                    }
+var FileDone2 = function(event){
+  var Part_finder = -1;
+  var Part_index = -1;
+  counter_control = counter_control + 1;
+  var fileContent = event.target.result;
+  var lines = fileContent.split(/\n/);
+
+  var fileHeaders = new Array();
+  fileHeaders = lines[0].split(/\t/);
+
+  var tmp = -1;
+  for (var i = 1; lines.length > i; i++){
+
+    var test = 1;
+    var temp = lines[i].split(/\t/);
+    if (temp != "") {
+      temp[5] = temp[5].replace("\r", "");
+      var addedAlready = 1;
+      for(var jr = 0; jr<control_stimulis.length; jr++){
+        if(control_stimulis[jr] === temp[5]){
+          addedAlready = 0;
+        }
+      }
+      if(addedAlready & temp[5].startsWith("http")){
+        var len = control_stimulis.length;
+        control_stimulis[len] = temp[5];
+      }
+>>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
+
+      ID_finder = 0;
+      Part_finder = 0;
+          for (var j = 0; fileData_Control.length > j; j++){
+              if (fileData_Control[j][0][0].stimuliName === temp[5]){
+                for(var a = 0; a < fileData_Control[j].length; a++){
+                  if(fileData_Control[j][a][0].partID === counter_control){
+                    Part_finder = 1;
+                    Part_index = a;
+                  }
                 }
-              if (test == 1){
-                tmp = fileData_Autistic.length;
-                fileData_Autistic[tmp] = new Array();
-                fileData_Autistic[tmp][0] = new Array();
-                fileData_Autistic[tmp][0][0] = new Object();
-                fileData_Autistic[tmp][0][0].x = temp[3];
-                fileData_Autistic[tmp][0][0].y = temp[4];
-                fileData_Autistic[tmp][0][0].duration = temp[2];
-                fileData_Autistic[tmp][0][0].stimuliName = temp[5];
-                fileData_Autistic[tmp][0][0].partID = counter_autistic;
-                fileData_Autistic[tmp][0][0].index = temp[0];
-                fileData_Autistic[tmp][0][0].timeStamp = temp[1];
+                if(Part_finder == 1){  //If participant and stimuli name found in the array
+                  tmp = fileData_Control[j][Part_index].length;
+                  fileData_Control[j][Part_index][tmp] = new Object();
+                  fileData_Control[j][Part_index][tmp].x = temp[3];
+                  fileData_Control[j][Part_index][tmp].y = temp[4];
+                  fileData_Control[j][Part_index][tmp].duration = temp[2];
+                  fileData_Control[j][Part_index][tmp].stimuliName = temp[5];
+                  fileData_Control[j][Part_index][tmp].partID = counter_control;
+                  fileData_Control[j][Part_index][tmp].index = temp[0];
+                  fileData_Control[j][Part_index][tmp].timeStamp = temp[1];
+                  test = 0;
+                }
+                else{   //If paticipant not found, but stimuli name found
+                  tmp = fileData_Control[j].length;
+                  fileData_Control[j][tmp] = new Array();
+                  fileData_Control[j][tmp][0] = new Object();
+                  fileData_Control[j][tmp][0].x = temp[3];
+                  fileData_Control[j][tmp][0].y = temp[4];
+                  fileData_Control[j][tmp][0].duration = temp[2];
+                  fileData_Control[j][tmp][0].stimuliName = temp[5];
+                  fileData_Control[j][tmp][0].partID = counter_control;
+                  fileData_Control[j][tmp][0].index = temp[0];
+                  fileData_Control[j][tmp][0].timeStamp = temp[1];
+                  test = 0;
+                }
               }
   if(control_stimulis.length > autistic_stimulis.length){
     for(var i=0;i<control_stimulis.length;i++){
@@ -301,10 +325,49 @@ function read(){
             var tempo = stimuli_array.length;
             stimuli_array[tempo] = control_stimulis[i];
           }
-        }
+          if (test == 1){   //If simuli not found in the array
+            tmp = fileData_Control.length;
+            fileData_Control[tmp] = new Array();
+            fileData_Control[tmp][0] = new Array();
+            fileData_Control[tmp][0][0] = new Object();
+            fileData_Control[tmp][0][0].x = temp[3];
+            fileData_Control[tmp][0][0].y = temp[4];
+            fileData_Control[tmp][0][0].duration = temp[2];
+            fileData_Control[tmp][0][0].stimuliName = temp[5];
+            fileData_Control[tmp][0][0].partID = counter_control;
+            fileData_Control[tmp][0][0].index = temp[0];
+            fileData_Control[tmp][0][0].timeStamp = temp[1];
+          }
+    }
+  }
+  if(ID_finder === 1){
+      counter_control = counter_control - 1;
+  }
+  ID_finder = 1;
+}
+
+//
+
+function read(){
+  var stimuli_array = new Array();
+  var stimuli_name = document.getElementById("stimuli").value;
+  var model_name = document.getElementById("model").value;
+  document.getElementById("model").value = "";
+  document.getElementById("stimuli").value = "";
+
+  if(control_stimulis.length > autistic_stimulis.length){
+    for(var i=0;i<control_stimulis.length;i++){
+      for(var j=0;j<autistic_stimulis.length;j++){
+          if(control_stimulis[i] === autistic_stimulis[j]){
+            var tempo = stimuli_array.length;
+            stimuli_array[tempo] = control_stimulis[i];
+          }
       }
+<<<<<<< HEAD
       if(ID_finder === 1){
           counter_autistic = counter_autistic - 1;
+=======
+>>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     }
   }
 
@@ -316,9 +379,12 @@ function read(){
             stimuli_array[tempo] = control_stimulis[j];
           }
       }
+<<<<<<< HEAD
       ID_finder = 1;
     };
     reader.readAsText(file.files[z]);
+=======
+>>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     }
   }
 
@@ -328,90 +394,6 @@ function read(){
     var grid = addGrid(1);
     var path_autistic = sendSta(grid, stimuli_name, fileData_Autistic);
     console.log("Autistic path: " + path_autistic);
-  }
-  //////////////////////////////////////////////////////////////////////////
-  file = file_control;
-  for (var z = 0; file.files.length > z; z++){
-    var Part_finder = -1;
-    var Part_index = -1;
-    var reader = new FileReader();
-    reader.onload = function(event){
-        counter_control = counter_control + 1;
-      var fileContent = event.target.result;
-      var lines = fileContent.split(/\n/);
-
-      var fileHeaders = new Array();
-      fileHeaders = lines[0].split(/\t/);
-
-      var tmp = -1;
-      for (var i = 1; lines.length > i; i++){
-
-        var test = 1;
-        var temp = lines[i].split(/\t/);
-        if (temp != "") {
-          temp[5] = temp[5].replace("\r", "");
-          position = stimuli_name === temp[5];
-
-          if (position){
-            ID_finder = 0;
-            Part_finder = 0;
-                for (var j = 0; fileData_Control.length > j; j++){
-                    if (fileData_Control[j][0][0].stimuliName === stimuli_name){
-                      for(var a = 0; a < fileData_Control[j].length; a++){
-                        if(fileData_Control[j][a][0].partID === counter_control){
-                          Part_finder = 1;
-                          Part_index = a;
-                        }
-                      }
-                      if(Part_finder == 1){
-                        tmp = fileData_Control[j][Part_index].length;
-                        fileData_Control[j][Part_index][tmp] = new Object();
-                        fileData_Control[j][Part_index][tmp].x = temp[3];
-                        fileData_Control[j][Part_index][tmp].y = temp[4];
-                        fileData_Control[j][Part_index][tmp].duration = temp[2];
-                        fileData_Control[j][Part_index][tmp].stimuliName = temp[5];
-                        fileData_Control[j][Part_index][tmp].partID = counter_control;
-                        fileData_Control[j][Part_index][tmp].index = temp[0];
-                        fileData_Control[j][Part_index][tmp].timeStamp = temp[1];
-                        test = 0;
-                      }
-                      else{
-                        tmp = fileData_Control[j].length;
-                        fileData_Control[j][tmp] = new Array();
-                        fileData_Control[j][tmp][0] = new Object();
-                        fileData_Control[j][tmp][0].x = temp[3];
-                        fileData_Control[j][tmp][0].y = temp[4];
-                        fileData_Control[j][tmp][0].duration = temp[2];
-                        fileData_Control[j][tmp][0].stimuliName = temp[5];
-                        fileData_Control[j][tmp][0].partID = counter_control;
-                        fileData_Control[j][tmp][0].index = temp[0];
-                        fileData_Control[j][tmp][0].timeStamp = temp[1];
-                        test = 0;
-                      }
-                    }
-                }
-              if (test == 1){
-                tmp = fileData_Control.length;
-                fileData_Control[tmp] = new Array();
-                fileData_Control[tmp][0] = new Array();
-                fileData_Control[tmp][0][0] = new Object();
-                fileData_Control[tmp][0][0].x = temp[3];
-                fileData_Control[tmp][0][0].y = temp[4];
-                fileData_Control[tmp][0][0].duration = temp[2];
-                fileData_Control[tmp][0][0].stimuliName = temp[5];
-                fileData_Control[tmp][0][0].partID = counter_control;
-                fileData_Control[tmp][0][0].index = temp[0];
-                fileData_Control[tmp][0][0].timeStamp = temp[1];
-              }
-          }
-        }
-      }
-      if(ID_finder === 1){
-          counter_control = counter_control - 1;
-      }
-      ID_finder = 1;
-    };
-    reader.readAsText(file.files[z]);
   }
   if(fileData_Control.length){
     var grid = addGrid(0);
@@ -429,13 +411,17 @@ function read(){
     xhttp.onreadystatechange = function(){}
     xhttp.open("GET","fileWrite.py?q="+fileWrite, true);
     xhttp.send();
+    fileWrite = "";
   }
 }
 
 var newComerData = new Array();
 
 function newComerRead(file){
+<<<<<<< HEAD
   var myModel = document.getElementById("model").value;
+=======
+>>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     var myModel = document.getElementById("model").value;
     var reader = new FileReader();
     reader.onload = function(event){
@@ -485,9 +471,12 @@ function newComerRead(file){
     reader.readAsText(file.files[0]);
     document.getElementById("inputfile").value = "";
     document.getElementById("model").value = "";
+<<<<<<< HEAD
 //    if(newComerData.length > 0){
       const fileUrl = 'models.txt' // provide file location
       fetch(fileUrl)
+=======
+>>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     const fileUrl = 'models.txt' // provide file location
     fetch(fileUrl)
     .then( r => r.text() )
@@ -503,7 +492,6 @@ function newComerRead(file){
         }
       }
     } )
-    //}
 }
 
 var grid = {
@@ -519,12 +507,19 @@ function addGrid(checker) {
 		var width = document.getElementById("width").value;
     var height = document.getElementById("height").value;
 
+<<<<<<< HEAD
     if(checker){
+=======
+>>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     if(checker){  //Checks if we hae already write the width and heigth or not
       fileWrite = fileWrite.concat(width);
       fileWrite = fileWrite.concat(",");
       fileWrite = fileWrite.concat(height);
       fileWrite = fileWrite.concat(",");
+    }
+    else{
+      document.getElementById("width").value = "";
+      document.getElementById("height").value = "";
     }
 
 		var startX = 0;
@@ -617,7 +612,6 @@ function singlePathCreator(width, height, stimuliUsed){
   console.log(unknownPath);
 }
 
-
 function sendSta(grid, stimuli, arr){
   var indx = -1;
   var points = new Array();
@@ -680,6 +674,8 @@ function sendSta(grid, stimuli, arr){
 };
 
 var jsondata = JSON.stringify(postData);
+
+
 var dataResponse;
     $.ajax({
       type: "POST",
@@ -773,8 +769,13 @@ function prediction(unknown,autistic,normal){
     tmp[1] = tmp[1].substring(0,4);
     $(document).ready(function(){
       $("#myModal").modal();
+<<<<<<< HEAD
       $('#result').html("Closer Group: " + tmp[0] + " Certainty(%): " + tmp[1]);
       $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
+=======
+      $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
+    result = "";
+>>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     });
 }
 
