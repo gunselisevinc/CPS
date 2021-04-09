@@ -264,3 +264,81 @@ section .btn a{
   text-align: center;
   color: white;
 }
+
+/*drop down start*/
+.dropbtn {
+  background-color: #50575e;
+  color: white;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 16px;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 9px 58px;
+  text-decoration: none;
+  transition: 0.6s ease;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  color : white;
+}
+
+.dropdown-content option {
+  color: black;
+  background-color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content option:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #eca1a6;
+}
+/*drop down end*/
+
+/*Message start*/
+.alert {
+  position: absolute;
+  top: 30%;
+  left: 39%;
+  padding: 13px;
+  background-color: #black;
+  border: 2px solid red;
+  color: white;
+  font-size: 15px #white;
+  font-style: italic;
+
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  float: right;
+  font-size: 20px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: red;
+}
+/*Message end*/
