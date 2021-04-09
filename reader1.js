@@ -17,13 +17,6 @@ var path_control = '';
 var path_autistic = '';
 var fileWrite = '';
 
-<<<<<<< HEAD
-function read(file_autistic, file_control){
-  console.log("RUN");
-  var stimuli_name = document.getElementById("stimuli").value;
-  var model_name = document.getElementById("model").value;
-=======
->>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
 var autistic_stimulis = new Array();
 var control_stimulis = new Array();
 
@@ -122,9 +115,7 @@ var FileDone = function(event){
   }
   ID_finder = 1;
 }
-<<<<<<< HEAD
 
-  file = file_autistic;
 //Triggerred when a file is uploaded to Autistic Group, Input File Read
 document.getElementById('inputfile1').addEventListener('change', function(){
   control_stimulis = [];
@@ -164,14 +155,6 @@ var FileDone2 = function(event){
         control_stimulis[len] = temp[5];
       }
 
-  for (var z = 0; file.files.length > z; z++){
-    var Part_finder = -1;
-    var Part_index = -1;
-    var reader = new FileReader();
-    reader.onload = function(event){
-        counter_autistic = counter_autistic + 1;
-      var fileContent = event.target.result;
-      var lines = fileContent.split(/\n/);
       ID_finder = 0;
       Part_finder = 0;
           for (var j = 0; fileData_Control.length > j; j++){
@@ -230,128 +213,15 @@ var FileDone2 = function(event){
   ID_finder = 1;
 }
 
-      var fileHeaders = new Array();
-      fileHeaders = lines[0].split(/\t/);
-//
-
-      var tmp = -1;
-      for (var i = 1; lines.length > i; i++){
-function read(){
-  var stimuli_array = new Array();
-  var stimuli_name = document.getElementById("stimuli").value;
-  var model_name = document.getElementById("model").value;
-=======
-
-//Triggerred when a file is uploaded to Autistic Group, Input File Read
-document.getElementById('inputfile1').addEventListener('change', function(){
-  control_stimulis = [];
-  for (var z = 0; this.files.length > z; z++){
-    var reader=new FileReader();
-    var fileData = new Array();
-    reader.onload = FileDone2;
-    reader.readAsText(this.files[z]);
-  }
-})
-
-var FileDone2 = function(event){
-  var Part_finder = -1;
-  var Part_index = -1;
-  counter_control = counter_control + 1;
-  var fileContent = event.target.result;
-  var lines = fileContent.split(/\n/);
-
-  var fileHeaders = new Array();
-  fileHeaders = lines[0].split(/\t/);
-
-  var tmp = -1;
-  for (var i = 1; lines.length > i; i++){
-
-    var test = 1;
-    var temp = lines[i].split(/\t/);
-    if (temp != "") {
-      temp[5] = temp[5].replace("\r", "");
-      var addedAlready = 1;
-      for(var jr = 0; jr<control_stimulis.length; jr++){
-        if(control_stimulis[jr] === temp[5]){
-          addedAlready = 0;
-        }
-      }
-      if(addedAlready & temp[5].startsWith("http")){
-        var len = control_stimulis.length;
-        control_stimulis[len] = temp[5];
-      }
->>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
-
-      ID_finder = 0;
-      Part_finder = 0;
-          for (var j = 0; fileData_Control.length > j; j++){
-              if (fileData_Control[j][0][0].stimuliName === temp[5]){
-                for(var a = 0; a < fileData_Control[j].length; a++){
-                  if(fileData_Control[j][a][0].partID === counter_control){
-                    Part_finder = 1;
-                    Part_index = a;
-                  }
-                }
-                if(Part_finder == 1){  //If participant and stimuli name found in the array
-                  tmp = fileData_Control[j][Part_index].length;
-                  fileData_Control[j][Part_index][tmp] = new Object();
-                  fileData_Control[j][Part_index][tmp].x = temp[3];
-                  fileData_Control[j][Part_index][tmp].y = temp[4];
-                  fileData_Control[j][Part_index][tmp].duration = temp[2];
-                  fileData_Control[j][Part_index][tmp].stimuliName = temp[5];
-                  fileData_Control[j][Part_index][tmp].partID = counter_control;
-                  fileData_Control[j][Part_index][tmp].index = temp[0];
-                  fileData_Control[j][Part_index][tmp].timeStamp = temp[1];
-                  test = 0;
-                }
-                else{   //If paticipant not found, but stimuli name found
-                  tmp = fileData_Control[j].length;
-                  fileData_Control[j][tmp] = new Array();
-                  fileData_Control[j][tmp][0] = new Object();
-                  fileData_Control[j][tmp][0].x = temp[3];
-                  fileData_Control[j][tmp][0].y = temp[4];
-                  fileData_Control[j][tmp][0].duration = temp[2];
-                  fileData_Control[j][tmp][0].stimuliName = temp[5];
-                  fileData_Control[j][tmp][0].partID = counter_control;
-                  fileData_Control[j][tmp][0].index = temp[0];
-                  fileData_Control[j][tmp][0].timeStamp = temp[1];
-                  test = 0;
-                }
-              }
-  if(control_stimulis.length > autistic_stimulis.length){
-    for(var i=0;i<control_stimulis.length;i++){
-      for(var j=0;j<autistic_stimulis.length;j++){
-          if(control_stimulis[i] === autistic_stimulis[j]){
-            var tempo = stimuli_array.length;
-            stimuli_array[tempo] = control_stimulis[i];
-          }
-          if (test == 1){   //If simuli not found in the array
-            tmp = fileData_Control.length;
-            fileData_Control[tmp] = new Array();
-            fileData_Control[tmp][0] = new Array();
-            fileData_Control[tmp][0][0] = new Object();
-            fileData_Control[tmp][0][0].x = temp[3];
-            fileData_Control[tmp][0][0].y = temp[4];
-            fileData_Control[tmp][0][0].duration = temp[2];
-            fileData_Control[tmp][0][0].stimuliName = temp[5];
-            fileData_Control[tmp][0][0].partID = counter_control;
-            fileData_Control[tmp][0][0].index = temp[0];
-            fileData_Control[tmp][0][0].timeStamp = temp[1];
-          }
-    }
-  }
-  if(ID_finder === 1){
-      counter_control = counter_control - 1;
-  }
-  ID_finder = 1;
-}
-
 //
 
 function read(){
   var stimuli_array = new Array();
   var stimuli_name = document.getElementById("stimuli").value;
   var model_name = document.getElementById("model").value;
+  var gridSizeX = document.getElementById("gridX").value;
+  var gridSizeY = document.getElementById("gridY").value;
+
   document.getElementById("model").value = "";
   document.getElementById("stimuli").value = "";
 
@@ -363,11 +233,6 @@ function read(){
             stimuli_array[tempo] = control_stimulis[i];
           }
       }
-<<<<<<< HEAD
-      if(ID_finder === 1){
-          counter_autistic = counter_autistic - 1;
-=======
->>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     }
   }
 
@@ -379,12 +244,6 @@ function read(){
             stimuli_array[tempo] = control_stimulis[j];
           }
       }
-<<<<<<< HEAD
-      ID_finder = 1;
-    };
-    reader.readAsText(file.files[z]);
-=======
->>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     }
   }
 
@@ -404,6 +263,10 @@ function read(){
     fileWrite = fileWrite.concat(path_autistic);
     fileWrite = fileWrite.concat(",");
     fileWrite = fileWrite.concat(path_control);
+    fileWrite = fileWrite.concat(",");
+    fileWrite = fileWrite.concat(gridSizeX);
+    fileWrite = fileWrite.concat(",");
+    fileWrite = fileWrite.concat(gridSizeY);
     fileWrite = fileWrite.concat(",\n");
     console.log(fileWrite);
 
@@ -418,10 +281,6 @@ function read(){
 var newComerData = new Array();
 
 function newComerRead(file){
-<<<<<<< HEAD
-  var myModel = document.getElementById("model").value;
-=======
->>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     var myModel = document.getElementById("model").value;
     var reader = new FileReader();
     reader.onload = function(event){
@@ -469,14 +328,8 @@ function newComerRead(file){
       }
     };
     reader.readAsText(file.files[0]);
-    document.getElementById("inputfile").value = "";
+    document.getElementById("inputfile3").value = "";
     document.getElementById("model").value = "";
-<<<<<<< HEAD
-//    if(newComerData.length > 0){
-      const fileUrl = 'models.txt' // provide file location
-      fetch(fileUrl)
-=======
->>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     const fileUrl = 'models.txt' // provide file location
     fetch(fileUrl)
     .then( r => r.text() )
@@ -485,7 +338,7 @@ function newComerRead(file){
       for (var i = 0; i < lines.length; i++){
         data = lines[i].split(',');
         if(data[0] === myModel){
-          singlePathCreator(data[1], data[2], data[3]);
+          singlePathCreator(data[1], data[2], data[3],data[6],data[7]);
           console.log(data[5]);
           console.log(data[4]);
           prediction(unknownPath, data[5], data[4]);
@@ -506,11 +359,9 @@ var grid = {
 function addGrid(checker) {
 		var width = document.getElementById("width").value;
     var height = document.getElementById("height").value;
+    var gridSizeX = document.getElementById("gridX").value;
+    var gridSizeY = document.getElementById("gridY").value;
 
-<<<<<<< HEAD
-    if(checker){
-=======
->>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     if(checker){  //Checks if we hae already write the width and heigth or not
       fileWrite = fileWrite.concat(width);
       fileWrite = fileWrite.concat(",");
@@ -527,11 +378,8 @@ function addGrid(checker) {
     var lengthX = 0;
     var lengthY = 0;
 
-	  var gridSizeX = 3;
-    var gridSizeY = 3;
-		var indexCounter = 1;
-    var indexCounter = 65;
     var index = '';
+    var indexCounter = 65;
 
     var Grids = [];
 
@@ -544,7 +392,6 @@ function addGrid(checker) {
             index = String.fromCharCode(indexCounter);
 
             Grids.push({
-                index: indexCounter,
                 index: index,
                 startX: startX,
                 lengthX: lengthX,
@@ -559,18 +406,15 @@ function addGrid(checker) {
 }
 
 var unknownPath = '';
-function singlePathCreator(width, height, stimuliUsed){
+function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY){
 
   var startX = 0;
   var startY = 0;
   var lengthX = 0;
   var lengthY = 0;
 
-  var gridSizeX = 3;
-  var gridSizeY = 3;
-  var indexCounter = 1;
-  var indexCounter = 65;
   var index = '';
+  var indexCounter = 65;
 
   var Grids = [];
 
@@ -583,7 +427,7 @@ function singlePathCreator(width, height, stimuliUsed){
           index = String.fromCharCode(indexCounter);
 
           Grids.push({
-              index: indexCounter,
+              index: index,
               startX: startX,
               lengthX: lengthX,
               startY: startY,
@@ -654,15 +498,23 @@ function sendSta(grid, stimuli, arr){
     points = [];
   }
 
+  var daccuracy = document.getElementById("daccuracy").value;
+  var sizeOfScreen = document.getElementById("screenSize").value;
+  var distance = document.getElementById("distance").value;
+  var resX = document.getElementById("rWidth").value;
+  var resY =  document.getElementById("rHeight").value;
+  var tlevel = document.getElementById("Tolarance").value;
+  var hfidelity = document.getElementById("fidelity").value;
+
   var setting = {
     sta: {
-        daccuracy: 0.5,
-        sizeOfScreen: 17,
-        distance: 60,
-        resX: 1280,
-        resY: 1024,
-        tlevel: 1.00,
-        hfidelity: true
+        daccuracy: daccuracy,
+        sizeOfScreen: sizeOfScreen,
+        distance: distance,
+        resX: resX,
+        resY: resY,
+        tlevel: tlevel,
+        hfidelity: hfidelity
     },
     staAddress: "http://127.0.0.1:5000"
 };
@@ -769,13 +621,8 @@ function prediction(unknown,autistic,normal){
     tmp[1] = tmp[1].substring(0,4);
     $(document).ready(function(){
       $("#myModal").modal();
-<<<<<<< HEAD
-      $('#result').html("Closer Group: " + tmp[0] + " Certainty(%): " + tmp[1]);
-      $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
-=======
       $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
     result = "";
->>>>>>> b71c9713ea8d95957597bb98a8db53f13a032d05
     });
 }
 
@@ -784,23 +631,22 @@ $(document).ready(function (){
     $('#inputfile, #inputfile1, #model, #stimuli').change(validate);
 });
 
-function validate(){
-    if ($('#inputfile').val().length   >   0   &&
-        $('#inputfile1').val().length  >   0   &&
-        $('#model').val().length    >   0 &&
-        $('#stimuli').val().length  >   0) {
-        $("input[type=submit]").prop("disabled", false);
-    }
-    else {
-        $("input[type=submit]").prop("disabled", true);
-    }
+function validate() {
+  if ($('#inputfile').val().length > 0 &&
+    $('#inputfile1').val().length > 0 &&
+    $('#model').val().length > 0 &&
+    $('#stimuli').val().length > 0) {
+    $('#create').prop("disabled", false);
+  } else {
+    $('#create').prop("disabled", true);
+  }
 }
 
 //var reader = new FileReader();
-function getImageSize(reader){
+function getImageSize(reader) {
   //Read the contents of Image File.
   reader.readAsDataURL(fileUpload.files[0]);
-  reader.onload = function (e) {
+  reader.onload = function(e) {
 
     //Initiate the JavaScript Image object.
     var image = new Image();
@@ -809,10 +655,10 @@ function getImageSize(reader){
     image.src = e.target.result;
 
     //Validate the File Height and Width.
-    image.onload = function () {
+    image.onload = function() {
       var height = this.height;
       var width = this.width;
     };
   };
-  return [height,width];
+  return [height, width];
 }
