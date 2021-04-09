@@ -20,6 +20,16 @@ var fileWrite = '';
 var autistic_stimulis = new Array();
 var control_stimulis = new Array();
 
+var autistic_stimulis = new Array();
+var control_stimulis = new Array();
+var enable_control = 0;
+var enable_autistic = 0;
+
+var dropdown_autistic = 0 ;
+var dropdown_control = 0 ;
+var dropdown_stimulis = new Array();
+var stimuli_array = new Array();
+
 //Triggerred when a file is uploaded to Autistic Group, Input File Read
 document.getElementById('inputfile').addEventListener('change', function(){
   autistic_stimulis = [];
@@ -34,6 +44,15 @@ document.getElementById('inputfile').addEventListener('change', function(){
 var FileDone = function(event){
   var Part_finder = -1;
   var Part_index = -1;
+  //enable inputs start
+  enable_control= enable_control + 1;
+    if(enable_autistic == 1){
+        document.getElementById("model").disabled = false;
+        document.getElementById("height").disabled = false;
+        document.getElementById("width").disabled = false;}
+    //enable inputs end
+
+
   counter_autistic = counter_autistic + 1;
   var fileContent = event.target.result;
   var lines = fileContent.split(/\n/);
@@ -114,6 +133,31 @@ var FileDone = function(event){
       counter_autistic = counter_autistic - 1;
   }
   ID_finder = 1;
+
+  //dropdown stimuli array start
+  dropdown_autistic = 1;
+  for(var i=0;i<autistic_stimulis.length;i++){
+      var found = 0;
+      for(var j=0;j<stimuli_array.length;j++){
+          if(stimuli_array[j] === autistic_stimulis[i]){
+            found = 1;
+          }
+      }
+      if (found == 0){
+        var tempo = stimuli_array.length;
+       stimuli_array[tempo] = autistic_stimulis[i];
+      }
+      }
+
+
+if(dropdown_control == 1){
+var select = document.getElementById("selectStimuli");
+ for(var i = 0; i < stimuli_array.length; i++) {
+   var opt = stimuli_array[i];
+   var el = document.createElement("option");
+    el.textContent = opt; el.value = opt;
+    select.appendChild(el); }}
+  //dropdown stimuli array end
 }
 
 //Triggerred when a file is uploaded to Autistic Group, Input File Read
@@ -130,6 +174,14 @@ document.getElementById('inputfile1').addEventListener('change', function(){
 var FileDone2 = function(event){
   var Part_finder = -1;
   var Part_index = -1;
+  //enable input start
+    enable_autistic = enable_autistic+1;
+    if(enable_control == 1){
+    document.getElementById("model").disabled = false;
+    document.getElementById("height").disabled = false;
+    document.getElementById("width").disabled = false;}
+    //enable input end
+
   counter_control = counter_control + 1;
   var fileContent = event.target.result;
   var lines = fileContent.split(/\n/);
@@ -211,19 +263,43 @@ var FileDone2 = function(event){
       counter_control = counter_control - 1;
   }
   ID_finder = 1;
+  //dropdown stimuli array start
+  dropdown_control = 1;
+  for(var i=0;i<control_stimulis.length;i++){
+     var found = 0;
+      for(var j=0;j<stimuli_array.length;j++){
+          if(control_stimulis[i] === stimuli_array[j]){
+          found = 1;
+
+          }
+      }
+   if ( found == 0){
+   var tempo = stimuli_array.length;
+   stimuli_array[tempo] = control_stimulis[i];
+    }
+  }
+
+if(dropdown_autistic == 1){
+var select = document.getElementById("selectStimuli");
+ for(var i = 0; i < stimuli_array.length; i++) {
+   var opt = stimuli_array[i];
+   var el = document.createElement("option");
+    el.textContent = opt; el.value = opt;
+    select.appendChild(el); }}
+  //dropdown stimuli array end
 }
 
 //
 
 function read(){
   var stimuli_array = new Array();
-  var stimuli_name = document.getElementById("stimuli").value;
+  var stimuli_name = document.getElementById("selectStimuli").value;
   var model_name = document.getElementById("model").value;
   var gridSizeX = document.getElementById("gridX").value;
   var gridSizeY = document.getElementById("gridY").value;
 
   document.getElementById("model").value = "";
-  document.getElementById("stimuli").value = "";
+  document.getElementById("selectStimuli").value = "";
 
   if(control_stimulis.length > autistic_stimulis.length){
     for(var i=0;i<control_stimulis.length;i++){
@@ -345,6 +421,28 @@ function newComerRead(file){
         }
       }
     } )
+
+    //model drop down start
+    function modelFunc(data, i){
+
+      if (data != 0 )modelArray[i]= data;
+      console.log("yeni");
+      console.log(i);
+      console.log(data.length);
+
+      console.log(modelArray.length);
+      for (var j=0; j< modelArray.length; j++) console.log(modelArray[j]);
+
+      if (data.length == 0 ){
+      var select = document.getElementById("selectModel");
+      for(var j = 0; j < modelArray.length; j++) {
+      var opt = modelArray[j];
+      var el = document.createElement("option");
+      el.textContent = opt; el.value = opt;
+      select.appendChild(el); } }
+    }
+    //model drop down end
+
 }
 
 var grid = {
@@ -635,10 +733,10 @@ function validate() {
   if ($('#inputfile').val().length > 0 &&
     $('#inputfile1').val().length > 0 &&
     $('#model').val().length > 0 &&
-    $('#stimuli').val().length > 0) {
+    $('#selectStimuli').val().length > 0) {
     $('#create').prop("disabled", false);
   } else {
-    $('#create').prop("disabled", true);
+   $('#create').prop("disabled", true);
   }
 }
 

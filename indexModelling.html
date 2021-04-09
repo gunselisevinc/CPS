@@ -25,6 +25,14 @@
         <div class="title">
           <h3>A Tool for Classification and Prediction of Autism with STA</h3>
           <h4>Add required eye tracking files for each ASD Group and Control Group to create your modelling set. Files should be in .txt form. You can name your modeling sets.</h4>
+          <!-- Message start -->
+          <!--<h5>Please upload eye tracking data files first.</h5>-->
+          <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong>Important!</strong> Please upload eye tracking data files first.
+          </div>
+         <!-- Message end-->
+
           <div class="container">
             <div class="button-wrap">
               <br>
@@ -34,16 +42,26 @@
                      <br>
                      <label class ="new-button"> Upload Files-Control Group <input type="file" accept=".txt" name="inputfile1" id="inputfile1" multiple></label>
                      <br><br>
-                     <label>Model:  </label>
-                     <input type="text" id="model" name="model" style="background-color:white"><br><br>
-                     <label>Stimuli Name:  </label>
-                     <input type="text" id="stimuli" name="stimuli" style="background-color:white"><br><br>
-                     <label for="width">Width:  </label>
-                     <input type="text" id="width" name="width" style="background-color:white"><br><br>
-                     <label for="height">Height:</label>
-                     <input type="text" id="height" name="height" style="background-color:white"><br><br>
-                     <button class ="btn" id="myBtn" style="height: 41px; width: 155px; font-size: 16px"> Other Settings </button>
-                     <input type="submit" id="create" value="Create" disabled>
+                     <!-- drop down StimuliName -->
+                     <div class="dropdown">
+                      <button class="dropbtn"disabled>Select Stimuli Name</button>
+                      <div class="dropdown-content">
+                      <select id="selectStimuli"style="background-color:white">
+                      <option>Choose a StimuliName</option>
+                      </select>
+                      </div>
+                      </div>
+                     <!-- End drop down -->
+                     <form method = "post"> <!-- action shmyould be changed -->
+                       <br><br>
+                       <label>Model:  </label>
+                       <input type="text" id="model" name="model"style="background-color:white" disabled ><br><br>
+                       <label for="width">Width:   </label>
+                       <input type="text" id="width" name="width"style="background-color:white" disabled ><br><br>
+                       <label for="height">Height:  </label>
+                       <input type="text" id="height" name="height"style="background-color:white" disabled ><br><br>
+                       <button class ="btn" id="myBtn" style="height: 41px; width: 155px; font-size: 16px"> Other Settings </button>
+                       <input type="submit" value="Submit" >
                  </form>
                  <div>
                 </div>
