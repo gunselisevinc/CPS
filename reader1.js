@@ -219,6 +219,9 @@ function read(){
   var stimuli_array = new Array();
   var stimuli_name = document.getElementById("stimuli").value;
   var model_name = document.getElementById("model").value;
+  var gridSizeX = document.getElementById("gridX").value;
+  var gridSizeY = document.getElementById("gridY").value;
+
   document.getElementById("model").value = "";
   document.getElementById("stimuli").value = "";
 
@@ -260,6 +263,10 @@ function read(){
     fileWrite = fileWrite.concat(path_autistic);
     fileWrite = fileWrite.concat(",");
     fileWrite = fileWrite.concat(path_control);
+    fileWrite = fileWrite.concat(",");
+    fileWrite = fileWrite.concat(gridSizeX);
+    fileWrite = fileWrite.concat(",");
+    fileWrite = fileWrite.concat(gridSizeY);
     fileWrite = fileWrite.concat(",\n");
     console.log(fileWrite);
 
@@ -321,7 +328,7 @@ function newComerRead(file){
       }
     };
     reader.readAsText(file.files[0]);
-    document.getElementById("inputfile").value = "";
+    document.getElementById("inputfile3").value = "";
     document.getElementById("model").value = "";
     const fileUrl = 'models.txt' // provide file location
     fetch(fileUrl)
@@ -331,7 +338,7 @@ function newComerRead(file){
       for (var i = 0; i < lines.length; i++){
         data = lines[i].split(',');
         if(data[0] === myModel){
-          singlePathCreator(data[1], data[2], data[3]);
+          singlePathCreator(data[1], data[2], data[3],data[6],data[7]);
           console.log(data[5]);
           console.log(data[4]);
           prediction(unknownPath, data[5], data[4]);
@@ -352,6 +359,8 @@ var grid = {
 function addGrid(checker) {
 		var width = document.getElementById("width").value;
     var height = document.getElementById("height").value;
+    var gridSizeX = document.getElementById("gridX").value;
+    var gridSizeY = document.getElementById("gridY").value;
 
     if(checker){  //Checks if we hae already write the width and heigth or not
       fileWrite = fileWrite.concat(width);
@@ -369,9 +378,8 @@ function addGrid(checker) {
     var lengthX = 0;
     var lengthY = 0;
 
-	  var gridSizeX = 3;
-    var gridSizeY = 3;
-		var indexCounter = 1;
+    var index = '';
+    var indexCounter = 65;
 
     var Grids = [];
 
@@ -381,9 +389,10 @@ function addGrid(checker) {
             lengthX = width * 1/gridSizeX;
             startY = height * i/gridSizeY;
             lengthY =  height * 1/gridSizeY;
+            index = String.fromCharCode(indexCounter);
 
             Grids.push({
-                index: indexCounter,
+                index: index,
                 startX: startX,
                 lengthX: lengthX,
                 startY: startY,
@@ -397,16 +406,15 @@ function addGrid(checker) {
 }
 
 var unknownPath = '';
-function singlePathCreator(width, height, stimuliUsed){
+function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY){
 
   var startX = 0;
   var startY = 0;
   var lengthX = 0;
   var lengthY = 0;
 
-  var gridSizeX = 3;
-  var gridSizeY = 3;
-  var indexCounter = 1;
+  var index = '';
+  var indexCounter = 65;
 
   var Grids = [];
 
@@ -416,9 +424,10 @@ function singlePathCreator(width, height, stimuliUsed){
           lengthX = width * 1/gridSizeX;
           startY = height * i/gridSizeY;
           lengthY =  height * 1/gridSizeY;
+          index = String.fromCharCode(indexCounter);
 
           Grids.push({
-              index: indexCounter,
+              index: index,
               startX: startX,
               lengthX: lengthX,
               startY: startY,
@@ -489,15 +498,23 @@ function sendSta(grid, stimuli, arr){
     points = [];
   }
 
+  var daccuracy = document.getElementById("daccuracy").value;
+  var sizeOfScreen = document.getElementById("screenSize").value;
+  var distance = document.getElementById("distance").value;
+  var resX = document.getElementById("rWidth").value;
+  var resY =  document.getElementById("rHeight").value;
+  var tlevel = document.getElementById("Tolarance").value;
+  var hfidelity = document.getElementById("fidelity").value;
+
   var setting = {
     sta: {
-        daccuracy: 0.5,
-        sizeOfScreen: 17,
-        distance: 60,
-        resX: 1280,
-        resY: 1024,
-        tlevel: 1.00,
-        hfidelity: true
+        daccuracy: daccuracy,
+        sizeOfScreen: sizeOfScreen,
+        distance: distance,
+        resX: resX,
+        resY: resY,
+        tlevel: tlevel,
+        hfidelity: hfidelity
     },
     staAddress: "http://127.0.0.1:5000"
 };
@@ -607,4 +624,41 @@ function prediction(unknown,autistic,normal){
       $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
     result = "";
     });
+}
+
+$(document).ready(function (){
+    validate();
+    $('#inputfile, #inputfile1, #model, #stimuli').change(validate);
+});
+
+function validate() {
+  if ($('#inputfile').val().length > 0 &&
+    $('#inputfile1').val().length > 0 &&
+    $('#model').val().length > 0 &&
+    $('#stimuli').val().length > 0) {
+    $('#create').prop("disabled", false);
+  } else {
+    $('#create').prop("disabled", true);
+  }
+}
+
+//var reader = new FileReader();
+function getImageSize(reader) {
+  //Read the contents of Image File.
+  reader.readAsDataURL(fileUpload.files[0]);
+  reader.onload = function(e) {
+
+    //Initiate the JavaScript Image object.
+    var image = new Image();
+
+    //Set the Base64 string return from FileReader as source.
+    image.src = e.target.result;
+
+    //Validate the File Height and Width.
+    image.onload = function() {
+      var height = this.height;
+      var width = this.width;
+    };
+  };
+  return [height, width];
 }
