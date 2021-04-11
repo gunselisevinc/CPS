@@ -640,14 +640,17 @@ var dataResponse;
     dataResponse = JSON.parse(dataResponse);
     dataResponse = JSON.stringify(dataResponse);
     if(dataResponse != " "){
-      var path = dataResponse[2];
-      var temp = 6;
-      for(var i = 6; i < dataResponse.length; i++){
-        if(i === temp){
-          path = path.concat(dataResponse[i]);
-          temp = temp + 4;
-        }
+      var respond = dataResponse;
+      respond = respond.split('[');
+      path = "";
+      path = path.concat(respond[1][1]);
+      for(var xr = 5; xr < respond[1].length; xr = xr + 4){
+        path = path.concat(respond[1][xr]);
+        path = path.replaceAll('"', '');
       }
+      durations = respond[2].split(',');
+      t_mp = durations.length - 1;
+      durations[t_mp] = durations[t_mp].replaceAll(']','');
     }
     return path;
 }

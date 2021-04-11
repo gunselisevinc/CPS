@@ -30,7 +30,7 @@ def getParticipants (pList, EyeTrackingData):
         myFile = EyeTrackingData[x]
         myRecords = myFile.split('\n')
         myRecords_templist = []
-        
+
         for y in range (1, len(myRecords) - 1):
             myRecords_templist.append(myRecords[y].split('\t'))
 
@@ -50,17 +50,17 @@ def getAoIs (SegmentationData):
         temp = mySegments[x].split('\t')
         AoIs.append ([temp[0], temp[1], temp[2], temp[3], temp[4], temp[5]])
     return AoIs
-	
+
 def calculateErrorRateArea (accuracyDegree, Distance, screenResolutionX, screenResolutionY, screenDiagonalSize):
     ErrorRateAreaInCM = tan(radians(accuracyDegree)) * Distance
     ErrorRateAreaInPixels = (ErrorRateAreaInCM * getPPI(screenResolutionX, screenResolutionY, screenDiagonalSize))/2.54
     return round(ErrorRateAreaInPixels,2)
-	
+
 def getPPI (screenResolutionX, screenResolutionY, screenDiagonalSize):
     diagonalResolution = sqrt (pow(screenResolutionX, 2) + pow(screenResolutionY, 2))
     PPI = diagonalResolution / screenDiagonalSize
     return PPI
-	
+
 def createSequences (Participants, myAoIs, errorRateArea):
     Sequences = {}
     keys = Participants.keys()
@@ -74,7 +74,7 @@ def createSequences (Participants, myAoIs, errorRateArea):
                     tempAoI = tempAoI + myAoIs[k][5]
                     tempDuration = int (Participants[keys[y]][z][2])
 
-            distanceList = []        
+            distanceList = []
             if len (tempAoI) > 1:
                 #tempAoI = "(" + tempAoI + ")"
                 for m in range (0 , len(tempAoI)):
@@ -87,7 +87,7 @@ def createSequences (Participants, myAoIs, errorRateArea):
                             distanceList.append([myAoIs[n][5], min(distance)])
                 distanceList.sort( key=lambda x: x[1])
                 tempAoI = distanceList[0][0]
-                            
+
             if len (tempAoI) != 0:
                 sequence = sequence + tempAoI + "-" + str (tempDuration) + "."
 
@@ -98,13 +98,13 @@ def createSequences (Participants, myAoIs, errorRateArea):
 def getNumberedSequence (Sequence, AoINames):
     numberedSequence = []
     numberedSequence.append([Sequence[0][0], 1, Sequence[0][1]])
-    
+
     for y in range (1, len(Sequence)):
         if Sequence[y][0] == Sequence[y-1][0]:
             numberedSequence.append([Sequence[y][0], numberedSequence[len(numberedSequence)-1][1], Sequence[y][1]] )
         else:
             numberedSequence.append([Sequence[y][0], getSequenceNumber(Sequence[0:y], Sequence[y][0]), Sequence[y][1]])
-            
+
     AoIList = getExistingAoIListForSequence(numberedSequence)
     #AoINames = getAoIs(SegmentationPath)
     AoINames = [w[5] for w in AoINames]
@@ -127,7 +127,7 @@ def getNumberedSequence (Sequence, AoINames):
         myAoIList.reverse()
         if len (myAoIList) > 0:
             myDictionary [AoINames[x]] = myAoIList
-        
+
     for AoI in AoIList:
         index = [w[0] for w in myDictionary[AoI[0]]].index(AoI)
         replacementList.append ([AoI, [AoI[0], (index + 1)]])
@@ -136,7 +136,7 @@ def getNumberedSequence (Sequence, AoINames):
         myReplacementList = [w[0] for w in replacementList]
         index = myReplacementList.index(numberedSequence[x][0:2])
         newSequence.append([replacementList[index][1][0]] + [replacementList[index][1][1]] + [numberedSequence[x][2]])
-        
+
     return newSequence
 
 def getSequenceNumber (Sequence, Item):
@@ -152,7 +152,7 @@ def getAbstractedSequence (Sequence):
             if myAbstractedSequence[len(myAbstractedSequence) - 1] != Sequence[y][0]:
                 myAbstractedSequence.append(Sequence[y][0])
     return myAbstractedSequence
-	
+
 def getExistingAoIListForSequence (Sequence):
     AoIlist = []
     for x in range (0, len(Sequence)):
@@ -171,7 +171,7 @@ def calculateImportanceThreshold (mySequences, Threshold):
 
     if len (commonAoIs) == 0:
         return -1
-    
+
     minValueCounter = commonAoIs[0][1]
     for AoIdetails in commonAoIs:
         if minValueCounter > AoIdetails[1]:
@@ -181,7 +181,7 @@ def calculateImportanceThreshold (mySequences, Threshold):
     for AoIdetails in commonAoIs:
         if minValueDuration > AoIdetails[2]:
             minValueDuration = AoIdetails[2]
-            
+
     return [minValueCounter, minValueDuration]
 
 def getNumberDurationOfAoIs (Sequences):
@@ -199,13 +199,13 @@ def getNumberDurationOfAoIs (Sequences):
                 flagCounter = flagCounter + 1
 
         AoIcount.append([AoIs[x], counter, duration, flagCounter])
-		
+
     return AoIcount
 
 def updateAoIsFlag(AoIs, threshold):
     for AoI in AoIs:
         if AoI [1] >= threshold[0] and AoI [2] >= threshold[1]:
-            AoI [3] = True        
+            AoI [3] = True
     return AoIs
 
 def removeInsignificantAoIs(Sequences, AoIList):
@@ -237,7 +237,7 @@ def getExistingAoIList (Sequences):
             except:
                 AoIlist.append(Sequences[keys[y]][x][0:2])
     return AoIlist
-	
+
 def calculateNumberDurationOfFixationsAndNSV(Sequences):
     keys = Sequences.keys()
     for x in range (0 , len (keys)):
@@ -252,7 +252,7 @@ def calculateNumberDurationOfFixationsAndNSV(Sequences):
                     myAbstractedSequence[len(myAbstractedSequence) - 1][3] = myAbstractedSequence[len(myAbstractedSequence) - 1][3] + int (Sequences[keys[x]][y][2])
 
         Sequences[keys[x]] = myAbstractedSequence
-    
+
     keys = Sequences.keys()
     for x in range (0 , len (keys)):
          for y in range (0, len (Sequences[keys[x]])):
@@ -290,12 +290,12 @@ def getValueableAoIs (AoIList, Threshold):
     for myAoIdetail in AoIList:
         if myAoIdetail[5] >= Threshold:
             commonAoIs.append(myAoIdetail)
-            
+
     minValue = commonAoIs[0][4]
     for AoIdetails in commonAoIs:
         if minValue > AoIdetails[4]:
             minValue = AoIdetails[4]
-            
+
     for myAoIdetail in AoIList:
         if myAoIdetail [4] >= minValue:
             valuableAoIs.append(myAoIdetail)
@@ -322,12 +322,12 @@ def getAbstractedSequences(Sequences):
 def getStringEditDistance (Sequence1, Sequence2):
     distance = 0
     matrix = []
-    
+
     for k in range (0, len(Sequence1) + 1):
         matrix.append([])
         for g in range (0, len (Sequence2) + 1):
             matrix[k].append(0)
-            
+
     for k in range (0, len(Sequence1) + 1):
         matrix [k][0] = k
 
@@ -344,7 +344,7 @@ def getStringEditDistance (Sequence1, Sequence2):
     return distance;
 
 # Function calculateAverageSimilarity definition here
-def calculateAverageSimilarity (Sequences, commonSequence):        
+def calculateAverageSimilarity (Sequences, commonSequence):
     distancelist = []
     keys = Sequences.keys()
     for y in range (0 , len (keys)):
@@ -353,7 +353,7 @@ def calculateAverageSimilarity (Sequences, commonSequence):
         similarity = 100.0 * (1 - normalisedScore)
         distancelist.append(similarity)
     return median(distancelist)
-    
+
 # STA Algorithm
 def convertData(response):
     jsonData = json.loads(response)
@@ -398,9 +398,9 @@ def convertData(response):
     settings['sizeOfScreen'] = int(settingsData['sizeOfScreen'])
     settings['tlevel'] = float(settingsData['tlevel'])
     settings['hfidelity'] = bool(settingsData['hfidelity'])
-	
+
     return pList, EyeTrackingData, SegmentationData, settings
-	
+
 # Preliminary Stage
 def STA(response):
     pList, EyeTrackingData, SegmentationData, settings = convertData(response)
@@ -419,7 +419,7 @@ def STA(response):
     for y in range (0 , len (keys)):
         for z in range (0, len(mySequences[keys[y]])):
             mySequences[keys[y]][z] = mySequences[keys[y]][z].split('-')
-        
+
     # First-Pass
     mySequences_num = {}
     keys = mySequences.keys()
@@ -431,50 +431,66 @@ def STA(response):
             mySequences_num[keys[y]] = []
 
     if highestFidelity is not True:
-        ToleranceThreshold = toleranceLevel * len(keys)		
+        ToleranceThreshold = toleranceLevel * len(keys)
         myImportanceThreshold = calculateImportanceThreshold(mySequences_num, ToleranceThreshold)
         if myImportanceThreshold != -1:
             myImportantAoIs = updateAoIsFlag(getNumberDurationOfAoIs(mySequences_num), myImportanceThreshold)
             myNewSequences = removeInsignificantAoIs(mySequences_num, myImportantAoIs)
-        
+
             #Second-Pass
             myNewAoIList = getExistingAoIList(myNewSequences)
             myNewAoIList = calculateTotalNumberDurationofFixationsandNSV(myNewAoIList, calculateNumberDurationOfFixationsAndNSV(myNewSequences))
             myFinalList = getValueableAoIs(myNewAoIList, ToleranceThreshold)
             myFinalList.sort( key = lambda x: (x[4], x[3], x[2]))
             myFinalList.reverse()
-        
+
             commonSequence = []
+            durations = []
             for y in range (0, len(myFinalList)):
                 commonSequence.append(myFinalList[y][0])
-            
+                durations.append(myFinalList[y][3])
+            durations_final = [int(durations[0])]
+            for xr in range(1, len(commonSequence)):
+                if commonSequence[xr] == commonSequence[xr - 1]:
+                    myIndex = len(durations_final) - 1
+                    durations_final[myIndex] += int(durations[xr])
+                else:
+                    durations_final.append(int(durations[xr]))
             trendingPath = getAbstractedSequence(commonSequence)
             #print "Trending Path:", trendingPath
+            trendingPath.append(durations_final)
             return trendingPath
         else:
             return []
     else:
         tolerantPaths = []
         for toleranceLevel in [float(j) / 100 for j in range(0, 101)]:
-            ToleranceThreshold = toleranceLevel * len(keys)		
+            ToleranceThreshold = toleranceLevel * len(keys)
             myImportanceThreshold = calculateImportanceThreshold(mySequences_num, ToleranceThreshold)
             if myImportanceThreshold != -1:
                 myImportantAoIs = updateAoIsFlag(getNumberDurationOfAoIs(mySequences_num), myImportanceThreshold)
                 myNewSequences = removeInsignificantAoIs(mySequences_num, myImportantAoIs)
-        
+
                 #Second-Pass
                 myNewAoIList = getExistingAoIList(myNewSequences)
                 myNewAoIList = calculateTotalNumberDurationofFixationsandNSV(myNewAoIList, calculateNumberDurationOfFixationsAndNSV(myNewSequences))
                 myFinalList = getValueableAoIs(myNewAoIList, ToleranceThreshold)
                 myFinalList.sort( key = lambda x: (x[4], x[3], x[2]))
                 myFinalList.reverse()
-        
+
                 commonSequence = []
+                durations = []
                 for y in range (0, len(myFinalList)):
                     commonSequence.append(myFinalList[y][0])
-                
+                    durations.append(myFinalList[y][3])
+                durations_final = [int(durations[0])]
+                for xr in range(1, len(commonSequence)):
+                    if commonSequence[xr] == commonSequence[xr - 1]:
+                        myIndex = len(durations_final) - 1
+                        durations_final[myIndex] += int(durations[xr])
+                    else:
+                        durations_final.append(int(durations[xr]))
                 trendingPath = getAbstractedSequence(commonSequence)
-            
                 myNewNormalSequences_Temp = {}
                 myNewNormalSequences_Temp = getAbstractedSequences(mySequences)
 
@@ -484,17 +500,18 @@ def STA(response):
                     for z in range (0, len(myNewNormalSequences_Temp[keys[y]])):
                         tempSequence.append(myNewNormalSequences_Temp[keys[y]][z][0])
                     myNewNormalSequences_Temp[keys[y]] = getAbstractedSequence(tempSequence)
-            
+
                 tolerantPaths.append([trendingPath,calculateAverageSimilarity(myNewNormalSequences_Temp, trendingPath),toleranceLevel])
             else:
                 tolerantPaths.append([[],calculateAverageSimilarity(myNewNormalSequences_Temp, []),toleranceLevel])
-                
+
         tolerantPaths.sort( key = lambda x: x[1])
         tolerantPaths.reverse()
         #print "Trending Path:", tolerantPaths[0][0]
+        tolerantPaths[0][0].append(durations_final)
         return tolerantPaths[0][0]
         #print "Tolerance Level:", tolerantPaths[0][2]
-   
+
 def processData(data):
     return data
 
