@@ -417,7 +417,7 @@ function newComerRead(file){
           singlePathCreator(data[1], data[2], data[3],data[6],data[7]);
           console.log(data[5]);
           console.log(data[4]);
-          prediction(unknownPath, data[5], data[4]);
+          prediction(unknownPath, data[5], data[4], data[6], data[7]);
         }
       }
     } )
@@ -535,19 +535,22 @@ function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY){
       }
   }
   var indexP;
-
+  var indexFound = 0;
   for(var i = 0; i < newComerData.length; i++){
     newComerData[i][0].stimuliName = newComerData[i][0].stimuliName.replace('\r', '');
     if(newComerData[i][0].stimuliName === stimuliUsed){
       indexP = i;
+      indexFound = 1;
     }
   }
-  for(var i = 0; i < newComerData[indexP].length; i++){
-    for(var j = 0; j < Grids.length; j++){
-      var op_y = Grids[j].startY + Grids[j].lengthY;
-      var op_x = Grids[j].startX + Grids[j].lengthX;
-      if((Grids[j].startY <= newComerData[indexP][i].y) & (newComerData[indexP][i].y <= op_y) & (Grids[j].startX <= newComerData[indexP][i].x) & (newComerData[indexP][i].x <= op_x)){
-        unknownPath = unknownPath.concat(Grids[j].index);
+  if(indexFound){
+    for(var i = 0; i < newComerData[indexP].length; i++){
+      for(var j = 0; j < Grids.length; j++){
+        var op_y = Grids[j].startY + Grids[j].lengthY;
+        var op_x = Grids[j].startX + Grids[j].lengthX;
+        if((Grids[j].startY <= newComerData[indexP][i].y) & (newComerData[indexP][i].y <= op_y) & (Grids[j].startX <= newComerData[indexP][i].x) & (newComerData[indexP][i].x <= op_x)){
+          unknownPath = unknownPath.concat(Grids[j].index);
+        }
       }
     }
   }
@@ -693,19 +696,19 @@ function levenshtein(a, b) {
     return matrix[b.length][a.length];
 }
 
-function prediction(unknown,autistic,normal){
+function prediction(unknown,autistic,control,gridX,gridY){
     var comparisonUnknownAutistic = levenshtein(unknown,autistic);
-    var comparisonUnknownNormal = levenshtein(unknown,normal);
+    var comparisonUnknownControl = levenshtein(unknown,control);
     var similarityRate;
     var result = '';
-    if(comparisonUnknownNormal < comparisonUnknownAutistic){
-        similarityRate = 1 - (comparisonUnknownNormal/Math.max(unknown.length,normal.length));
-        console.log("NORMAL " + similarityRate);
+    if(comparisonUnknownControl < comparisonUnknownAutistic){
+        similarityRate = 1 - (comparisonUnknownControl/Math.max(unknown.length,control.length));
+        console.log("NOT AUTISTIC " + similarityRate);
         similarityRate = 100*similarityRate;
         result = result.concat("Not Autistic," + similarityRate);
     }
 
-    else if (comparisonUnknownAutistic < comparisonUnknownNormal) {
+    else if (comparisonUnknownAutistic < comparisonUnknownControl) {
         similarityRate = 1 - (comparisonUnknownAutistic/Math.max(unknown.length,autistic.length));
         console.log("AUTISTIC " + similarityRate);
         similarityRate = 100*similarityRate;
@@ -720,11 +723,12 @@ function prediction(unknown,autistic,normal){
     }
     tmp = result.split(",");
     tmp[1] = tmp[1].substring(0,4);
-    $(document).ready(function(){
-      $("#myModal").modal();
-      $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
+//    $(document).ready(function(){
+//      $("#myModal").modal();
+//      $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
     result = "";
-    });
+//    });
+    visualize(unknown,autistic,control,gridX,gridY);
 }
 
 $(document).ready(function (){
@@ -762,4 +766,207 @@ function getImageSize(reader) {
     };
   };
   return [height, width];
+}
+
+//Visualisation
+function visualize(unknown,autistic,control,gridX,gridY){
+  var n = new Array();
+  var e = new Array();
+  var rowLength = 640/parseInt(gridX);
+  var columnLength = 512/parseInt(gridY);
+  index = 1;
+  for(var i=0; i<autistic.length;i++){
+    var num = autistic.charCodeAt(i);
+    num = num - 65;
+    var h = parseInt(gridY);
+    var row = num/h;
+    row = Math.floor(row);
+    var g = parseInt(gridY);
+    var column = num%g;
+    var y = row*rowLength + rowLength/2;
+    var x = column*columnLength + columnLength/2;
+    n.push({
+      id: index,
+      x: x,
+      y: y,
+      color: '#cc00ff',
+      size:5,
+      label: String.fromCharCode(num+65),
+    });
+    e.push({
+      from: (index-1),
+      to: index,
+      color: {
+        color: "#66ffcc",
+      },
+    });
+    index++;
+  }
+  for(var i=0; i<control.length;i++){
+    var num = control.charCodeAt(i);
+    num = num - 65;
+    var h = parseInt(gridY);
+    var row = num/h;
+    row = Math.floor(row);
+    var g = parseInt(gridY);
+    var column = num%g;
+    var y = row*rowLength + rowLength/2;
+    var x = column*columnLength + columnLength/2;
+    n.push({
+      id: index,
+      x: x,
+      y: y,
+      color: '#cc00ff',
+      size:5,
+      label: String.fromCharCode(num+65),
+    });
+    var t = {
+      from: (index-1),
+      to: index,
+      color: {
+        color: "#ff66ff",
+      },
+    }
+    e.push(t);
+    index++;
+  }
+  for(var i=0; i<unknown.length;i++){
+    var num = unknown.charCodeAt(i);
+    num = num - 65;
+    var h = parseInt(gridY);
+    var row = num/h;
+    row = Math.floor(row);
+    var g = parseInt(gridY);
+    var column = num%g;
+    var y = row*rowLength + rowLength/2;
+    var x = column*columnLength + columnLength/2;
+    n.push({
+      id: index,
+      x: x,
+      y: y,
+      color: '#cc00ff',
+      size:5,
+      label: String.fromCharCode(num+65),
+    });
+    e.push({
+      from: (index-1),
+      to: index,
+      color: {
+        color: "#ffff66",
+      },
+    });
+    index++;
+  }
+/*
+  console.log(rowLength + " " +columnLength);
+  for(var i=0;i<gridX;i++){
+    for(var j=0;j<gridY;j++){
+      var y = i*rowLength + rowLength/2;
+      var x = j*columnLength + columnLength/2;
+      n.push({
+        id:index,
+        x: x,
+        y: y,
+        color: "#ff44ff",
+        size:15,
+      })
+      index++;
+    }
+  }*/
+
+  console.log(n);
+
+var nodes = new vis.DataSet(n);
+
+console.log(e);
+var edges = new vis.DataSet(e);
+/*  var nodes = new vis.DataSet([
+    {id: 1, label: 'node 1', x: 512, y: 640, color: '#00ff00'},
+    {id: 2, label: 'node 2', x: 500, y: 0, color: '#00ff00' },
+    {id: 3, label: 'node 3', x: 0, y: 0, color: '#00ff00'},
+    {id: 4, label: 'node 4', size: 50, x: 400, y: 400, color: '#00ff00'},
+ //   {id: 10, group: 2, label: 'node 4', size: 49, x: 400, y: 400},
+    {id: 5, label: 'node 5', x: 400, y: 0, color: '#00ff00'},
+  //  {id: 6, group: 1, label: 'node 5', x: 300, y: 50},
+ //   {id: 7, group: 2, label: 'node 5', x: 200, y: 0},
+    {id: 8, label: 'node 5', x: 100, y: 100, color: '#00ff00'},
+   // {id: 9, group: 2, label: 'node 5', x: 300, y: 200},
+]);*/
+/*  var edges = new vis.DataSet([
+    {from: 8, to: 3},
+    {from: 3, to: 2},
+    {from: 1, to: 4},
+    {from: 4, to: 5},
+    {from: 5, to: 8},
+ //   {from: 7, to: 6},
+ //   {from: 6, to: 9},
+//    {from: 6, to: 8}
+]);*/
+  var container = document.getElementById("mynetwork");
+  var data = {
+    nodes: nodes,
+    edges: edges,
+  }
+  var options = {
+    nodes: {
+      shape: "dot",
+      size: 30,
+      fixed: {
+        y: true,
+        x: true,
+      },
+
+      font: {
+        size: 32,
+        color: "#ffffff",
+      },
+      borderWidth: 2,
+    },
+    edges: {
+      width: 2,
+      smooth: {
+        type: "vertical",
+        forceDirection: "none",
+        roundness: 1,
+      },
+      arrows: {to:{
+          enabled: true,
+          }
+        }
+    },
+
+    physics: false,
+      interaction: {
+        dragNodes: false,// do not allow dragging nodes
+        zoomView: false, // do not allow zooming
+        dragView: false  // do not allow dragging
+      }
+  };
+
+
+var network = new vis.Network(container, data, options);/*
+document.getElementById("autisticSelection").style.display = "block";
+document.getElementById("controlSelection").style.display = "block";
+document.getElementById("unknownSelection").style.display = "block";
+
+var button = document.createElement("button");
+button.innerHTML = "Do Something";
+
+// 2. Append somewhere
+var body = document.getElementsByTagName("mynetwork")[0];
+body.appendChild(button);
+
+// 3. Add event handler
+button.addEventListener ("click", function() {
+  alert("did something");
+});
+
+/*
+network.moveTo({
+    position: {x:505, y:414},
+    //position: {x: 590, y: 520},
+    offset: {x: x, y: y},
+    scale: 1,
+})*/
+
 }

@@ -3,7 +3,16 @@
   <head>
     <title>Prediction</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
+
     <script src="dependencies/jquery/jquery.min.js"></script>
+
+    <!--      <link rel="stylesheet" href="dependencies/vis/vis-network.min.css"> -->
+    <!--    <link rel="stylesheet" href="dependencies/materialize-css/css/materialize.min.css"> -->
+
+
+  <!--       <link rel="stylesheet" href="dependencies/materialize-css/css/materialize.min.css"> -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="dependencies/vistaplus.css">
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -39,6 +48,7 @@
                            <input type="text" id="model" name="model" style="background-color:white"><br><br>
                        <input type="submit" value="Submit"> <!-- Click the "Submit" button and the form-data will be sent to a page on the server called "action_page.php". -->
                      </form>
+
                      <div>
                     </div>
                     <script src="reader1.js" type="text/javascript"></script>
@@ -47,6 +57,29 @@
               <section id="output" class="section"><h5>Output</h1>
                   <a href="#main" class="btn" id="backTop">Back To Top</a>
                   <a href="indexModelling.html" class="btn" id="backModelling">Create New Model</a>
+                  <div id="mynetwork">
+                    <div id="buttons">
+                      <br>
+                      <br>
+                      <br>
+                      <br><br><br><br><br><br><br><br><br><br>
+                    <a href="javascript:autistic" class="btn" style="background-color:#66ffcc; color:black; width: 5.5em;display:none" id="autisticSelection"> Autistic </a>
+                    <br>
+                    <br>
+                    <br>
+                    <a href="javascript:control" class="btn" style="background-color:#ff66ff; color:black; width: 5.5em;display:none" id="controlSelection"> Control </a>
+                    <br>
+                    <br>
+                    <br>
+                    <a href="javascript:unknown" class="btn" style="background-color:#ffff66; color:black; width: 5.5em; display:none" id="unknownSelection"> Unknown </a>
+                  </div>
+                  </div>
+
+                  <script src="dependencies/vis/vis-network.min.js"></script>
+                  <script src="dependencies/html2canvas/html2canvas.min.js"></script>
+                  <script src="dependencies/materialize-css/js/materialize.min.js"></script>
+                  <script src="dependencies/heatmap.js-2.0.5/build/heatmap.js"></script>
+                  <script src="dependencies/heatmap.js-2.0.5/build/heatmap.min.js"></script>
               </section>
       </div>
       <!-- <div class="container">
@@ -71,6 +104,11 @@
     <!-- Jquery CDN Link -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript">
+
+    document.getElementById("autisticSelection").style.margin = "0px 0px 0px 00px";
+    document.getElementById("controlSelection").style.margin = "20px 0px 0px 0px";
+    document.getElementById("unknownSelection").style.margin = "20px 0px 0px 0px";
+    document.getElementById("buttons").style.margin = "-20px -200px -20px -180px";
 
     backTop.addEventListener("click", function() {
       function scrollTopAnimated() {

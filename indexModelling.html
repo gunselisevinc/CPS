@@ -5,6 +5,11 @@
       <script src="dependencies/jquery/jquery.min.js"></script>
    <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>   -->
       <script src="dependencies/vis/vis-network.min.js"></script>
+      <script src="dependencies/jquery/jquery.min.js"></script>
+      <script src="dependencies/html2canvas/html2canvas.min.js"></script>
+      <script src="dependencies/materialize-css/js/materialize.min.js"></script>
+      <script src="dependencies/heatmap.js-2.0.5/build/heatmap.js"></script>
+      <script src="dependencies/heatmap.js-2.0.5/build/heatmap.min.js"></script>
       <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
       <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
@@ -52,13 +57,13 @@
                      <!-- End drop down -->
                        <br><br>
                        <label>Model:  </label>
-                       <input type="text" id="model" name="model"style="background-color:white" disabled ><br><br>
+                       <input type="text" id="model" name="model" disabled ><br><br>
                        <label for="width">Width:   </label>
-                       <input type="text" id="width" name="width"style="background-color:white" disabled ><br><br>
+                       <input type="text" id="width" name="width" disabled ><br><br>
                        <label for="height">Height:  </label>
-                       <input type="text" id="height" name="height"style="background-color:white" disabled ><br><br>
-                       <button class ="btn" id="myBtn" style="height: 41px; width: 155px; font-size: 16px"> Other Settings </button>
-                       <button class ="btn" id="myBtn1" style="height: 41px; width: 155px; font-size: 16px" onclick="javascript:read()"> Create </button>
+                       <input type="text" id="height" name="height" disabled ><br><br>
+                       <button class ="btn" id="myBtn" style="height: 41px; width: 155px; font-size: 16px; background-color: black;"> Other Settings </button>
+                       <button class ="btn" id="myBtn1" style="height: 41px; width: 155px; font-size: 16px; background-color: black;" onclick="javascript:read()"> Create </button>
                  <div>
                 </div>
                 <script src="reader1.js" type="text/javascript"></script>
@@ -72,7 +77,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <span class="close">&times;</span>
-            <p style="color:#fff">Manage Advanced Settings</p>
+            <p style="color:black">Manage Advanced Settings</p>
           </div>
           <form id = "staSettings" method = "post" action="#">
             <br>
@@ -82,8 +87,8 @@
             <label for="tab8">        </label>
             <label for="rHeight" id="heightLabel">Resolution Height</label>
             <br>
-            <input type="number" id="rWidth" value=1280 min=0 style="background-color:white">
-            <input type="number" id="rHeight" value=1024 min=0 style="background-color:white">
+            <input type="number" id="rWidth" value=1280 min=0>
+            <input type="number" id="rHeight" value=1024 min=0>
             </div>
             <br>
             <br>
@@ -91,8 +96,8 @@
             <label for="screenSize" id="inchLabel">Screen Inch</label>
             <label for="distance" id="distanceLabel">Distance to Tracker</label>
             <br>
-            <input type="number" id="screenSize" value=17 min=0 style="background-color:white">
-            <input type="number" id="distance" value=60 min=0 style="background-color:white">
+            <input type="number" id="screenSize" value=17 min=0>
+            <input type="number" id="distance" value=60 min=0>
             </div>
             <br>
             <br>
@@ -100,17 +105,17 @@
             <label for="daccuracy" id="accuracyLabel">Degree of Accuracy</label>
             <label for="Tolarance" id="tolaranceLabel">Tolarance Level</label>
             <br>
-            <input type="number" id="daccuracy" value=0.5 min=0 style="background-color:white">
-            <input type="number" id="Tolarance" value=1 min=0 style="background-color:white">
+            <input type="number" id="daccuracy" value=0.5 min=0>
+            <input type="number" id="Tolarance" value=1 min=0>
             </div>
             <br>
             <br>
             <div>
               <label for="grid" id="gridLabel">Grid</label>
               <br>
-              <input type="number" id="gridX" value=3 min=1 style="width: 3.5em; background-color:white">
+              <input type="number" id="gridX" value=3 min=1 style="width: 3.5em">
               <label for="x" id="xLabel">x</label>
-              <input type="number" id="gridY" value=3 min=1 style="width: 3.5em; background-color:white">
+              <input type="number" id="gridY" value=3 min=1 style="width: 3.5em">
               <input type="checkbox" id="fidelity" name="fidelity" value="fidelity" checked>
               <label for="fidelity" id="fidelityLabel"> Highest Fidelity</label>
             </div>
