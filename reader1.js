@@ -17,185 +17,319 @@ var path_control = '';
 var path_autistic = '';
 var fileWrite = '';
 
-function read(file_autistic, file_control){
-  console.log("RUN");
-  var stimuli_name = document.getElementById("stimuli").value;
-  var model_name = document.getElementById("model").value;
+var autistic_stimulis = new Array();
+var control_stimulis = new Array();
 
-  file = file_autistic;
+var autistic_stimulis = new Array();
+var control_stimulis = new Array();
+var enable_control = 0;
+var enable_autistic = 0;
 
-  for (var z = 0; file.files.length > z; z++){
-    var Part_finder = -1;
-    var Part_index = -1;
-    var reader = new FileReader();
-    reader.onload = function(event){
-        counter_autistic = counter_autistic + 1;
-      var fileContent = event.target.result;
-      var lines = fileContent.split(/\n/);
+var dropdown_autistic = 0 ;
+var dropdown_control = 0 ;
+var dropdown_stimulis = new Array();
+var stimuli_array = new Array();
 
-      var fileHeaders = new Array();
-      fileHeaders = lines[0].split(/\t/);
+//Triggerred when a file is uploaded to Autistic Group, Input File Read
+document.getElementById('inputfile').addEventListener('change', function(){
+  autistic_stimulis = [];
+  for (var z = 0; this.files.length > z; z++){
+    var reader=new FileReader();
+    var fileData = new Array();
+    reader.onload = FileDone;
+    reader.readAsText(this.files[z]);
+}
+//dropdown print start
+    if(dropdown_control == 1){
+    var select = document.getElementById("selectStimuli");
+     for(var i = 0; i < stimuli_array.length; i++) {
+       var opt = stimuli_array[i];
+       var el = document.createElement("option");
+        el.textContent = opt; el.value = opt;
+        select.appendChild(el); }}
+//dropdown print end
+})
 
-      var tmp = -1;
-      for (var i = 1; lines.length > i; i++){
+var FileDone = function(event){
+  var Part_finder = -1;
+  var Part_index = -1;
+  //enable inputs start
+  enable_control= enable_control + 1;
+    if(enable_autistic >= 1){
+        document.getElementById("model").disabled = false;
+        document.getElementById("height").disabled = false;
+        document.getElementById("width").disabled = false;}
+    //enable inputs end
 
-        var test = 1;
-        var temp = lines[i].split(/\t/);
-        if (temp != "") {
-          temp[5] = temp[5].replace("\r", "");
-          position = stimuli_name === temp[5];
 
-          if (position){
-            ID_finder = 0;
-            Part_finder = 0;
-                for (var j = 0; fileData_Autistic.length > j; j++){
-                    if (fileData_Autistic[j][0][0].stimuliName === stimuli_name){
-                      for(var a = 0; a < fileData_Autistic[j].length; a++){
-                        if(fileData_Autistic[j][a][0].partID === counter_autistic){
-                          Part_finder = 1;
-                          Part_index = a;
-                        }
-                      }
-                      if(Part_finder == 1){
-                        tmp = fileData_Autistic[j][Part_index].length;
-                        fileData_Autistic[j][Part_index][tmp] = new Object();
-                        fileData_Autistic[j][Part_index][tmp].x = temp[3];
-                        fileData_Autistic[j][Part_index][tmp].y = temp[4];
-                        fileData_Autistic[j][Part_index][tmp].duration = temp[2];
-                        fileData_Autistic[j][Part_index][tmp].stimuliName = temp[5];
-                        fileData_Autistic[j][Part_index][tmp].partID = counter_autistic;
-                        fileData_Autistic[j][Part_index][tmp].index = temp[0];
-                        fileData_Autistic[j][Part_index][tmp].timeStamp = temp[1];
-                        test = 0;
-                      }
-                      else{
-                        tmp = fileData_Autistic[j].length;
-                        fileData_Autistic[j][tmp] = new Array();
-                        fileData_Autistic[j][tmp][0] = new Object();
-                        fileData_Autistic[j][tmp][0].x = temp[3];
-                        fileData_Autistic[j][tmp][0].y = temp[4];
-                        fileData_Autistic[j][tmp][0].duration = temp[2];
-                        fileData_Autistic[j][tmp][0].stimuliName = temp[5];
-                        fileData_Autistic[j][tmp][0].partID = counter_autistic;
-                        fileData_Autistic[j][tmp][0].index = temp[0];
-                        fileData_Autistic[j][tmp][0].timeStamp = temp[1];
-                        test = 0;
-                      }
-                    }
-                }
-              if (test == 1){
-                tmp = fileData_Autistic.length;
-                fileData_Autistic[tmp] = new Array();
-                fileData_Autistic[tmp][0] = new Array();
-                fileData_Autistic[tmp][0][0] = new Object();
-                fileData_Autistic[tmp][0][0].x = temp[3];
-                fileData_Autistic[tmp][0][0].y = temp[4];
-                fileData_Autistic[tmp][0][0].duration = temp[2];
-                fileData_Autistic[tmp][0][0].stimuliName = temp[5];
-                fileData_Autistic[tmp][0][0].partID = counter_autistic;
-                fileData_Autistic[tmp][0][0].index = temp[0];
-                fileData_Autistic[tmp][0][0].timeStamp = temp[1];
-              }
-          }
+  counter_autistic = counter_autistic + 1;
+  var fileContent = event.target.result;
+  var lines = fileContent.split(/\n/);
+
+  var fileHeaders = new Array();
+  fileHeaders = lines[0].split(/\t/);
+
+  var tmp = -1;
+  for (var i = 1; lines.length > i; i++){
+
+  var test = 1;
+  var temp = lines[i].split(/\t/);
+  if (temp != "") {
+      temp[5] = temp[5].replace("\r", "");
+      var addedAlready = 1;
+      for(var jr = 0; jr<autistic_stimulis.length; jr++){
+        if(autistic_stimulis[jr] === temp[5]){
+          addedAlready = 0;
         }
       }
-      if(ID_finder === 1){
-          counter_autistic = counter_autistic - 1;
+      if(addedAlready & temp[5].startsWith("http")){
+        var len = autistic_stimulis.length;
+        autistic_stimulis[len] = temp[5];
       }
-      ID_finder = 1;
-    };
-    reader.readAsText(file.files[z]);
+      ID_finder = 0;
+      Part_finder = 0;
+          for (var j = 0; fileData_Autistic.length > j; j++){
+              if (fileData_Autistic[j][0][0].stimuliName === temp[5]){
+                for(var a = 0; a < fileData_Autistic[j].length; a++){
+                  if(fileData_Autistic[j][a][0].partID === counter_autistic){
+                    Part_finder = 1;
+                    Part_index = a;
+                  }
+                }
+                if(Part_finder == 1){  //If participant and stimuli name found in the array
+                  tmp = fileData_Autistic[j][Part_index].length;
+                  fileData_Autistic[j][Part_index][tmp] = new Object();
+                  fileData_Autistic[j][Part_index][tmp].x = temp[3];
+                  fileData_Autistic[j][Part_index][tmp].y = temp[4];
+                  fileData_Autistic[j][Part_index][tmp].duration = temp[2];
+                  fileData_Autistic[j][Part_index][tmp].stimuliName = temp[5];
+                  fileData_Autistic[j][Part_index][tmp].partID = counter_autistic;
+                  fileData_Autistic[j][Part_index][tmp].index = temp[0];
+                  fileData_Autistic[j][Part_index][tmp].timeStamp = temp[1];
+                  test = 0;
+                }
+                else{   //If paticipant not found, but stimuli name found
+                  tmp = fileData_Autistic[j].length;
+                  fileData_Autistic[j][tmp] = new Array();
+                  fileData_Autistic[j][tmp][0] = new Object();
+                  fileData_Autistic[j][tmp][0].x = temp[3];
+                  fileData_Autistic[j][tmp][0].y = temp[4];
+                  fileData_Autistic[j][tmp][0].duration = temp[2];
+                  fileData_Autistic[j][tmp][0].stimuliName = temp[5];
+                  fileData_Autistic[j][tmp][0].partID = counter_autistic;
+                  fileData_Autistic[j][tmp][0].index = temp[0];
+                  fileData_Autistic[j][tmp][0].timeStamp = temp[1];
+                  test = 0;
+                }
+              }
+          }
+          if (test == 1){   //If simuli not found in the array
+            tmp = fileData_Autistic.length;
+            fileData_Autistic[tmp] = new Array();
+            fileData_Autistic[tmp][0] = new Array();
+            fileData_Autistic[tmp][0][0] = new Object();
+            fileData_Autistic[tmp][0][0].x = temp[3];
+            fileData_Autistic[tmp][0][0].y = temp[4];
+            fileData_Autistic[tmp][0][0].duration = temp[2];
+            fileData_Autistic[tmp][0][0].stimuliName = temp[5];
+            fileData_Autistic[tmp][0][0].partID = counter_autistic;
+            fileData_Autistic[tmp][0][0].index = temp[0];
+            fileData_Autistic[tmp][0][0].timeStamp = temp[1];
+          }
+    }
   }
+  if(ID_finder === 1){
+      counter_autistic = counter_autistic - 1;
+  }
+  ID_finder = 1;
+
+  //dropdown stimuli array start
+  dropdown_autistic = 1;
+  for(var i=0;i<autistic_stimulis.length;i++){
+      var found = 0;
+      for(var j=0;j<stimuli_array.length;j++){
+          if(stimuli_array[j] === autistic_stimulis[i]){
+            found = 1;
+          }
+      }
+      if (found == 0){
+        var tempo = stimuli_array.length;
+       stimuli_array[tempo] = autistic_stimulis[i];
+      }
+      }
+  //dropdown stimuli array end
+}
+
+//Triggerred when a file is uploaded to Autistic Group, Input File Read
+document.getElementById('inputfile1').addEventListener('change', function(){
+  control_stimulis = [];
+  for (var z = 0; this.files.length > z; z++){
+    var reader=new FileReader();
+    var fileData = new Array();
+    reader.onload = FileDone2;
+    reader.readAsText(this.files[z]);
+  }
+  //dropdown print start
+  if(dropdown_autistic == 1 ){
+  var select = document.getElementById("selectStimuli");
+   for(var i = 0; i < stimuli_array.length; i++) {
+     var opt = stimuli_array[i];
+     var el = document.createElement("option");
+      el.textContent = opt; el.value = opt;
+      select.appendChild(el); }}
+    //dropdown print end
+})
+
+var FileDone2 = function(event){
+  var Part_finder = -1;
+  var Part_index = -1;
+  //enable input start
+    enable_autistic = enable_autistic+1;
+    if(enable_control >= 1){
+    document.getElementById("model").disabled = false;
+    document.getElementById("height").disabled = false;
+    document.getElementById("width").disabled = false;}
+    //enable input end
+
+  counter_control = counter_control + 1;
+  var fileContent = event.target.result;
+  var lines = fileContent.split(/\n/);
+
+  var fileHeaders = new Array();
+  fileHeaders = lines[0].split(/\t/);
+
+  var tmp = -1;
+  for (var i = 1; lines.length > i; i++){
+
+    var test = 1;
+    var temp = lines[i].split(/\t/);
+    if (temp != "") {
+      temp[5] = temp[5].replace("\r", "");
+      var addedAlready = 1;
+      for(var jr = 0; jr<control_stimulis.length; jr++){
+        if(control_stimulis[jr] === temp[5]){
+          addedAlready = 0;
+        }
+      }
+      if(addedAlready & temp[5].startsWith("http")){
+        var len = control_stimulis.length;
+        control_stimulis[len] = temp[5];
+      }
+
+      ID_finder = 0;
+      Part_finder = 0;
+          for (var j = 0; fileData_Control.length > j; j++){
+              if (fileData_Control[j][0][0].stimuliName === temp[5]){
+                for(var a = 0; a < fileData_Control[j].length; a++){
+                  if(fileData_Control[j][a][0].partID === counter_control){
+                    Part_finder = 1;
+                    Part_index = a;
+                  }
+                }
+                if(Part_finder == 1){  //If participant and stimuli name found in the array
+                  tmp = fileData_Control[j][Part_index].length;
+                  fileData_Control[j][Part_index][tmp] = new Object();
+                  fileData_Control[j][Part_index][tmp].x = temp[3];
+                  fileData_Control[j][Part_index][tmp].y = temp[4];
+                  fileData_Control[j][Part_index][tmp].duration = temp[2];
+                  fileData_Control[j][Part_index][tmp].stimuliName = temp[5];
+                  fileData_Control[j][Part_index][tmp].partID = counter_control;
+                  fileData_Control[j][Part_index][tmp].index = temp[0];
+                  fileData_Control[j][Part_index][tmp].timeStamp = temp[1];
+                  test = 0;
+                }
+                else{   //If paticipant not found, but stimuli name found
+                  tmp = fileData_Control[j].length;
+                  fileData_Control[j][tmp] = new Array();
+                  fileData_Control[j][tmp][0] = new Object();
+                  fileData_Control[j][tmp][0].x = temp[3];
+                  fileData_Control[j][tmp][0].y = temp[4];
+                  fileData_Control[j][tmp][0].duration = temp[2];
+                  fileData_Control[j][tmp][0].stimuliName = temp[5];
+                  fileData_Control[j][tmp][0].partID = counter_control;
+                  fileData_Control[j][tmp][0].index = temp[0];
+                  fileData_Control[j][tmp][0].timeStamp = temp[1];
+                  test = 0;
+                }
+              }
+          }
+          if (test == 1){   //If simuli not found in the array
+            tmp = fileData_Control.length;
+            fileData_Control[tmp] = new Array();
+            fileData_Control[tmp][0] = new Array();
+            fileData_Control[tmp][0][0] = new Object();
+            fileData_Control[tmp][0][0].x = temp[3];
+            fileData_Control[tmp][0][0].y = temp[4];
+            fileData_Control[tmp][0][0].duration = temp[2];
+            fileData_Control[tmp][0][0].stimuliName = temp[5];
+            fileData_Control[tmp][0][0].partID = counter_control;
+            fileData_Control[tmp][0][0].index = temp[0];
+            fileData_Control[tmp][0][0].timeStamp = temp[1];
+          }
+    }
+  }
+  if(ID_finder === 1){
+      counter_control = counter_control - 1;
+  }
+  ID_finder = 1;
+  //dropdown stimuli array start
+  dropdown_control = 1;
+  for(var i=0;i<control_stimulis.length;i++){
+     var found = 0;
+      for(var j=0;j<stimuli_array.length;j++){
+          if(control_stimulis[i] === stimuli_array[j]){
+          found = 1;
+
+          }
+      }
+   if ( found == 0){
+   var tempo = stimuli_array.length;
+   stimuli_array[tempo] = control_stimulis[i];
+    }
+  }
+ //dropdown stimuli array end
+}
+
+
+
+function read(){
+  var stimuli_array = new Array();
+  var stimuli_name = document.getElementById("selectStimuli").value;
+  var model_name = document.getElementById("model").value;
+  var gridSizeX = document.getElementById("gridX").value;
+  var gridSizeY = document.getElementById("gridY").value;
+
+  document.getElementById("model").value = "";
+  document.getElementById("selectStimuli").value = "";
+
+  if(control_stimulis.length > autistic_stimulis.length){
+    for(var i=0;i<control_stimulis.length;i++){
+      for(var j=0;j<autistic_stimulis.length;j++){
+          if(control_stimulis[i] === autistic_stimulis[j]){
+            var tempo = stimuli_array.length;
+            stimuli_array[tempo] = control_stimulis[i];
+          }
+      }
+    }
+  }
+
+  else{
+    for(var i=0;i<autistic_stimulis.length;i++){
+      for(var j=0;j<control_stimulis.length;j++){
+          if(control_stimulis[j] === autistic_stimulis[i]){
+            var tempo = stimuli_array.length;
+            stimuli_array[tempo] = control_stimulis[j];
+          }
+      }
+    }
+  }
+
   if(fileData_Autistic.length){
     fileWrite = fileWrite.concat(model_name);
     fileWrite = fileWrite.concat(",");
     var grid = addGrid(1);
     var path_autistic = sendSta(grid, stimuli_name, fileData_Autistic);
     console.log("Autistic path: " + path_autistic);
-  }
-  //////////////////////////////////////////////////////////////////////////
-  file = file_control;
-  for (var z = 0; file.files.length > z; z++){
-    var Part_finder = -1;
-    var Part_index = -1;
-    var reader = new FileReader();
-    reader.onload = function(event){
-        counter_control = counter_control + 1;
-      var fileContent = event.target.result;
-      var lines = fileContent.split(/\n/);
-
-      var fileHeaders = new Array();
-      fileHeaders = lines[0].split(/\t/);
-
-      var tmp = -1;
-      for (var i = 1; lines.length > i; i++){
-
-        var test = 1;
-        var temp = lines[i].split(/\t/);
-        if (temp != "") {
-          temp[5] = temp[5].replace("\r", "");
-          position = stimuli_name === temp[5];
-
-          if (position){
-            ID_finder = 0;
-            Part_finder = 0;
-                for (var j = 0; fileData_Control.length > j; j++){
-                    if (fileData_Control[j][0][0].stimuliName === stimuli_name){
-                      for(var a = 0; a < fileData_Control[j].length; a++){
-                        if(fileData_Control[j][a][0].partID === counter_control){
-                          Part_finder = 1;
-                          Part_index = a;
-                        }
-                      }
-                      if(Part_finder == 1){
-                        tmp = fileData_Control[j][Part_index].length;
-                        fileData_Control[j][Part_index][tmp] = new Object();
-                        fileData_Control[j][Part_index][tmp].x = temp[3];
-                        fileData_Control[j][Part_index][tmp].y = temp[4];
-                        fileData_Control[j][Part_index][tmp].duration = temp[2];
-                        fileData_Control[j][Part_index][tmp].stimuliName = temp[5];
-                        fileData_Control[j][Part_index][tmp].partID = counter_control;
-                        fileData_Control[j][Part_index][tmp].index = temp[0];
-                        fileData_Control[j][Part_index][tmp].timeStamp = temp[1];
-                        test = 0;
-                      }
-                      else{
-                        tmp = fileData_Control[j].length;
-                        fileData_Control[j][tmp] = new Array();
-                        fileData_Control[j][tmp][0] = new Object();
-                        fileData_Control[j][tmp][0].x = temp[3];
-                        fileData_Control[j][tmp][0].y = temp[4];
-                        fileData_Control[j][tmp][0].duration = temp[2];
-                        fileData_Control[j][tmp][0].stimuliName = temp[5];
-                        fileData_Control[j][tmp][0].partID = counter_control;
-                        fileData_Control[j][tmp][0].index = temp[0];
-                        fileData_Control[j][tmp][0].timeStamp = temp[1];
-                        test = 0;
-                      }
-                    }
-                }
-              if (test == 1){
-                tmp = fileData_Control.length;
-                fileData_Control[tmp] = new Array();
-                fileData_Control[tmp][0] = new Array();
-                fileData_Control[tmp][0][0] = new Object();
-                fileData_Control[tmp][0][0].x = temp[3];
-                fileData_Control[tmp][0][0].y = temp[4];
-                fileData_Control[tmp][0][0].duration = temp[2];
-                fileData_Control[tmp][0][0].stimuliName = temp[5];
-                fileData_Control[tmp][0][0].partID = counter_control;
-                fileData_Control[tmp][0][0].index = temp[0];
-                fileData_Control[tmp][0][0].timeStamp = temp[1];
-              }
-          }
-        }
-      }
-      if(ID_finder === 1){
-          counter_control = counter_control - 1;
-      }
-      ID_finder = 1;
-    };
-    reader.readAsText(file.files[z]);
   }
   if(fileData_Control.length){
     var grid = addGrid(0);
@@ -206,6 +340,10 @@ function read(file_autistic, file_control){
     fileWrite = fileWrite.concat(path_autistic);
     fileWrite = fileWrite.concat(",");
     fileWrite = fileWrite.concat(path_control);
+    fileWrite = fileWrite.concat(",");
+    fileWrite = fileWrite.concat(gridSizeX);
+    fileWrite = fileWrite.concat(",");
+    fileWrite = fileWrite.concat(gridSizeY);
     fileWrite = fileWrite.concat(",\n");
     console.log(fileWrite);
 
@@ -213,13 +351,14 @@ function read(file_autistic, file_control){
     xhttp.onreadystatechange = function(){}
     xhttp.open("GET","fileWrite.py?q="+fileWrite, true);
     xhttp.send();
+    fileWrite = "";
   }
 }
 
 var newComerData = new Array();
 
 function newComerRead(file){
-  var myModel = document.getElementById("model").value;
+    var myModel = document.getElementById("model").value;
     var reader = new FileReader();
     reader.onload = function(event){
       var fileContent = event.target.result;
@@ -266,25 +405,45 @@ function newComerRead(file){
       }
     };
     reader.readAsText(file.files[0]);
-    document.getElementById("inputfile").value = "";
+    document.getElementById("inputfile3").value = "";
     document.getElementById("model").value = "";
-//    if(newComerData.length > 0){
-      const fileUrl = 'models.txt' // provide file location
-      fetch(fileUrl)
+    const fileUrl = 'models.txt' // provide file location
+    fetch(fileUrl)
     .then( r => r.text() )
     .then( t => {
       var lines = t.split('\n');
       for (var i = 0; i < lines.length; i++){
         data = lines[i].split(',');
         if(data[0] === myModel){
-          singlePathCreator(data[1], data[2], data[3]);
+          singlePathCreator(data[1], data[2], data[3],data[6],data[7]);
           console.log(data[5]);
           console.log(data[4]);
           prediction(unknownPath, data[5], data[4]);
         }
       }
     } )
-    //}
+
+    //model drop down start
+    function modelFunc(data, i){
+
+      if (data != 0 )modelArray[i]= data;
+      console.log("yeni");
+      console.log(i);
+      console.log(data.length);
+
+      console.log(modelArray.length);
+      for (var j=0; j< modelArray.length; j++) console.log(modelArray[j]);
+
+      if (data.length == 0 ){
+      var select = document.getElementById("selectModel");
+      for(var j = 0; j < modelArray.length; j++) {
+      var opt = modelArray[j];
+      var el = document.createElement("option");
+      el.textContent = opt; el.value = opt;
+      select.appendChild(el); } }
+    }
+    //model drop down end
+
 }
 
 var grid = {
@@ -299,12 +458,18 @@ var grid = {
 function addGrid(checker) {
 		var width = document.getElementById("width").value;
     var height = document.getElementById("height").value;
+    var gridSizeX = document.getElementById("gridX").value;
+    var gridSizeY = document.getElementById("gridY").value;
 
-    if(checker){
+    if(checker){  //Checks if we hae already write the width and heigth or not
       fileWrite = fileWrite.concat(width);
       fileWrite = fileWrite.concat(",");
       fileWrite = fileWrite.concat(height);
       fileWrite = fileWrite.concat(",");
+    }
+    else{
+      document.getElementById("width").value = "";
+      document.getElementById("height").value = "";
     }
 
 		var startX = 0;
@@ -312,9 +477,8 @@ function addGrid(checker) {
     var lengthX = 0;
     var lengthY = 0;
 
-	  var gridSizeX = 3;
-    var gridSizeY = 3;
-		var indexCounter = 1;
+    var index = '';
+    var indexCounter = 65;
 
     var Grids = [];
 
@@ -324,9 +488,10 @@ function addGrid(checker) {
             lengthX = width * 1/gridSizeX;
             startY = height * i/gridSizeY;
             lengthY =  height * 1/gridSizeY;
+            index = String.fromCharCode(indexCounter);
 
             Grids.push({
-                index: indexCounter,
+                index: index,
                 startX: startX,
                 lengthX: lengthX,
                 startY: startY,
@@ -340,16 +505,15 @@ function addGrid(checker) {
 }
 
 var unknownPath = '';
-function singlePathCreator(width, height, stimuliUsed){
+function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY){
 
   var startX = 0;
   var startY = 0;
   var lengthX = 0;
   var lengthY = 0;
 
-  var gridSizeX = 3;
-  var gridSizeY = 3;
-  var indexCounter = 1;
+  var index = '';
+  var indexCounter = 65;
 
   var Grids = [];
 
@@ -359,9 +523,10 @@ function singlePathCreator(width, height, stimuliUsed){
           lengthX = width * 1/gridSizeX;
           startY = height * i/gridSizeY;
           lengthY =  height * 1/gridSizeY;
+          index = String.fromCharCode(indexCounter);
 
           Grids.push({
-              index: indexCounter,
+              index: index,
               startX: startX,
               lengthX: lengthX,
               startY: startY,
@@ -389,7 +554,6 @@ function singlePathCreator(width, height, stimuliUsed){
   }
   console.log(unknownPath);
 }
-
 
 function sendSta(grid, stimuli, arr){
   var indx = -1;
@@ -433,15 +597,23 @@ function sendSta(grid, stimuli, arr){
     points = [];
   }
 
+  var daccuracy = document.getElementById("daccuracy").value;
+  var sizeOfScreen = document.getElementById("screenSize").value;
+  var distance = document.getElementById("distance").value;
+  var resX = document.getElementById("rWidth").value;
+  var resY =  document.getElementById("rHeight").value;
+  var tlevel = document.getElementById("Tolarance").value;
+  var hfidelity = document.getElementById("fidelity").value;
+
   var setting = {
     sta: {
-        daccuracy: 0.5,
-        sizeOfScreen: 17,
-        distance: 60,
-        resX: 1280,
-        resY: 1024,
-        tlevel: 1.00,
-        hfidelity: true
+        daccuracy: daccuracy,
+        sizeOfScreen: sizeOfScreen,
+        distance: distance,
+        resX: resX,
+        resY: resY,
+        tlevel: tlevel,
+        hfidelity: hfidelity
     },
     staAddress: "http://127.0.0.1:5000"
 };
@@ -453,6 +625,8 @@ function sendSta(grid, stimuli, arr){
 };
 
 var jsondata = JSON.stringify(postData);
+
+
 var dataResponse;
     $.ajax({
       type: "POST",
@@ -467,14 +641,17 @@ var dataResponse;
     dataResponse = JSON.parse(dataResponse);
     dataResponse = JSON.stringify(dataResponse);
     if(dataResponse != " "){
-      var path = dataResponse[2];
-      var temp = 6;
-      for(var i = 6; i < dataResponse.length; i++){
-        if(i === temp){
-          path = path.concat(dataResponse[i]);
-          temp = temp + 4;
-        }
+      var respond = dataResponse;
+      respond = respond.split('[');
+      path = "";
+      path = path.concat(respond[1][1]);
+      for(var xr = 5; xr < respond[1].length; xr = xr + 4){
+        path = path.concat(respond[1][xr]);
+        path = path.replaceAll('"', '');
       }
+      durations = respond[2].split(',');
+      t_mp = durations.length - 1;
+      durations[t_mp] = durations[t_mp].replaceAll(']','');
     }
     return path;
 }
@@ -546,6 +723,44 @@ function prediction(unknown,autistic,normal){
     tmp[1] = tmp[1].substring(0,4);
     $(document).ready(function(){
       $("#myModal").modal();
-      $('#result').html("Closer Group: " + tmp[0] + " Certainty(%): " + tmp[1]);
+      $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
+    result = "";
     });
+}
+
+$(document).ready(function (){
+    validate();
+    $('#inputfile, #inputfile1, #model, #stimuli').change(validate);
+});
+
+function validate() {
+  if ($('#inputfile').val().length > 0 &&
+    $('#inputfile1').val().length > 0 &&
+    $('#model').val().length > 0 &&
+    $('#selectStimuli').val().length > 0) {
+    $('#create').prop("disabled", false);
+  } else {
+   $('#create').prop("disabled", true);
+  }
+}
+
+//var reader = new FileReader();
+function getImageSize(reader) {
+  //Read the contents of Image File.
+  reader.readAsDataURL(fileUpload.files[0]);
+  reader.onload = function(e) {
+
+    //Initiate the JavaScript Image object.
+    var image = new Image();
+
+    //Set the Base64 string return from FileReader as source.
+    image.src = e.target.result;
+
+    //Validate the File Height and Width.
+    image.onload = function() {
+      var height = this.height;
+      var width = this.width;
+    };
+  };
+  return [height, width];
 }
