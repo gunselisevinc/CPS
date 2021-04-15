@@ -38,7 +38,16 @@ document.getElementById('inputfile').addEventListener('change', function(){
     var fileData = new Array();
     reader.onload = FileDone;
     reader.readAsText(this.files[z]);
-  }
+}
+//dropdown print start
+    if(dropdown_control == 1){
+    var select = document.getElementById("selectStimuli");
+     for(var i = 0; i < stimuli_array.length; i++) {
+       var opt = stimuli_array[i];
+       var el = document.createElement("option");
+        el.textContent = opt; el.value = opt;
+        select.appendChild(el); }}
+//dropdown print end
 })
 
 var FileDone = function(event){
@@ -46,7 +55,7 @@ var FileDone = function(event){
   var Part_index = -1;
   //enable inputs start
   enable_control= enable_control + 1;
-    if(enable_autistic == 1){
+    if(enable_autistic >= 1){
         document.getElementById("model").disabled = false;
         document.getElementById("height").disabled = false;
         document.getElementById("width").disabled = false;}
@@ -148,15 +157,6 @@ var FileDone = function(event){
        stimuli_array[tempo] = autistic_stimulis[i];
       }
       }
-
-
-if(dropdown_control == 1){
-var select = document.getElementById("selectStimuli");
- for(var i = 0; i < stimuli_array.length; i++) {
-   var opt = stimuli_array[i];
-   var el = document.createElement("option");
-    el.textContent = opt; el.value = opt;
-    select.appendChild(el); }}
   //dropdown stimuli array end
 }
 
@@ -169,6 +169,15 @@ document.getElementById('inputfile1').addEventListener('change', function(){
     reader.onload = FileDone2;
     reader.readAsText(this.files[z]);
   }
+  //dropdown print start
+  if(dropdown_autistic == 1 ){
+  var select = document.getElementById("selectStimuli");
+   for(var i = 0; i < stimuli_array.length; i++) {
+     var opt = stimuli_array[i];
+     var el = document.createElement("option");
+      el.textContent = opt; el.value = opt;
+      select.appendChild(el); }}
+    //dropdown print end
 })
 
 var FileDone2 = function(event){
@@ -176,7 +185,7 @@ var FileDone2 = function(event){
   var Part_index = -1;
   //enable input start
     enable_autistic = enable_autistic+1;
-    if(enable_control == 1){
+    if(enable_control >= 1){
     document.getElementById("model").disabled = false;
     document.getElementById("height").disabled = false;
     document.getElementById("width").disabled = false;}
@@ -278,18 +287,10 @@ var FileDone2 = function(event){
    stimuli_array[tempo] = control_stimulis[i];
     }
   }
-
-if(dropdown_autistic == 1){
-var select = document.getElementById("selectStimuli");
- for(var i = 0; i < stimuli_array.length; i++) {
-   var opt = stimuli_array[i];
-   var el = document.createElement("option");
-    el.textContent = opt; el.value = opt;
-    select.appendChild(el); }}
-  //dropdown stimuli array end
+ //dropdown stimuli array end
 }
 
-//
+
 
 function read(){
   var stimuli_array = new Array();
