@@ -355,9 +355,10 @@ function read(){
 }
 
 var newComerData = new Array();
+var myModel = "";
 
 function newComerRead(file){
-    var myModel = document.getElementById("model").value;
+    myModel = document.getElementById("model").value;
     var reader = new FileReader();
     reader.onload = function(event){
       var fileContent = event.target.result;
@@ -770,6 +771,7 @@ function getImageSize(reader) {
 
 //Visualisation
 function visualize(unknown,autistic,control,gridX,gridY){
+
   var n = new Array();
   var e = new Array();
   var rowLength = 640/parseInt(gridX);
@@ -880,28 +882,7 @@ var nodes = new vis.DataSet(n);
 
 console.log(e);
 var edges = new vis.DataSet(e);
-/*  var nodes = new vis.DataSet([
-    {id: 1, label: 'node 1', x: 512, y: 640, color: '#00ff00'},
-    {id: 2, label: 'node 2', x: 500, y: 0, color: '#00ff00' },
-    {id: 3, label: 'node 3', x: 0, y: 0, color: '#00ff00'},
-    {id: 4, label: 'node 4', size: 50, x: 400, y: 400, color: '#00ff00'},
- //   {id: 10, group: 2, label: 'node 4', size: 49, x: 400, y: 400},
-    {id: 5, label: 'node 5', x: 400, y: 0, color: '#00ff00'},
-  //  {id: 6, group: 1, label: 'node 5', x: 300, y: 50},
- //   {id: 7, group: 2, label: 'node 5', x: 200, y: 0},
-    {id: 8, label: 'node 5', x: 100, y: 100, color: '#00ff00'},
-   // {id: 9, group: 2, label: 'node 5', x: 300, y: 200},
-]);*/
-/*  var edges = new vis.DataSet([
-    {from: 8, to: 3},
-    {from: 3, to: 2},
-    {from: 1, to: 4},
-    {from: 4, to: 5},
-    {from: 5, to: 8},
- //   {from: 7, to: 6},
- //   {from: 6, to: 9},
-//    {from: 6, to: 8}
-]);*/
+
   var container = document.getElementById("mynetwork");
   var data = {
     nodes: nodes,
@@ -944,29 +925,166 @@ var edges = new vis.DataSet(e);
   };
 
 
-var network = new vis.Network(container, data, options);/*
-document.getElementById("autisticSelection").style.display = "block";
-document.getElementById("controlSelection").style.display = "block";
-document.getElementById("unknownSelection").style.display = "block";
+var network = new vis.Network(container, data, options);
+}
 
-var button = document.createElement("button");
-button.innerHTML = "Do Something";
+function displayCustomizedPaths(){
+  //data.nodes.clear();
+  //data.edges.clear();
+  var n = new Array();
+  var e = new Array();
+  index = 1;
 
-// 2. Append somewhere
-var body = document.getElementsByTagName("mynetwork")[0];
-body.appendChild(button);
+  const fileUrl = 'models.txt' // provide file location
+  fetch(fileUrl)
+  .then( r => r.text() )
+  .then( t => {
+    var lines = t.split('\n');
+    for (var i = 0; i < lines.length; i++){
+      data = lines[i].split(',');
+      if(data[0] === myModel){
+        var rowLength = 640/parseInt(data[6]);
+        var columnLength = 512/parseInt(data[7]);
+        var autisticCheckBox = document.getElementById("autisticBox");
+        var controlCheckBox = document.getElementById("controlBox");
+        var unknownCheckBox = document.getElementById("unknownBox");
+        if( $(autisticCheckBox).is(':checked') ){
+          for(var i=0; i<data[5].length;i++){
+            var num = data[5].charCodeAt(i);
+            num = num - 65;
+            var h = parseInt(data[7]);
+            var row = num/h;
+            row = Math.floor(row);
+            var g = parseInt(data[7]);
+            var column = num%g;
+            var y = row*rowLength + rowLength/2;
+            var x = column*columnLength + columnLength/2;
+            n.push({
+              id: index,
+              x: x,
+              y: y,
+              color: '#cc00ff',
+              size:5,
+              label: String.fromCharCode(num+65),
+            });
+            e.push({
+              from: (index-1),
+              to: index,
+              color: {
+                color: "#66ffcc",
+              },
+            });
+            index++;
+          }
+        }
+        if( $(controlCheckBox).is(':checked') ){
+          for(var i=0; i<data[4].length;i++){
+            var num = data[4].charCodeAt(i);
+            num = num - 65;
+            var h = parseInt(data[7]);
+            var row = num/h;
+            row = Math.floor(row);
+            var g = parseInt(data[7]);
+            var column = num%g;
+            var y = row*rowLength + rowLength/2;
+            var x = column*columnLength + columnLength/2;
+            n.push({
+              id: index,
+              x: x,
+              y: y,
+              color: '#cc00ff',
+              size:5,
+              label: String.fromCharCode(num+65),
+            });
+            var t = {
+              from: (index-1),
+              to: index,
+              color: {
+                color: "#ff66ff",
+              },
+            }
+            e.push(t);
+            index++;
+          }
+        }
+        if( $(unknownCheckBox).is(':checked') ){
+          for(var i=0; i<unknownPath.length;i++){
+            var num = unknownPath.charCodeAt(i);
+            num = num - 65;
+            var h = parseInt(data[7]);
+            var row = num/h;
+            row = Math.floor(row);
+            var g = parseInt(data[7]);
+            var column = num%g;
+            var y = row*rowLength + rowLength/2;
+            var x = column*columnLength + columnLength/2;
+            n.push({
+              id: index,
+              x: x,
+              y: y,
+              color: '#cc00ff',
+              size:5,
+              label: String.fromCharCode(num+65),
+            });
+            e.push({
+              from: (index-1),
+              to: index,
+              color: {
+                color: "#ffff66",
+              },
+            });
+            index++;
+          }
+        }
+      }
+    }
+    var nodes = new vis.DataSet(n);
 
-// 3. Add event handler
-button.addEventListener ("click", function() {
-  alert("did something");
-});
+    console.log(e);
+    var edges = new vis.DataSet(e);
 
-/*
-network.moveTo({
-    position: {x:505, y:414},
-    //position: {x: 590, y: 520},
-    offset: {x: x, y: y},
-    scale: 1,
-})*/
+      var container = document.getElementById("mynetwork");
+      var data = {
+        nodes: nodes,
+        edges: edges,
+      }
+      var options = {
+        nodes: {
+          shape: "dot",
+          size: 30,
+          fixed: {
+            y: true,
+            x: true,
+          },
 
+          font: {
+            size: 32,
+            color: "#ffffff",
+          },
+          borderWidth: 2,
+        },
+        edges: {
+          width: 2,
+          smooth: {
+            type: "vertical",
+            forceDirection: "none",
+            roundness: 1,
+          },
+          arrows: {to:{
+              enabled: true,
+              }
+            }
+        },
+
+        physics: false,
+          interaction: {
+            dragNodes: false,// do not allow dragging nodes
+            zoomView: false, // do not allow zooming
+            dragView: false  // do not allow dragging
+          }
+      };
+
+
+    var network = new vis.Network(container, data, options);
+  } )
 }
