@@ -794,7 +794,7 @@ function visualize(unknown,autistic,control,gridX,gridY){
       y: y,
       color: '#cc00ff',
       size:5,
-      label: String.fromCharCode(num+65),
+  //    label: String.fromCharCode(num+65),
     });
     e.push({
       from: (index-1),
@@ -821,7 +821,7 @@ function visualize(unknown,autistic,control,gridX,gridY){
       y: y,
       color: '#cc00ff',
       size:5,
-      label: String.fromCharCode(num+65),
+  //    label: String.fromCharCode(num+65),
     });
     var t = {
       from: (index-1),
@@ -849,7 +849,7 @@ function visualize(unknown,autistic,control,gridX,gridY){
       y: y,
       color: '#cc00ff',
       size:5,
-      label: String.fromCharCode(num+65),
+    //  label: String.fromCharCode(num+65),
     });
     e.push({
       from: (index-1),
@@ -875,9 +875,32 @@ function visualize(unknown,autistic,control,gridX,gridY){
       })
       index++;
     }
-  }*/
+  }
 
-  console.log(n);
+  console.log(n);*/
+
+  for(var i=0;i<gridX;i++){
+    for(var j=0;j<gridY;j++){
+      var y = i*rowLength + rowLength/2;
+      var x = j*columnLength + columnLength/2;
+      n.push({
+        id:index,
+        x: x,
+        y: y,
+        color: "#ffffff00",
+        size:15,
+      })
+      index++;
+    }
+  }
+
+  e.push({
+    from: 1,
+    to: (index-1),
+    color: {
+      color: "#ffffff00",
+    },
+  })
 
 var nodes = new vis.DataSet(n);
 
@@ -966,7 +989,7 @@ function displayCustomizedPaths(){
               y: y,
               color: '#cc00ff',
               size:5,
-              label: String.fromCharCode(num+65),
+      //        label: String.fromCharCode(num+65),
             });
             e.push({
               from: (index-1),
@@ -995,7 +1018,7 @@ function displayCustomizedPaths(){
               y: y,
               color: '#cc00ff',
               size:5,
-              label: String.fromCharCode(num+65),
+          //    label: String.fromCharCode(num+65),
             });
             var t = {
               from: (index-1),
@@ -1025,7 +1048,7 @@ function displayCustomizedPaths(){
               y: y,
               color: '#cc00ff',
               size:5,
-              label: String.fromCharCode(num+65),
+            //  label: String.fromCharCode(num+65),
             });
             e.push({
               from: (index-1),
@@ -1039,6 +1062,30 @@ function displayCustomizedPaths(){
         }
       }
     }
+
+    for(var i=0;i<data[6];i++){
+      for(var j=0;j<data[7];j++){
+        var y = i*rowLength + rowLength/2;
+        var x = j*columnLength + columnLength/2;
+        n.push({
+          id:index,
+          x: x,
+          y: y,
+          color: "#ffffff00",
+          size:15,
+        })
+        index++;
+      }
+    }
+
+    e.push({
+      from: 1,
+      to: (index-1),
+      color: {
+        color: "#ffffff00",
+      },
+    })
+
     var nodes = new vis.DataSet(n);
 
     console.log(e);
@@ -1088,4 +1135,8 @@ function displayCustomizedPaths(){
 
     var network = new vis.Network(container, data, options);
   } )
+}
+
+function heatMap(){
+
 }
