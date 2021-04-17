@@ -3,7 +3,16 @@
   <head>
     <title>Prediction</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
+
     <script src="dependencies/jquery/jquery.min.js"></script>
+
+    <!--      <link rel="stylesheet" href="dependencies/vis/vis-network.min.css"> -->
+    <!--    <link rel="stylesheet" href="dependencies/materialize-css/css/materialize.min.css"> -->
+
+
+  <!--       <link rel="stylesheet" href="dependencies/materialize-css/css/materialize.min.css"> -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="dependencies/vistaplus.css">
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -39,6 +48,7 @@
                            <input type="text" id="model" name="model" style="background-color:white"><br><br>
                        <input type="submit" value="Submit"> <!-- Click the "Submit" button and the form-data will be sent to a page on the server called "action_page.php". -->
                      </form>
+
                      <div>
                     </div>
                     <script src="reader1.js" type="text/javascript"></script>
@@ -47,6 +57,24 @@
               <section id="output" class="section"><h5>Output</h1>
                   <a href="#main" class="btn" id="backTop">Back To Top</a>
                   <a href="indexModelling.html" class="btn" id="backModelling">Create New Model</a>
+
+                  <div id="mynetwork">
+                  </div>
+                  <div id="buttons">
+                    <input type="checkbox" id="autisticBox" name="autisticBox" value="autisticBox" style="color:#66ffcc" checked>
+                    <label for="autistic" id="autisticLabel" style="color:#66ffcc; font-size:19px"> Autistic</label>
+
+                    <input type="checkbox" id="controlBox" name="controlBox" value="controlBox" style="color:#66ffcc" checked>
+                    <label for="control" id="controlLabel" style="color:#ff66ff; font-size:19px"> Control</label>
+
+                    <input type="checkbox" id="unknownBox" name="unknownBox" value="unknownBox" style="color:#66ffcc" checked>
+                    <label for="unknown" id="unknownLabel" style="color:#ffff66; font-size:19px"> Unknown</label>
+                  </div>
+                  <script src="dependencies/vis/vis-network.min.js"></script>
+                  <script src="dependencies/html2canvas/html2canvas.min.js"></script>
+                  <script src="dependencies/materialize-css/js/materialize.min.js"></script>
+                  <script src="dependencies/heatmap.js-2.0.5/build/heatmap.js"></script>
+                  <script src="dependencies/heatmap.js-2.0.5/build/heatmap.min.js"></script>
               </section>
       </div>
       <!-- <div class="container">
@@ -72,13 +100,44 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript">
 
+    document.getElementById("autisticBox").style.margin = "0px 0px 0px 267px";
+    document.getElementById("autisticLabel").style.margin = "0px 0px 0px 1px";
+    document.getElementById("controlBox").style.margin = "0px 0px 0px 50px";
+    document.getElementById("controlLabel").style.margin = "20px 0px 0px 1px";
+    document.getElementById("unknownBox").style.margin = "0px 0px 0px 50px";
+    document.getElementById("unknownLabel").style.margin = "20px 0px 0px 1px";
+
     backTop.addEventListener("click", function() {
       function scrollTopAnimated() {
             $("html, body").animate(
                 { scrollTop: "0" }, 500);
         }
       });
-      //
+
+      $('input[name=autisticBox]').change(function() {
+        if ($(this).is(':checked')) {
+          displayCustomizedPaths();
+        } else {
+          displayCustomizedPaths();
+        }
+      });
+
+      $('input[name=controlBox]').change(function() {
+        if ($(this).is(':checked')) {
+          displayCustomizedPaths();
+        } else {
+          displayCustomizedPaths();
+        }
+      });
+
+      $('input[name=unknownBox]').change(function() {
+        if ($(this).is(':checked')) {
+          displayCustomizedPaths();
+        } else {
+          displayCustomizedPaths();
+        }
+      });
+
       // $(function(){
       //   $("backTop").on('click', function(){
       //     $(html, body).animate({

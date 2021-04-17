@@ -356,9 +356,10 @@ function read(){
 }
 
 var newComerData = new Array();
+var myModel = "";
 
 function newComerRead(file){
-    var myModel = document.getElementById("model").value;
+    myModel = document.getElementById("model").value;
     var reader = new FileReader();
     reader.onload = function(event){
       var fileContent = event.target.result;
@@ -418,7 +419,7 @@ function newComerRead(file){
           singlePathCreator(data[1], data[2], data[3],data[6],data[7]);
           console.log(data[5]);
           console.log(data[4]);
-          prediction(unknownPath, data[5], data[4]);
+          prediction(unknownPath, data[5], data[4], data[6], data[7]);
         }
       }
     } )
@@ -536,19 +537,22 @@ function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY){
       }
   }
   var indexP;
-
+  var indexFound = 0;
   for(var i = 0; i < newComerData.length; i++){
     newComerData[i][0].stimuliName = newComerData[i][0].stimuliName.replace('\r', '');
     if(newComerData[i][0].stimuliName === stimuliUsed){
       indexP = i;
+      indexFound = 1;
     }
   }
-  for(var i = 0; i < newComerData[indexP].length; i++){
-    for(var j = 0; j < Grids.length; j++){
-      var op_y = Grids[j].startY + Grids[j].lengthY;
-      var op_x = Grids[j].startX + Grids[j].lengthX;
-      if((Grids[j].startY <= newComerData[indexP][i].y) & (newComerData[indexP][i].y <= op_y) & (Grids[j].startX <= newComerData[indexP][i].x) & (newComerData[indexP][i].x <= op_x)){
-        unknownPath = unknownPath.concat(Grids[j].index);
+  if(indexFound){
+    for(var i = 0; i < newComerData[indexP].length; i++){
+      for(var j = 0; j < Grids.length; j++){
+        var op_y = Grids[j].startY + Grids[j].lengthY;
+        var op_x = Grids[j].startX + Grids[j].lengthX;
+        if((Grids[j].startY <= newComerData[indexP][i].y) & (newComerData[indexP][i].y <= op_y) & (Grids[j].startX <= newComerData[indexP][i].x) & (newComerData[indexP][i].x <= op_x)){
+          unknownPath = unknownPath.concat(Grids[j].index);
+        }
       }
     }
   }
@@ -694,19 +698,19 @@ function levenshtein(a, b) {
     return matrix[b.length][a.length];
 }
 
-function prediction(unknown,autistic,normal){
+function prediction(unknown,autistic,control,gridX,gridY){
     var comparisonUnknownAutistic = levenshtein(unknown,autistic);
-    var comparisonUnknownNormal = levenshtein(unknown,normal);
+    var comparisonUnknownControl = levenshtein(unknown,control);
     var similarityRate;
     var result = '';
-    if(comparisonUnknownNormal < comparisonUnknownAutistic){
-        similarityRate = 1 - (comparisonUnknownNormal/Math.max(unknown.length,normal.length));
-        console.log("NORMAL " + similarityRate);
+    if(comparisonUnknownControl < comparisonUnknownAutistic){
+        similarityRate = 1 - (comparisonUnknownControl/Math.max(unknown.length,control.length));
+        console.log("NOT AUTISTIC " + similarityRate);
         similarityRate = 100*similarityRate;
         result = result.concat("Not Autistic," + similarityRate);
     }
 
-    else if (comparisonUnknownAutistic < comparisonUnknownNormal) {
+    else if (comparisonUnknownAutistic < comparisonUnknownControl) {
         similarityRate = 1 - (comparisonUnknownAutistic/Math.max(unknown.length,autistic.length));
         console.log("AUTISTIC " + similarityRate);
         similarityRate = 100*similarityRate;
@@ -721,11 +725,12 @@ function prediction(unknown,autistic,normal){
     }
     tmp = result.split(",");
     tmp[1] = tmp[1].substring(0,4);
-    $(document).ready(function(){
-      $("#myModal").modal();
-      $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
+//    $(document).ready(function(){
+//      $("#myModal").modal();
+//      $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
     result = "";
-    });
+//    });
+    visualize(unknown,autistic,control,gridX,gridY);
 }
 
 $(document).ready(function (){
@@ -763,4 +768,375 @@ function getImageSize(reader) {
     };
   };
   return [height, width];
+}
+
+//Visualisation
+function visualize(unknown,autistic,control,gridX,gridY){
+
+  var n = new Array();
+  var e = new Array();
+  var rowLength = 640/parseInt(gridX);
+  var columnLength = 512/parseInt(gridY);
+  index = 1;
+  for(var i=0; i<autistic.length;i++){
+    var num = autistic.charCodeAt(i);
+    num = num - 65;
+    var h = parseInt(gridY);
+    var row = num/h;
+    row = Math.floor(row);
+    var g = parseInt(gridY);
+    var column = num%g;
+    var y = row*rowLength + rowLength/2;
+    var x = column*columnLength + columnLength/2;
+    n.push({
+      id: index,
+      x: x,
+      y: y,
+      color: '#cc00ff',
+      size:5,
+  //    label: String.fromCharCode(num+65),
+    });
+    e.push({
+      from: (index-1),
+      to: index,
+      color: {
+        color: "#66ffcc",
+      },
+    });
+    index++;
+  }
+  for(var i=0; i<control.length;i++){
+    var num = control.charCodeAt(i);
+    num = num - 65;
+    var h = parseInt(gridY);
+    var row = num/h;
+    row = Math.floor(row);
+    var g = parseInt(gridY);
+    var column = num%g;
+    var y = row*rowLength + rowLength/2;
+    var x = column*columnLength + columnLength/2;
+    n.push({
+      id: index,
+      x: x,
+      y: y,
+      color: '#cc00ff',
+      size:5,
+  //    label: String.fromCharCode(num+65),
+    });
+    var t = {
+      from: (index-1),
+      to: index,
+      color: {
+        color: "#ff66ff",
+      },
+    }
+    e.push(t);
+    index++;
+  }
+  for(var i=0; i<unknown.length;i++){
+    var num = unknown.charCodeAt(i);
+    num = num - 65;
+    var h = parseInt(gridY);
+    var row = num/h;
+    row = Math.floor(row);
+    var g = parseInt(gridY);
+    var column = num%g;
+    var y = row*rowLength + rowLength/2;
+    var x = column*columnLength + columnLength/2;
+    n.push({
+      id: index,
+      x: x,
+      y: y,
+      color: '#cc00ff',
+      size:5,
+    //  label: String.fromCharCode(num+65),
+    });
+    e.push({
+      from: (index-1),
+      to: index,
+      color: {
+        color: "#ffff66",
+      },
+    });
+    index++;
+  }
+/*
+  console.log(rowLength + " " +columnLength);
+  for(var i=0;i<gridX;i++){
+    for(var j=0;j<gridY;j++){
+      var y = i*rowLength + rowLength/2;
+      var x = j*columnLength + columnLength/2;
+      n.push({
+        id:index,
+        x: x,
+        y: y,
+        color: "#ff44ff",
+        size:15,
+      })
+      index++;
+    }
+  }
+
+  console.log(n);*/
+
+  for(var i=0;i<gridX;i++){
+    for(var j=0;j<gridY;j++){
+      var y = i*rowLength + rowLength/2;
+      var x = j*columnLength + columnLength/2;
+      n.push({
+        id:index,
+        x: x,
+        y: y,
+        color: "#ffffff00",
+        size:15,
+      })
+      index++;
+    }
+  }
+
+  e.push({
+    from: 1,
+    to: (index-1),
+    color: {
+      color: "#ffffff00",
+    },
+  })
+
+var nodes = new vis.DataSet(n);
+
+console.log(e);
+var edges = new vis.DataSet(e);
+
+  var container = document.getElementById("mynetwork");
+  var data = {
+    nodes: nodes,
+    edges: edges,
+  }
+  var options = {
+    nodes: {
+      shape: "dot",
+      size: 30,
+      fixed: {
+        y: true,
+        x: true,
+      },
+
+      font: {
+        size: 32,
+        color: "#ffffff",
+      },
+      borderWidth: 2,
+    },
+    edges: {
+      width: 2,
+      smooth: {
+        type: "vertical",
+        forceDirection: "none",
+        roundness: 1,
+      },
+      arrows: {to:{
+          enabled: true,
+          }
+        }
+    },
+
+    physics: false,
+      interaction: {
+        dragNodes: false,// do not allow dragging nodes
+        zoomView: false, // do not allow zooming
+        dragView: false  // do not allow dragging
+      }
+  };
+
+
+var network = new vis.Network(container, data, options);
+}
+
+function displayCustomizedPaths(){
+  //data.nodes.clear();
+  //data.edges.clear();
+  var n = new Array();
+  var e = new Array();
+  index = 1;
+
+  const fileUrl = 'models.txt' // provide file location
+  fetch(fileUrl)
+  .then( r => r.text() )
+  .then( t => {
+    var lines = t.split('\n');
+    for (var i = 0; i < lines.length; i++){
+      data = lines[i].split(',');
+      if(data[0] === myModel){
+        var rowLength = 640/parseInt(data[6]);
+        var columnLength = 512/parseInt(data[7]);
+        var autisticCheckBox = document.getElementById("autisticBox");
+        var controlCheckBox = document.getElementById("controlBox");
+        var unknownCheckBox = document.getElementById("unknownBox");
+        if( $(autisticCheckBox).is(':checked') ){
+          for(var i=0; i<data[5].length;i++){
+            var num = data[5].charCodeAt(i);
+            num = num - 65;
+            var h = parseInt(data[7]);
+            var row = num/h;
+            row = Math.floor(row);
+            var g = parseInt(data[7]);
+            var column = num%g;
+            var y = row*rowLength + rowLength/2;
+            var x = column*columnLength + columnLength/2;
+            n.push({
+              id: index,
+              x: x,
+              y: y,
+              color: '#cc00ff',
+              size:5,
+      //        label: String.fromCharCode(num+65),
+            });
+            e.push({
+              from: (index-1),
+              to: index,
+              color: {
+                color: "#66ffcc",
+              },
+            });
+            index++;
+          }
+        }
+        if( $(controlCheckBox).is(':checked') ){
+          for(var i=0; i<data[4].length;i++){
+            var num = data[4].charCodeAt(i);
+            num = num - 65;
+            var h = parseInt(data[7]);
+            var row = num/h;
+            row = Math.floor(row);
+            var g = parseInt(data[7]);
+            var column = num%g;
+            var y = row*rowLength + rowLength/2;
+            var x = column*columnLength + columnLength/2;
+            n.push({
+              id: index,
+              x: x,
+              y: y,
+              color: '#cc00ff',
+              size:5,
+          //    label: String.fromCharCode(num+65),
+            });
+            var t = {
+              from: (index-1),
+              to: index,
+              color: {
+                color: "#ff66ff",
+              },
+            }
+            e.push(t);
+            index++;
+          }
+        }
+        if( $(unknownCheckBox).is(':checked') ){
+          for(var i=0; i<unknownPath.length;i++){
+            var num = unknownPath.charCodeAt(i);
+            num = num - 65;
+            var h = parseInt(data[7]);
+            var row = num/h;
+            row = Math.floor(row);
+            var g = parseInt(data[7]);
+            var column = num%g;
+            var y = row*rowLength + rowLength/2;
+            var x = column*columnLength + columnLength/2;
+            n.push({
+              id: index,
+              x: x,
+              y: y,
+              color: '#cc00ff',
+              size:5,
+            //  label: String.fromCharCode(num+65),
+            });
+            e.push({
+              from: (index-1),
+              to: index,
+              color: {
+                color: "#ffff66",
+              },
+            });
+            index++;
+          }
+        }
+      }
+    }
+
+    for(var i=0;i<data[6];i++){
+      for(var j=0;j<data[7];j++){
+        var y = i*rowLength + rowLength/2;
+        var x = j*columnLength + columnLength/2;
+        n.push({
+          id:index,
+          x: x,
+          y: y,
+          color: "#ffffff00",
+          size:15,
+        })
+        index++;
+      }
+    }
+
+    e.push({
+      from: 1,
+      to: (index-1),
+      color: {
+        color: "#ffffff00",
+      },
+    })
+
+    var nodes = new vis.DataSet(n);
+
+    console.log(e);
+    var edges = new vis.DataSet(e);
+
+      var container = document.getElementById("mynetwork");
+      var data = {
+        nodes: nodes,
+        edges: edges,
+      }
+      var options = {
+        nodes: {
+          shape: "dot",
+          size: 30,
+          fixed: {
+            y: true,
+            x: true,
+          },
+
+          font: {
+            size: 32,
+            color: "#ffffff",
+          },
+          borderWidth: 2,
+        },
+        edges: {
+          width: 2,
+          smooth: {
+            type: "vertical",
+            forceDirection: "none",
+            roundness: 1,
+          },
+          arrows: {to:{
+              enabled: true,
+              }
+            }
+        },
+
+        physics: false,
+          interaction: {
+            dragNodes: false,// do not allow dragging nodes
+            zoomView: false, // do not allow zooming
+            dragView: false  // do not allow dragging
+          }
+      };
+
+
+    var network = new vis.Network(container, data, options);
+  } )
+}
+
+function heatMap(){
+
 }
