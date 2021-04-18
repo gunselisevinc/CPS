@@ -347,7 +347,7 @@ section .btn a{
 /*Message end*/
 #mynetwork {
 /*  border: 1px solid #444444;*/
-  background-image: url("../1.jpg");
+/*  background-image: url("../1.jpg");*/
   width: 512;
   height: 640;
   background-size: cover;
