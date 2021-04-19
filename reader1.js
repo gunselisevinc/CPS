@@ -16,6 +16,8 @@ var ID_finder = 1;
 var path_control = '';
 var path_autistic = '';
 var fileWrite = '';
+var height = -1;
+var width = -1;
 
 var autistic_stimulis = new Array();
 var control_stimulis = new Array();
@@ -57,9 +59,10 @@ var FileDone = function(event){
   enable_control= enable_control + 1;
     if(enable_autistic >= 1){
         document.getElementById("model").disabled = false;
-        document.getElementById("height").disabled = false;
-        document.getElementById("width").disabled = false;}
+  //      document.getElementById("height").disabled = false;
+  //      document.getElementById("width").disabled = false;}
     //enable inputs end
+  }
 
 
   counter_autistic = counter_autistic + 1;
@@ -187,8 +190,9 @@ var FileDone2 = function(event){
     enable_autistic = enable_autistic+1;
     if(enable_control >= 1){
     document.getElementById("model").disabled = false;
-    document.getElementById("height").disabled = false;
-    document.getElementById("width").disabled = false;}
+  //  document.getElementById("height").disabled = false;
+  //  document.getElementById("width").disabled = false;}
+}
     //enable input end
 
   counter_control = counter_control + 1;
@@ -330,21 +334,25 @@ function read(){
     var grid = addGrid(1);
     var path_autistic = sendSta(grid, stimuli_name, fileData_Autistic);
     console.log("Autistic path: " + path_autistic);
+    fileWrite = fileWrite.concat(stimuli_name);
+    fileWrite = fileWrite.concat(",");
+    fileWrite = fileWrite.concat(path_autistic);
+    fileWrite = fileWrite.concat(",");
+  //  fileWrite = fileWrite.concat(durationsStr);
+  //  fileWrite = fileWrite.concat(",");
+    durationsStr = '';
   }
   if(fileData_Control.length){
     var grid = addGrid(0);
     var path_control = sendSta(grid, stimuli_name, fileData_Control);
     console.log("Control path: " + path_control);
-    fileWrite = fileWrite.concat(stimuli_name);
-    fileWrite = fileWrite.concat(",");
-    fileWrite = fileWrite.concat(path_autistic);
-    fileWrite = fileWrite.concat(",");
     fileWrite = fileWrite.concat(path_control);
     fileWrite = fileWrite.concat(",");
     fileWrite = fileWrite.concat(gridSizeX);
     fileWrite = fileWrite.concat(",");
     fileWrite = fileWrite.concat(gridSizeY);
     fileWrite = fileWrite.concat(",\n");
+    durationsStr = '';
     console.log(fileWrite);
 
     var xhttp = new XMLHttpRequest();
@@ -458,8 +466,8 @@ var grid = {
 };
 
 function addGrid(checker) {
-		var width = document.getElementById("width").value;
-    var height = document.getElementById("height").value;
+	//	var width = document.getElementById("width").value;
+//    var height = document.getElementById("height").value;
     var gridSizeX = document.getElementById("gridX").value;
     var gridSizeY = document.getElementById("gridY").value;
 
@@ -469,11 +477,6 @@ function addGrid(checker) {
       fileWrite = fileWrite.concat(height);
       fileWrite = fileWrite.concat(",");
     }
-    else{
-      document.getElementById("width").value = "";
-      document.getElementById("height").value = "";
-    }
-
 		var startX = 0;
     var startY = 0;
     var lengthX = 0;
@@ -559,7 +562,7 @@ function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY){
   }
   console.log(unknownPath);
 }
-
+var durationsStr = '';
 function sendSta(grid, stimuli, arr){
   var indx = -1;
   var points = new Array();
@@ -605,8 +608,8 @@ function sendSta(grid, stimuli, arr){
   var daccuracy = document.getElementById("daccuracy").value;
   var sizeOfScreen = document.getElementById("screenSize").value;
   var distance = document.getElementById("distance").value;
-  var resX = document.getElementById("rWidth").value;
-  var resY =  document.getElementById("rHeight").value;
+  //var resX = document.getElementById("rWidth").value;
+  //var resY =  document.getElementById("rHeight").value;
   var tlevel = document.getElementById("Tolarance").value;
   var hfidelity = document.getElementById("fidelity").value;
 
@@ -615,8 +618,8 @@ function sendSta(grid, stimuli, arr){
         daccuracy: daccuracy,
         sizeOfScreen: sizeOfScreen,
         distance: distance,
-        resX: resX,
-        resY: resY,
+        resX: width,
+        resY: height,
         tlevel: tlevel,
         hfidelity: hfidelity
     },
@@ -657,6 +660,12 @@ var dataResponse;
       durations = respond[2].split(',');
       t_mp = durations.length - 1;
       durations[t_mp] = durations[t_mp].replaceAll(']','');
+      window.alert(durations);
+      for(var xr = 0; xr < durations.length; xr++){
+        durationsStr.concat(String(durations[xr]) + " ");
+    //    console.log(durations[xr]);
+      }
+  //    console.log(durationsStr);
     }
     return path;
 }
@@ -751,25 +760,33 @@ function validate() {
 }
 
 //var reader = new FileReader();
-function getImageSize(reader) {
+//function getImageSize(reader) {
+document.getElementById("screenshot").addEventListener('change', function(){
   //Read the contents of Image File.
-  reader.readAsDataURL(fileUpload.files[0]);
-  reader.onload = function(e) {
+  var reader=new FileReader();
+
+  reader.onload = ImageDone;
 
     //Initiate the JavaScript Image object.
     var image = new Image();
 
     //Set the Base64 string return from FileReader as source.
-    image.src = e.target.result;
+//    image.src = e.target.result;
 
     //Validate the File Height and Width.
-    image.onload = function() {
-      var height = this.height;
-      var width = this.width;
-    };
+
+  reader.readAsDataURL(this.files[0]);
+})
+
+var ImageDone = function(event){
+  var image = new Image();
+  image.onload = function(){
+    height = image.height;
+    width = image.width;
+    console.log(height + " " + width);
   };
-  return [height, width];
-}
+  image.src = event.target.result;
+};
 
 //Visualisation
 function visualize(unknown,autistic,control,gridX,gridY){
