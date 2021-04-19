@@ -348,6 +348,8 @@ function read(){
     console.log("Control path: " + path_control);
     fileWrite = fileWrite.concat(path_control);
     fileWrite = fileWrite.concat(",");
+  //  fileWrite = fileWrite.concat(durationsStr);
+  //  fileWrite = fileWrite.concat(",");
     fileWrite = fileWrite.concat(gridSizeX);
     fileWrite = fileWrite.concat(",");
     fileWrite = fileWrite.concat(gridSizeY);
@@ -660,12 +662,10 @@ var dataResponse;
       durations = respond[2].split(',');
       t_mp = durations.length - 1;
       durations[t_mp] = durations[t_mp].replaceAll(']','');
-      window.alert(durations);
       for(var xr = 0; xr < durations.length; xr++){
-        durationsStr.concat(String(durations[xr]) + " ");
-    //    console.log(durations[xr]);
+        durationsStr = durationsStr.concat(String(durations[xr]) + " ");
+        console.log(durations[xr]);
       }
-  //    console.log(durationsStr);
     }
     return path;
 }
