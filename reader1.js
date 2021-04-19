@@ -359,6 +359,7 @@ var newComerData = new Array();
 var myModel = "";
 
 function newComerRead(file){
+    unknownPath = "";
     myModel = document.getElementById("model").value;
     var reader = new FileReader();
     reader.onload = function(event){
@@ -773,8 +774,13 @@ function getImageSize(reader) {
 //Visualisation
 function visualize(unknown,autistic,control,gridX,gridY){
 
+
+  var container = document.getElementById("mynetwork");
+  container.style.backgroundImage = "url('1.jpg')";
+
   var n = new Array();
   var e = new Array();
+
   var rowLength = 640/parseInt(gridX);
   var columnLength = 512/parseInt(gridY);
   index = 1;
@@ -860,24 +866,6 @@ function visualize(unknown,autistic,control,gridX,gridY){
     });
     index++;
   }
-/*
-  console.log(rowLength + " " +columnLength);
-  for(var i=0;i<gridX;i++){
-    for(var j=0;j<gridY;j++){
-      var y = i*rowLength + rowLength/2;
-      var x = j*columnLength + columnLength/2;
-      n.push({
-        id:index,
-        x: x,
-        y: y,
-        color: "#ff44ff",
-        size:15,
-      })
-      index++;
-    }
-  }
-
-  console.log(n);*/
 
   for(var i=0;i<gridX;i++){
     for(var j=0;j<gridY;j++){
@@ -902,12 +890,16 @@ function visualize(unknown,autistic,control,gridX,gridY){
     },
   })
 
+console.log(n);
+console.log(e);
+
 var nodes = new vis.DataSet(n);
 
-console.log(e);
+
 var edges = new vis.DataSet(e);
 
   var container = document.getElementById("mynetwork");
+
   var data = {
     nodes: nodes,
     edges: edges,
@@ -1088,7 +1080,7 @@ function displayCustomizedPaths(){
 
     var nodes = new vis.DataSet(n);
 
-    console.log(e);
+
     var edges = new vis.DataSet(e);
 
       var container = document.getElementById("mynetwork");
