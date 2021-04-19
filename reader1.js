@@ -466,8 +466,8 @@ var grid = {
 };
 
 function addGrid(checker) {
-	//	var width = document.getElementById("width").value;
-//    var height = document.getElementById("height").value;
+	  //var width = document.getElementById("width").value;
+    //var height = document.getElementById("height").value;
     var gridSizeX = document.getElementById("gridX").value;
     var gridSizeY = document.getElementById("gridY").value;
 
