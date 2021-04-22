@@ -302,6 +302,12 @@ function read(){
   var model_name = document.getElementById("model").value;
   var gridSizeX = document.getElementById("gridX").value;
   var gridSizeY = document.getElementById("gridY").value;
+  var permission = document.getElementById("permission");
+  var storePermit = false;
+  if( $(permission).is(':checked')){
+    storePermit = true;
+  }
+  console.log(storePermit);
 
   document.getElementById("model").value = "";
   document.getElementById("selectStimuli").value = "";
