@@ -436,6 +436,8 @@ function newComerRead(file){
           singlePathCreator(data[1], data[2], data[3],data[6],data[7]);
           console.log(data[5]);
           console.log(data[4]);
+          width = data[1];
+          height = data[2];
           prediction(unknownPath, data[5], data[4], data[6], data[7]);
         }
       }
@@ -799,13 +801,22 @@ function visualize(unknown,autistic,control,gridX,gridY){
 
 
   var container = document.getElementById("mynetwork");
-  container.style.backgroundImage = "url('1.jpg')";
+  container.style.backgroundImage = "url('test.png')";
+  var h = height/2;
+  var w = width/2;
+  container.style.height = h;
+  container.style.width = w;
+
+  var margin = w/2;
+  document.getElementById("autisticBox").style.margin = "0px 0px 0px " + margin + "px";
 
   var n = new Array();
   var e = new Array();
 
-  var rowLength = 640/parseInt(gridX);
-  var columnLength = 512/parseInt(gridY);
+
+
+  var rowLength = h/parseInt(gridX);
+  var columnLength = w/parseInt(gridY);
   index = 1;
   for(var i=0; i<autistic.length;i++){
     var num = autistic.charCodeAt(i);
@@ -982,8 +993,10 @@ function displayCustomizedPaths(){
     for (var i = 0; i < lines.length; i++){
       data = lines[i].split(',');
       if(data[0] === myModel){
-        var rowLength = 640/parseInt(data[6]);
-        var columnLength = 512/parseInt(data[7]);
+        var h = data[2]/2;
+        var w = data[1]/2;
+        var rowLength = h/parseInt(data[6]);
+        var columnLength = w/parseInt(data[7]);
         var autisticCheckBox = document.getElementById("autisticBox");
         var controlCheckBox = document.getElementById("controlBox");
         var unknownCheckBox = document.getElementById("unknownBox");
