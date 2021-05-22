@@ -476,8 +476,6 @@ var grid = {
 };
 
 function addGrid(checker) {
-	//	var width = document.getElementById("width").value;
-//    var height = document.getElementById("height").value;
     var gridSizeX = document.getElementById("gridX").value;
     var gridSizeY = document.getElementById("gridY").value;
 
@@ -618,8 +616,6 @@ function sendSta(grid, stimuli, arr){
   var daccuracy = document.getElementById("daccuracy").value;
   var sizeOfScreen = document.getElementById("screenSize").value;
   var distance = document.getElementById("distance").value;
-  //var resX = document.getElementById("rWidth").value;
-  //var resY =  document.getElementById("rHeight").value;
   var tlevel = document.getElementById("Tolarance").value;
   var hfidelity = document.getElementById("fidelity").value;
 
@@ -716,6 +712,8 @@ function levenshtein(a, b) {
     return matrix[b.length][a.length];
 }
 
+
+
 function prediction(unknown,autistic,control,gridX,gridY){
     var comparisonUnknownAutistic = levenshtein(unknown,autistic);
     var comparisonUnknownControl = levenshtein(unknown,control);
@@ -767,8 +765,6 @@ function validate() {
   }
 }
 
-//var reader = new FileReader();
-//function getImageSize(reader) {
 document.getElementById("screenshot").addEventListener('change', function(){
   //Read the contents of Image File.
   var reader=new FileReader();
@@ -777,9 +773,6 @@ document.getElementById("screenshot").addEventListener('change', function(){
 
     //Initiate the JavaScript Image object.
     var image = new Image();
-
-    //Set the Base64 string return from FileReader as source.
-//    image.src = e.target.result;
 
     //Validate the File Height and Width.
 
@@ -795,12 +788,26 @@ var ImageDone = function(event){
   };
   image.src = event.target.result;
 };
+var myInterval;
+function StopInterval(){
+  clearInterval(myInterval);
+  console.log("done");
+}
 
+
+var container;
+var network;
+var nodes;
+var edges;
+var startNode = new Array();
 //Visualisation
 function visualize(unknown,autistic,control,gridX,gridY){
-
-
-  var container = document.getElementById("mynetwork");
+  //data.nodes.clear();
+  document.getElementById("output").style.display = "block";
+  window.scrollTo(1000,document.body.scrollHeight);
+  startNode = new Array();
+  var startEdge = new Array();
+  container = document.getElementById("mynetwork");
   container.style.backgroundImage = "url('test.png')";
   var h = height/2;
   var w = width/2;
@@ -808,7 +815,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
   container.style.width = w;
 
   var margin = w/2;
-  document.getElementById("autisticBox").style.margin = "0px 0px 0px " + margin + "px";
+  document.getElementById("autisticBox").style.margin = "0px 0px 0px " + (margin-180) + "px";
+  document.getElementById("speedLabel").style.margin = "0px 0px 0px " + (margin-122) + "px";
 
   var n = new Array();
   var e = new Array();
@@ -818,6 +826,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
   var rowLength = h/parseInt(gridX);
   var columnLength = w/parseInt(gridY);
   index = 1;
+  startNode[0] = index;
+  startEdge[0] = index;
   for(var i=0; i<autistic.length;i++){
     var num = autistic.charCodeAt(i);
     num = num - 65;
@@ -832,9 +842,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
       id: index,
       x: x,
       y: y,
-      color: '#cc00ff',
+    //  color: "#cc00ff",
       size:5,
-  //    label: String.fromCharCode(num+65),
     });
     e.push({
       from: (index-1),
@@ -845,6 +854,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
     });
     index++;
   }
+  startNode[1] = index;
+  startEdge[1] = index;
   for(var i=0; i<control.length;i++){
     var num = control.charCodeAt(i);
     num = num - 65;
@@ -859,9 +870,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
       id: index,
       x: x,
       y: y,
-      color: '#cc00ff',
+  //    color: "#cc00ff",
       size:5,
-  //    label: String.fromCharCode(num+65),
     });
     var t = {
       from: (index-1),
@@ -873,6 +883,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
     e.push(t);
     index++;
   }
+  startNode[2] = index;
+  startEdge[2] = index;
   for(var i=0; i<unknown.length;i++){
     var num = unknown.charCodeAt(i);
     num = num - 65;
@@ -887,9 +899,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
       id: index,
       x: x,
       y: y,
-      color: '#cc00ff',
+    //  color: "#cc00ff",
       size:5,
-    //  label: String.fromCharCode(num+65),
     });
     e.push({
       from: (index-1),
@@ -900,7 +911,7 @@ function visualize(unknown,autistic,control,gridX,gridY){
     });
     index++;
   }
-
+  startNode[3] = index;
   for(var i=0;i<gridX;i++){
     for(var j=0;j<gridY;j++){
       var y = i*rowLength + rowLength/2;
@@ -910,7 +921,7 @@ function visualize(unknown,autistic,control,gridX,gridY){
         x: x,
         y: y,
         color: "#ffffff00",
-        size:15,
+        size:5,
       })
       index++;
     }
@@ -927,12 +938,10 @@ function visualize(unknown,autistic,control,gridX,gridY){
 console.log(n);
 console.log(e);
 
-var nodes = new vis.DataSet(n);
+nodes = new vis.DataSet(n);
+edges = new vis.DataSet(e);
 
-
-var edges = new vis.DataSet(e);
-
-  var container = document.getElementById("mynetwork");
+  container = document.getElementById("mynetwork");
 
   var data = {
     nodes: nodes,
@@ -941,7 +950,8 @@ var edges = new vis.DataSet(e);
   var options = {
     nodes: {
       shape: "dot",
-      size: 30,
+      size: 5,
+      color: "#cc00ff",
       fixed: {
         y: true,
         x: true,
@@ -975,7 +985,10 @@ var edges = new vis.DataSet(e);
   };
 
 
-var network = new vis.Network(container, data, options);
+  network = new vis.Network(container, data, options);
+
+
+
 }
 
 function displayCustomizedPaths(){
@@ -984,7 +997,7 @@ function displayCustomizedPaths(){
   var n = new Array();
   var e = new Array();
   index = 1;
-
+  StopInterval();
   const fileUrl = 'models.txt' // provide file location
   fetch(fileUrl)
   .then( r => r.text() )
@@ -1000,7 +1013,9 @@ function displayCustomizedPaths(){
         var autisticCheckBox = document.getElementById("autisticBox");
         var controlCheckBox = document.getElementById("controlBox");
         var unknownCheckBox = document.getElementById("unknownBox");
+        startNode[0] = -1;
         if( $(autisticCheckBox).is(':checked') ){
+          startNode[0] = index;
           for(var i=0; i<data[5].length;i++){
             var num = data[5].charCodeAt(i);
             num = num - 65;
@@ -1015,7 +1030,7 @@ function displayCustomizedPaths(){
               id: index,
               x: x,
               y: y,
-              color: '#cc00ff',
+
               size:5,
       //        label: String.fromCharCode(num+65),
             });
@@ -1029,7 +1044,9 @@ function displayCustomizedPaths(){
             index++;
           }
         }
+        startNode[1] = -1;
         if( $(controlCheckBox).is(':checked') ){
+          startNode[1] = index;
           for(var i=0; i<data[4].length;i++){
             var num = data[4].charCodeAt(i);
             num = num - 65;
@@ -1044,9 +1061,8 @@ function displayCustomizedPaths(){
               id: index,
               x: x,
               y: y,
-              color: '#cc00ff',
+              //color: '#cc00ff',
               size:5,
-          //    label: String.fromCharCode(num+65),
             });
             var t = {
               from: (index-1),
@@ -1059,7 +1075,9 @@ function displayCustomizedPaths(){
             index++;
           }
         }
+        startNode[2] = -1;
         if( $(unknownCheckBox).is(':checked') ){
+          startNode[2] = index;
           for(var i=0; i<unknownPath.length;i++){
             var num = unknownPath.charCodeAt(i);
             num = num - 65;
@@ -1074,9 +1092,8 @@ function displayCustomizedPaths(){
               id: index,
               x: x,
               y: y,
-              color: '#cc00ff',
+              //color: '#cc00ff',
               size:5,
-            //  label: String.fromCharCode(num+65),
             });
             e.push({
               from: (index-1),
@@ -1090,7 +1107,7 @@ function displayCustomizedPaths(){
         }
       }
     }
-
+    startNode[3] = index;
     for(var i=0;i<data[6];i++){
       for(var j=0;j<data[7];j++){
         var y = i*rowLength + rowLength/2;
@@ -1100,7 +1117,7 @@ function displayCustomizedPaths(){
           x: x,
           y: y,
           color: "#ffffff00",
-          size:15,
+          size:5,
         })
         index++;
       }
@@ -1114,12 +1131,12 @@ function displayCustomizedPaths(){
       },
     })
 
-    var nodes = new vis.DataSet(n);
+    nodes = new vis.DataSet(n);
 
 
-    var edges = new vis.DataSet(e);
+    edges = new vis.DataSet(e);
 
-      var container = document.getElementById("mynetwork");
+      container = document.getElementById("mynetwork");
       var data = {
         nodes: nodes,
         edges: edges,
@@ -1127,7 +1144,8 @@ function displayCustomizedPaths(){
       var options = {
         nodes: {
           shape: "dot",
-          size: 30,
+          color: '#cc00ff',
+          size: 5,
           fixed: {
             y: true,
             x: true,
@@ -1161,10 +1179,65 @@ function displayCustomizedPaths(){
       };
 
 
-    var network = new vis.Network(container, data, options);
+    network = new vis.Network(container, data, options);
   } )
 }
 
-function heatMap(){
+function animation(){
 
+  var options = {
+    nodes: {
+      color: "#ffffff00",
+      },
+    edges: {
+      hidden: true,
+    },
+  }
+  StopInterval();
+  network.setOptions(options);
+    var i = startNode[0];
+    var j = startNode[1];
+    var k = startNode[2];
+    var i_end = startNode[1];
+    var j_end = startNode[2];
+    if(i_end == -1 && j_end == -1){
+      i_end = startNode[3];
+    }
+    else if(i_end == -1){
+      i_end = startNode[2];
+    }
+    else if(j_end == -1){
+      j_end = startNode[3];
+    }
+    var mySpeed = document.getElementById("speedValue").value;
+    mySpeed = mySpeed*1000 //Convert to milliseconds
+    myInterval = setInterval(function(){
+      if(((i === i_end) || (i == -1)) && ((j === j_end) || (j == -1)) && ((k === startNode[3]) || (k == -1))){
+        nodes.update({id: i, size: 5, color: "#cc00ff"});
+        nodes.update({id: j, size: 5, color: "#cc00ff"});
+        nodes.update({id: k, size: 5, color: "#cc00ff"});
+        StopInterval();
+      }
+      else{
+        if((i != i_end - 1) && (i != -1)){
+          nodes.update({id: i, color: "#cc00ff", size: 5});
+          nodes.update({id: i + 1, color: "#66ffcc", size: 15});
+          network.body.data.edges.add([{from: i, to: i + 1, color: {color: "#66ffcc"}, hidden: false}]);
+          i = i + 1;
+        }
+        if((j != j_end - 1) && (j != -1)){
+          nodes.update({id: j, color: "#cc00ff", size: 5});
+          nodes.update({id: j + 1, color: "#ff66ff", size: 15});
+          network.body.data.edges.add([{from: j, to: j + 1, color: {color: "#ff66ff"}, hidden: false}]);
+          j = j + 1;
+        }
+        if((k != startNode[3] - 1) && (k != -1)){
+          nodes.update({id: k, color: "#cc00ff", size: 5});
+          nodes.update({id: k + 1, color: "#ffff66", size: 15});
+          network.body.data.edges.add([{from: k, to: k + 1, color: {color: "#ffff66"}, hidden: false}]);
+          k = k + 1;
+        }
+        network.redraw;
+      }
+    }, mySpeed);
 }
