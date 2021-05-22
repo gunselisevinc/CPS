@@ -846,6 +846,7 @@ function visualize(unknown,autistic,control,gridX,gridY){
       size:5,
     });
     e.push({
+      id: index,
       from: (index-1),
       to: index,
       color: {
@@ -874,6 +875,7 @@ function visualize(unknown,autistic,control,gridX,gridY){
       size:5,
     });
     var t = {
+      id: index,
       from: (index-1),
       to: index,
       color: {
@@ -903,6 +905,7 @@ function visualize(unknown,autistic,control,gridX,gridY){
       size:5,
     });
     e.push({
+      id: index,
       from: (index-1),
       to: index,
       color: {
@@ -1035,6 +1038,7 @@ function displayCustomizedPaths(){
       //        label: String.fromCharCode(num+65),
             });
             e.push({
+              id: index,
               from: (index-1),
               to: index,
               color: {
@@ -1065,6 +1069,7 @@ function displayCustomizedPaths(){
               size:5,
             });
             var t = {
+              id: index,
               from: (index-1),
               to: index,
               color: {
@@ -1096,6 +1101,7 @@ function displayCustomizedPaths(){
               size:5,
             });
             e.push({
+              id: index,
               from: (index-1),
               to: index,
               color: {
@@ -1184,17 +1190,11 @@ function displayCustomizedPaths(){
 }
 
 function animation(){
-
-  var options = {
-    nodes: {
-      color: "#ffffff00",
-      },
-    edges: {
-      hidden: true,
-    },
+  for(t = 1; t <startNode[3]; t++){
+    nodes.update({id: t, color: "#ffffff00"});
+    network.body.data.edges.clear({id: t});
   }
   StopInterval();
-  network.setOptions(options);
     var i = startNode[0];
     var j = startNode[1];
     var k = startNode[2];
