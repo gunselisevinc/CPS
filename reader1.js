@@ -617,7 +617,12 @@ function sendSta(grid, stimuli, arr){
   var sizeOfScreen = document.getElementById("screenSize").value;
   var distance = document.getElementById("distance").value;
   var tlevel = document.getElementById("Tolarance").value;
-  var hfidelity = document.getElementById("fidelity").value;
+  var hfidelity = document.getElementById("fidelity");
+  var h_fidelity = false;
+  if( $(fidelity).is(':checked')){
+    h_fidelity = true;
+  }
+  console.log("Fidelity: " + h_fidelity);
 
   var setting = {
     sta: {
