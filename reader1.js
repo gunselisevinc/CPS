@@ -622,7 +622,6 @@ function sendSta(grid, stimuli, arr){
   if( $(fidelity).is(':checked')){
     h_fidelity = true;
   }
-  console.log("Fidelity: " + h_fidelity);
 
   var setting = {
     sta: {
