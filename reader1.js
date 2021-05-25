@@ -840,8 +840,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
     row = Math.floor(row);
     var g = parseInt(gridY);
     var column = num%g;
-    var y = row*rowLength + rowLength/2;
-    var x = column*columnLength + columnLength/2;
+    var y = row*rowLength + Math.floor(Math.random() * rowLength);
+    var x = column*columnLength + Math.floor(Math.random() * columnLength);
     n.push({
       id: index,
       x: x,
@@ -869,8 +869,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
     row = Math.floor(row);
     var g = parseInt(gridY);
     var column = num%g;
-    var y = row*rowLength + rowLength/2;
-    var x = column*columnLength + columnLength/2;
+    var y = row*rowLength + Math.floor(Math.random() * rowLength);
+    var x = column*columnLength + Math.floor(Math.random() * columnLength);
     n.push({
       id: index,
       x: x,
@@ -899,8 +899,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
     row = Math.floor(row);
     var g = parseInt(gridY);
     var column = num%g;
-    var y = row*rowLength + rowLength/2;
-    var x = column*columnLength + columnLength/2;
+    var y = row*rowLength + Math.floor(Math.random() * rowLength);
+    var x = column*columnLength + Math.floor(Math.random() * columnLength);
     n.push({
       id: index,
       x: x,
@@ -1031,8 +1031,8 @@ function displayCustomizedPaths(){
             row = Math.floor(row);
             var g = parseInt(data[7]);
             var column = num%g;
-            var y = row*rowLength + rowLength/2;
-            var x = column*columnLength + columnLength/2;
+            var y = row*rowLength + Math.floor(Math.random() * rowLength);
+            var x = column*columnLength + Math.floor(Math.random() * columnLength);
             n.push({
               id: index,
               x: x,
@@ -1063,8 +1063,8 @@ function displayCustomizedPaths(){
             row = Math.floor(row);
             var g = parseInt(data[7]);
             var column = num%g;
-            var y = row*rowLength + rowLength/2;
-            var x = column*columnLength + columnLength/2;
+            var y = row*rowLength + Math.floor(Math.random() * rowLength);
+            var x = column*columnLength + Math.floor(Math.random() * columnLength);
             n.push({
               id: index,
               x: x,
@@ -1095,8 +1095,8 @@ function displayCustomizedPaths(){
             row = Math.floor(row);
             var g = parseInt(data[7]);
             var column = num%g;
-            var y = row*rowLength + rowLength/2;
-            var x = column*columnLength + columnLength/2;
+            var y = row*rowLength + Math.floor(Math.random() * rowLength);
+            var x = column*columnLength + Math.floor(Math.random() * columnLength);
             n.push({
               id: index,
               x: x,
