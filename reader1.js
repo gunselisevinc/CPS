@@ -806,6 +806,8 @@ var startNode = new Array();
 var n = new Array();
 var e = new Array();
 var indexHolder = new Array();
+var gridX_c;
+var gridY_c;
 //Visualisation
 function visualize(unknown,autistic,control,gridX,gridY){
   n = [];
@@ -827,6 +829,8 @@ function visualize(unknown,autistic,control,gridX,gridY){
 
   var rowLength = h/parseInt(gridX);
   var columnLength = w/parseInt(gridY);
+  gridX_c = parseInt(gridX);
+  gridY_c = parseInt(gridY);
   index = 1;
   startNode[0] = index;
   indexHolder[0] = index;
@@ -1085,7 +1089,6 @@ for(var i=0; i<parseInt(gridY) - 1; i++){
     },
   })
 }
-
 index++;
 startNode[4] = index;
 
@@ -1137,8 +1140,7 @@ edges = new vis.DataSet(e);
 
   network = new vis.Network(container, data, options);
 }
-var gridX_c;
-var gridY_c;
+
 function displayCustomizedPaths(){
   var nn = new Array();
   var ee = new Array();
@@ -1303,7 +1305,7 @@ function displayCustomizedPaths(){
     }
     startNode[3] = index;
 
-if($(unknownCheckBox).is(':checked') || $(controlCheckBox).is(':checked') || $(autisticCheckBox).is(':checked')){
+//if($(unknownCheckBox).is(':checked') || $(controlCheckBox).is(':checked') || $(autisticCheckBox).is(':checked')){
   for(var i = 0; i < parseInt(gridX); i++){
     for(var j = 0; j < parseInt(gridY); j++){
       index++;
@@ -1430,7 +1432,7 @@ if($(unknownCheckBox).is(':checked') || $(controlCheckBox).is(':checked') || $(a
       },
     })
   }
-}
+//}
 
     nodes = new vis.DataSet(nn);
     edges = new vis.DataSet(ee);
