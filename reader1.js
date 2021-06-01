@@ -8,6 +8,23 @@ var data = {
     partID: -1
 };
 
+/*
+var model = {
+  id: -1,
+  width: -1,
+  height: -1,
+  image_path:	'',
+  model_name:	'',
+  stimuli_name:	'',
+  grid_x:	-1,
+  grid_y:	-1,
+  autistic_path: '',
+  control_path:	'',
+  flag: -1,
+  description: ''
+};
+*/
+
 var fileData_Autistic = new Array();
 var fileData_Control = new Array();
 var counter_control = 0;
@@ -363,11 +380,44 @@ function read(){
     durationsStr = '';
     console.log(fileWrite);
 
-    var xhttp = new XMLHttpRequest();
+    /*var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(){}
     xhttp.open("GET","fileWrite.py?q="+fileWrite, true);
     xhttp.send();
-    fileWrite = "";
+    fileWrite = "";*/
+
+    var flag = 0;
+    if(permission === true) flag = 1;
+    var image_path = "";
+    var desc = "";
+
+    //var dbWrite = "{"+"}"
+
+    fetch('http://localhost:5000/newModel', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            width: width,
+            height: height,
+            image_path:	image_path,
+            model_name:	model_name,
+            stimuli_name:	stimuli_name,
+            grid_x:	gridSizeX,
+            grid_y:	gridSizeY,
+            autistic_path: path_autistic,
+            control_path:	path_control,
+            flag: flag,
+            description: desc
+        })
+    })
+    .then(response => {
+      return response.json()
+    })
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
   }
 }
 
@@ -425,7 +475,7 @@ function newComerRead(file){
     reader.readAsText(file.files[0]);
     document.getElementById("inputfile3").value = "";
     document.getElementById("model").value = "";
-    const fileUrl = 'models.txt' // provide file location
+    /*const fileUrl = 'models.txt' // provide file location
     fetch(fileUrl)
     .then( r => r.text() )
     .then( t => {
@@ -441,7 +491,22 @@ function newComerRead(file){
           prediction(unknownPath, data[5], data[4], data[6], data[7]);
         }
       }
-    } )
+    } )*/
+
+    var getDataURl = 'http://localhost:5000/models/' + myModel;
+    console.log(getDataURl);
+    fetch(getDataURl)
+    .then(model => model.json())
+    .then((json) => {
+        var objectStr = JSON.stringify(json)
+        var objectDB = JSON.parse(objectStr);
+        console.log(objectDB);
+        console.log(objectDB[0].model_name);
+        width = objectDB[0].width;
+        height = objectDB[0].height;
+        singlePathCreator(width, height, objectDB[0].stimuli_name, objectDB[0].grid_x, objectDB[0].grid_y);
+        prediction(unknownPath, objectDB[0].autistic_path, objectDB[0].control_path, objectDB[0].grid_x, objectDB[0].grid_y);
+    })
 
     //model drop down start
     function modelFunc(data, i){

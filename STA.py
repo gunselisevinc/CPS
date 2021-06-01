@@ -406,7 +406,8 @@ def STA(response):
     pList, EyeTrackingData, SegmentationData, settings = convertData(response)
     myParticipants= getParticipants (pList, EyeTrackingData)
     myAoIs = getAoIs(SegmentationData)
-    myErrorRateArea = calculateErrorRateArea(settings['degreeOfAccuracy'], settings['distanceBetweenEyeTrackerAndParticipants'], settings['resolutionOfScreenX'], settings['resolutionOfScreenY'], settings['sizeOfScreen'])
+    #myErrorRateArea = calculateErrorRateArea(settings['degreeOfAccuracy'], settings['distanceBetweenEyeTrackerAndParticipants'], settings['resolutionOfScreenX'], settings['resolutionOfScreenY'], settings['sizeOfScreen'])
+    myErrorRateArea = 0
     mySequences = createSequences (myParticipants, myAoIs, myErrorRateArea)
     toleranceLevel = settings['tlevel']
     highestFidelity = settings['hfidelity']
