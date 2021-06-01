@@ -795,7 +795,6 @@ var ImageDone = function(event){
 var myInterval;
 function StopInterval(){
   clearInterval(myInterval);
-  console.log("done");
 }
 
 
@@ -804,9 +803,15 @@ var network;
 var nodes;
 var edges;
 var startNode = new Array();
+var n = new Array();
+var e = new Array();
+var indexHolder = new Array();
+var gridX_c;
+var gridY_c;
 //Visualisation
 function visualize(unknown,autistic,control,gridX,gridY){
-  //data.nodes.clear();
+  n = [];
+  e = [];
   document.getElementById("output").style.display = "block";
   window.scrollTo(1000,document.body.scrollHeight);
   startNode = new Array();
@@ -822,128 +827,270 @@ function visualize(unknown,autistic,control,gridX,gridY){
   document.getElementById("autisticBox").style.margin = "0px 0px 0px " + (margin-180) + "px";
   document.getElementById("speedLabel").style.margin = "0px 0px 0px " + (margin-122) + "px";
 
-  var n = new Array();
-  var e = new Array();
-
-
-
   var rowLength = h/parseInt(gridX);
   var columnLength = w/parseInt(gridY);
+  gridX_c = parseInt(gridX);
+  gridY_c = parseInt(gridY);
   index = 1;
   startNode[0] = index;
-  startEdge[0] = index;
+  indexHolder[0] = index;
   for(var i=0; i<autistic.length;i++){
     var num = autistic.charCodeAt(i);
     num = num - 65;
-    var h = parseInt(gridY);
-    var row = num/h;
+    var hh = parseInt(gridY);
+    var row = num/hh;
     row = Math.floor(row);
     var g = parseInt(gridY);
     var column = num%g;
-    var y = row*rowLength + rowLength/2;
-    var x = column*columnLength + columnLength/2;
-    n.push({
-      id: index,
-      x: x,
-      y: y,
-    //  color: "#cc00ff",
-      size:5,
-    });
+    var y = row*rowLength + Math.floor(Math.random() * rowLength);
+    var x = column*columnLength + Math.floor(Math.random() * columnLength);
+    if(index == startNode[0]){
+      n.push({
+        id: index,
+        x: x,
+        y: y,
+        color: "#D20606",
+        border: '#6E1515',
+        size:10,
+//        label: String.fromCharCode(num+65),
+      });
+    }
+    else{
+      n.push({
+        id: index,
+        x: x,
+        y: y,
+        color: "#D20606",
+        size:5,
+//        label: String.fromCharCode(num+65),
+      });
+    }
     e.push({
       id: index,
       from: (index-1),
       to: index,
       color: {
-        color: "#66ffcc",
+        color: "#D20606",
       },
     });
     index++;
   }
   startNode[1] = index;
-  startEdge[1] = index;
+  indexHolder[1] = index;
   for(var i=0; i<control.length;i++){
     var num = control.charCodeAt(i);
     num = num - 65;
-    var h = parseInt(gridY);
-    var row = num/h;
+    var hh = parseInt(gridY);
+    var row = num/hh;
     row = Math.floor(row);
     var g = parseInt(gridY);
     var column = num%g;
-    var y = row*rowLength + rowLength/2;
-    var x = column*columnLength + columnLength/2;
-    n.push({
-      id: index,
-      x: x,
-      y: y,
-  //    color: "#cc00ff",
-      size:5,
-    });
+    var y = row*rowLength + Math.floor(Math.random() * rowLength);
+    var x = column*columnLength + Math.floor(Math.random() * columnLength);
+    if(index == startNode[1]){
+      n.push({
+        id: index,
+        x: x,
+        y: y,
+        color: '#093E91',
+        border: '#000306',
+        size:10,
+      });
+    }
+    else{
+      n.push({
+        id: index,
+        x: x,
+        y: y,
+        color: '#093E91',
+        size:5,
+      });
+    }
+    if(index != startNode[1]){
     var t = {
       id: index,
       from: (index-1),
       to: index,
       color: {
-        color: "#ff66ff",
+        color: "#093E91",
       },
     }
-    e.push(t);
+    e.push(t);}
     index++;
   }
   startNode[2] = index;
-  startEdge[2] = index;
+  indexHolder[2] = index;
   for(var i=0; i<unknown.length;i++){
     var num = unknown.charCodeAt(i);
     num = num - 65;
-    var h = parseInt(gridY);
-    var row = num/h;
+    var hh = parseInt(gridY);
+    var row = num/hh;
     row = Math.floor(row);
     var g = parseInt(gridY);
     var column = num%g;
-    var y = row*rowLength + rowLength/2;
-    var x = column*columnLength + columnLength/2;
-    n.push({
-      id: index,
-      x: x,
-      y: y,
-    //  color: "#cc00ff",
-      size:5,
-    });
+    var y = row*rowLength + Math.floor(Math.random() * rowLength);
+    var x = column*columnLength + Math.floor(Math.random() * columnLength);
+    if(index == startNode[2]){
+      n.push({
+        id: index,
+        x: x,
+        y: y,
+        color: '#15910A',
+        border: '#1C6E15',
+        size:10,
+      });
+    }
+    else{
+      n.push({
+        id: index,
+        x: x,
+        y: y,
+        color: '#15910A',
+        size:5,
+      });
+    }
+    if(index != startNode[2]){
     e.push({
       id: index,
       from: (index-1),
       to: index,
       color: {
-        color: "#ffff66",
+        color: "#15910A",
       },
-    });
+    });}
     index++;
   }
   startNode[3] = index;
-  for(var i=0;i<gridX;i++){
-    for(var j=0;j<gridY;j++){
-      var y = i*rowLength + rowLength/2;
-      var x = j*columnLength + columnLength/2;
+  indexHolder[3] = index;
+
+for(var i = 0; i < parseInt(gridX); i++){
+  for(var j = 0; j < parseInt(gridY); j++){
+    index++;
+    var y = i*rowLength;
+    var x = j*columnLength;
+    n.push({
+      id:index,
+      x: x,
+      y: y,
+      color: "#ffffff00",
+      size:25,
+    })
+    index++;
+    var y = i*rowLength + rowLength;
+    var x = j*columnLength;
+    n.push({
+      id:index,
+      x: x,
+      y: y,
+      color: "#ffffff00",
+      size:25,
+    })
+    e.push({
+      from: (index -1),
+      to: (index),
+      width: 4,
+      arrows: {to:{
+          enabled: false,
+        }
+      },
+      color: {
+        color: "#606F74",
+      },
+    })
+      index++;
+      var y = i*rowLength;
+      var x = j*columnLength;
       n.push({
         id:index,
         x: x,
         y: y,
         color: "#ffffff00",
-        size:5,
+        size:25,
       })
       index++;
-    }
+      var y = i*rowLength;
+      var x = j*columnLength + columnLength;
+      n.push({
+        id:index,
+        x: x,
+        y: y,
+        color: "#ffffff00",
+        size:25,
+      })
+        e.push({
+          from: (index),
+          to: (index-1),
+          width: 4,
+          arrows: {to:{
+              enabled: false,
+            }
+          },
+          color: {
+            color: "#606F74",
+          },
+        })
   }
+  index++;
+  n.push({
+    id:index,
+    x: x,
+    y: y + rowLength,
+    color: "#ffffff00",
+    size:25,
+  })
+    e.push({
+      from: (index),
+      to: (index-1),
+      width: 4,
+      arrows: {to:{
+          enabled: false,
+        }
+      },
+      color: {
+        color: "#606F74",
+      },
+    })
+}
+index++;
+var y = (parseInt(gridX))*rowLength;
+var x = (parseInt(gridY))*columnLength;
+n.push({
+  id:index,
+  x: x,
+  y: y,
+  color: "#ffffff00",
+  size:25,
+})
+e.push({
+  from: (index),
+  to: (index-parseInt(gridY)),
+  width: 4,
+  arrows: {to:{
+      enabled: false,
+    }
+  },
+  color: {
+    color: "#606F74",
+  },
+})
 
+for(var i=0; i<parseInt(gridY) - 1; i++){
+  index = index - parseInt(gridY);
   e.push({
-    from: 1,
-    to: (index-1),
+    from: (index),
+    to: (index-(parseInt(gridY))),
+    width: 4,
+    arrows: {to:{
+        enabled: false,
+      }
+    },
     color: {
-      color: "#ffffff00",
+      color: "#606F74",
     },
   })
-
-console.log(n);
-console.log(e);
+}
+index++;
+startNode[4] = index;
 
 nodes = new vis.DataSet(n);
 edges = new vis.DataSet(e);
@@ -958,7 +1105,7 @@ edges = new vis.DataSet(e);
     nodes: {
       shape: "dot",
       size: 5,
-      color: "#cc00ff",
+      //color: "#cc00ff",
       fixed: {
         y: true,
         x: true,
@@ -991,18 +1138,13 @@ edges = new vis.DataSet(e);
       }
   };
 
-
   network = new vis.Network(container, data, options);
-
-
-
 }
 
 function displayCustomizedPaths(){
-  //data.nodes.clear();
-  //data.edges.clear();
-  var n = new Array();
-  var e = new Array();
+  var nn = new Array();
+  var ee = new Array();
+  var i_tracker = 0;
   index = 1;
   StopInterval();
   const fileUrl = 'models.txt' // provide file location
@@ -1017,6 +1159,10 @@ function displayCustomizedPaths(){
         var w = data[1]/2;
         var rowLength = h/parseInt(data[6]);
         var columnLength = w/parseInt(data[7]);
+        var gridX =  data[6];
+        gridX_c = gridX;
+        var gridY =  data[7];
+        gridY_c = gridY;
         var autisticCheckBox = document.getElementById("autisticBox");
         var controlCheckBox = document.getElementById("controlBox");
         var unknownCheckBox = document.getElementById("unknownBox");
@@ -1026,27 +1172,40 @@ function displayCustomizedPaths(){
           for(var i=0; i<data[5].length;i++){
             var num = data[5].charCodeAt(i);
             num = num - 65;
-            var h = parseInt(data[7]);
-            var row = num/h;
+            var hh = parseInt(data[7]);
+            var row = num/hh;
             row = Math.floor(row);
             var g = parseInt(data[7]);
             var column = num%g;
-            var y = row*rowLength + rowLength/2;
-            var x = column*columnLength + columnLength/2;
-            n.push({
-              id: index,
-              x: x,
-              y: y,
-
-              size:5,
-      //        label: String.fromCharCode(num+65),
-            });
-            e.push({
+            var y = n[indexHolder[0] + i - 1].y;
+            var x = n[indexHolder[0] + i - 1].x;
+            if(index == startNode[0]){
+              nn.push({
+                id: index,
+                x: x,
+                y: y,
+                color: "#D20606",
+                border: '#6E1515',
+                size:10,
+        //        label: String.fromCharCode(num+65),
+              });
+            }
+            else{
+              nn.push({
+                id: index,
+                x: x,
+                y: y,
+                color: "#D20606",
+                size:5,
+        //        label: String.fromCharCode(num+65),
+              });
+            }
+            ee.push({
               id: index,
               from: (index-1),
               to: index,
               color: {
-                color: "#66ffcc",
+                color: "#D20606",
               },
             });
             index++;
@@ -1058,29 +1217,43 @@ function displayCustomizedPaths(){
           for(var i=0; i<data[4].length;i++){
             var num = data[4].charCodeAt(i);
             num = num - 65;
-            var h = parseInt(data[7]);
-            var row = num/h;
+            var hh = parseInt(data[7]);
+            var row = num/hh;
             row = Math.floor(row);
             var g = parseInt(data[7]);
             var column = num%g;
-            var y = row*rowLength + rowLength/2;
-            var x = column*columnLength + columnLength/2;
-            n.push({
-              id: index,
-              x: x,
-              y: y,
-              //color: '#cc00ff',
-              size:5,
-            });
+            var y = n[indexHolder[1] + i - 1].y;
+            var x = n[indexHolder[1] + i - 1].x;
+            if(index == startNode[1]){
+              nn.push({
+                id: index,
+                x: x,
+                y: y,
+                color: '#093E91',
+                border: '#000306',
+                borderWidth: 2,
+                size:10,
+              });
+            }
+            else{
+              nn.push({
+                id: index,
+                x: x,
+                y: y,
+                color: '#093E91',
+                size:5,
+              });
+            }
+            if(index != startNode[1]){
             var t = {
               id: index,
               from: (index-1),
               to: index,
               color: {
-                color: "#ff66ff",
+                color: "#093E91",
               },
             }
-            e.push(t);
+            ee.push(t);}
             index++;
           }
         }
@@ -1090,61 +1263,179 @@ function displayCustomizedPaths(){
           for(var i=0; i<unknownPath.length;i++){
             var num = unknownPath.charCodeAt(i);
             num = num - 65;
-            var h = parseInt(data[7]);
-            var row = num/h;
+            var hh = parseInt(data[7]);
+            var row = num/hh;
             row = Math.floor(row);
             var g = parseInt(data[7]);
             var column = num%g;
-            var y = row*rowLength + rowLength/2;
-            var x = column*columnLength + columnLength/2;
-            n.push({
-              id: index,
-              x: x,
-              y: y,
-              //color: '#cc00ff',
-              size:5,
-            });
-            e.push({
+            var y = n[indexHolder[2] + i - 1].y;
+            var x = n[indexHolder[2] + i - 1].x;
+            if(index == startNode[2]){
+              nn.push({
+                id: index,
+                x: x,
+                y: y,
+                color: '#15910A',
+                border: '#1C6E15',
+                size:10,
+              });
+            }
+            else{
+              nn.push({
+                id: index,
+                x: x,
+                y: y,
+                color: '#15910A',
+                size:5,
+              });
+            }
+            if(index != startNode[2]){
+            ee.push({
               id: index,
               from: (index-1),
               to: index,
               color: {
-                color: "#ffff66",
+                color: "#15910A",
               },
-            });
+            });}
             index++;
           }
         }
       }
     }
     startNode[3] = index;
-    for(var i=0;i<data[6];i++){
-      for(var j=0;j<data[7];j++){
-        var y = i*rowLength + rowLength/2;
-        var x = j*columnLength + columnLength/2;
-        n.push({
+
+//if($(unknownCheckBox).is(':checked') || $(controlCheckBox).is(':checked') || $(autisticCheckBox).is(':checked')){
+  for(var i = 0; i < parseInt(gridX); i++){
+    for(var j = 0; j < parseInt(gridY); j++){
+      index++;
+      var y = i*rowLength;
+      var x = j*columnLength;
+      nn.push({
+        id:index,
+        x: x,
+        y: y,
+        color: "#ffffff00",
+        size:25,
+      })
+      index++;
+      var y = i*rowLength + rowLength;
+      var x = j*columnLength;
+      nn.push({
+        id:index,
+        x: x,
+        y: y,
+        color: "#ffffff00",
+        size:25,
+      })
+      ee.push({
+        from: (index -1),
+        to: (index),
+        width: 4,
+        arrows: {to:{
+            enabled: false,
+          }
+        },
+        color: {
+          color: "#606F74",
+        },
+      })
+        index++;
+        var y = i*rowLength;
+        var x = j*columnLength;
+        nn.push({
           id:index,
           x: x,
           y: y,
           color: "#ffffff00",
-          size:5,
+          size:25,
         })
         index++;
-      }
+        var y = i*rowLength;
+        var x = j*columnLength + columnLength;
+        nn.push({
+          id:index,
+          x: x,
+          y: y,
+          color: "#ffffff00",
+          size:25,
+        })
+          ee.push({
+            from: (index),
+            to: (index-1),
+            width: 4,
+            arrows: {to:{
+                enabled: false,
+              }
+            },
+            color: {
+              color: "#606F74",
+            },
+          })
     }
+    index++;
+    nn.push({
+      id:index,
+      x: x,
+      y: y + rowLength,
+      color: "#ffffff00",
+      size:25,
+    })
+      ee.push({
+        from: (index),
+        to: (index-1),
+        width: 4,
+        arrows: {to:{
+            enabled: false,
+          }
+        },
+        color: {
+          color: "#606F74",
+        },
+      })
+  }
+  index++;
+  var y = (parseInt(gridX))*rowLength;
+  var x = (parseInt(gridY))*columnLength;
+  nn.push({
+    id:index,
+    x: x,
+    y: y,
+    color: "#ffffff00",
+    size:25,
+  })
+  ee.push({
+    from: (index),
+    to: (index-parseInt(gridY)),
+    width: 4,
+    arrows: {to:{
+        enabled: false,
+      }
+    },
+    color: {
+      color: "#606F74",
+    },
+  })
 
-    e.push({
-      from: 1,
-      to: (index-1),
+  for(var i=0; i<parseInt(gridY) - 1; i++){
+    index = index - parseInt(gridY);
+    ee.push({
+      from: (index),
+      to: (index-(parseInt(gridY))),
+      width: 4,
+      arrows: {to:{
+          enabled: false,
+        }
+      },
       color: {
-        color: "#ffffff00",
+        color: "#606F74",
       },
     })
+  }
+//}
 
-    nodes = new vis.DataSet(n);
-
-
-    edges = new vis.DataSet(e);
+    nodes = new vis.DataSet(nn);
+    edges = new vis.DataSet(ee);
 
       container = document.getElementById("mynetwork");
       var data = {
@@ -1154,7 +1445,7 @@ function displayCustomizedPaths(){
       var options = {
         nodes: {
           shape: "dot",
-          color: '#cc00ff',
+        //  color: '#cc00ff',
           size: 5,
           fixed: {
             y: true,
@@ -1198,6 +1489,25 @@ function animation(){
     nodes.update({id: t, color: "#ffffff00"});
     network.body.data.edges.clear({id: t});
   }
+  var tmp_index = startNode[3];
+  for(var i = 0; i < parseInt(gridX_c); i++){
+    for(var j = 0; j < parseInt(gridY_c); j++){
+      tmp_index++;
+      tmp_index++;
+      network.body.data.edges.add([{from: tmp_index, to: parseInt(tmp_index) - 1, color: {color: "#606F74"}, hidden: false, width: 4, arrows: {to:{enabled: false,}},}]);
+      tmp_index++;
+      tmp_index++;
+      network.body.data.edges.add([{from: tmp_index, to: parseInt(tmp_index) - 1, color: {color: "#606F74"}, hidden: false, width: 4, arrows: {to:{enabled: false,}},}]);
+    }
+    tmp_index++;
+    network.body.data.edges.add([{from: tmp_index, to: parseInt(tmp_index) - 1, color: {color: "#606F74"}, hidden: false, width: 4, arrows: {to:{enabled: false,}},}]);
+  }
+  tmp_index++;
+  network.body.data.edges.add([{from: tmp_index, to: (parseInt(tmp_index) - parseInt(gridY_c)), color: {color: "#606F74"}, hidden: false, width: 4, arrows: {to:{enabled: false,}},}]);
+  for(var i=0; i < parseInt(gridY_c) - 1; i++){
+    tmp_index = tmp_index - parseInt(gridY_c);
+    network.body.data.edges.add([{from: tmp_index, to: (parseInt(tmp_index) - parseInt(gridY_c)), color: {color: "#606F74"}, hidden: false, width: 4, arrows: {to:{enabled: false,}},}]);
+  }
   StopInterval();
     var i = startNode[0];
     var j = startNode[1];
@@ -1217,28 +1527,37 @@ function animation(){
     mySpeed = mySpeed*1000 //Convert to milliseconds
     myInterval = setInterval(function(){
       if(((i === i_end) || (i == -1)) && ((j === j_end) || (j == -1)) && ((k === startNode[3]) || (k == -1))){
-        nodes.update({id: i, size: 5, color: "#cc00ff"});
-        nodes.update({id: j, size: 5, color: "#cc00ff"});
-        nodes.update({id: k, size: 5, color: "#cc00ff"});
+        nodes.update({id: i, size: 5, color: "#D20606"});
+        nodes.update({id: j, size: 5, color: "#093E91"});
+        nodes.update({id: k, size: 5, color: "#15910A"});
         StopInterval();
       }
       else{
         if((i != i_end - 1) && (i != -1)){
-          nodes.update({id: i, color: "#cc00ff", size: 5});
-          nodes.update({id: i + 1, color: "#66ffcc", size: 15});
-          network.body.data.edges.add([{from: i, to: i + 1, color: {color: "#66ffcc"}, hidden: false}]);
+          if(i == startNode[0])
+            nodes.update({id: i, color: "#D20606", size: 10});
+          else
+            nodes.update({id: i, color: "#D20606", size: 5});
+          nodes.update({id: i + 1, color: "#D20606", size: 15});
+          network.body.data.edges.add([{from: i, to: i + 1, color: {color: "#D20606"}, hidden: false}]);
           i = i + 1;
         }
         if((j != j_end - 1) && (j != -1)){
-          nodes.update({id: j, color: "#cc00ff", size: 5});
-          nodes.update({id: j + 1, color: "#ff66ff", size: 15});
-          network.body.data.edges.add([{from: j, to: j + 1, color: {color: "#ff66ff"}, hidden: false}]);
+          if(j == startNode[1])
+            nodes.update({id: j, color: "#093E91", size: 10});
+          else
+            nodes.update({id: j, color: "#093E91", size: 5});
+          nodes.update({id: j + 1, color: "#093E91", size: 15});
+          network.body.data.edges.add([{from: j, to: j + 1, color: {color: "#093E91"}, hidden: false}]);
           j = j + 1;
         }
         if((k != startNode[3] - 1) && (k != -1)){
-          nodes.update({id: k, color: "#cc00ff", size: 5});
-          nodes.update({id: k + 1, color: "#ffff66", size: 15});
-          network.body.data.edges.add([{from: k, to: k + 1, color: {color: "#ffff66"}, hidden: false}]);
+          if(k == startNode[2])
+            nodes.update({id: k, color: "#15910A", size: 10});
+          else
+            nodes.update({id: k, color: "#15910A", size: 5});
+          nodes.update({id: k + 1, color: "#15910A", size: 15});
+          network.body.data.edges.add([{from: k, to: k + 1, color: {color: "#15910A"}, hidden: false}]);
           k = k + 1;
         }
         network.redraw;
