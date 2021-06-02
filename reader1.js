@@ -382,9 +382,10 @@ function read() {
     fileWrite = fileWrite.concat(",\n");
     durationsStr = '';
     console.log(fileWrite);
+    console.log(storePermit);
 
     var flag = 0;
-    if (permission === true) flag = 1;
+    if (storePermit === true) flag = 1;
     var image_path = "";
     var desc = "";
 
@@ -484,6 +485,21 @@ function newComerRead(file) {
       height = objectDB[0].height;
       singlePathCreator(width, height, objectDB[0].stimuli_name, objectDB[0].grid_x, objectDB[0].grid_y);
       prediction(unknownPath, objectDB[0].autistic_path, objectDB[0].control_path, objectDB[0].grid_x, objectDB[0].grid_y);
+
+      if (objectDB[0].flag === 0) {
+        var modelRemoveURl = 'http://localhost:5000/modelRemove/' + myModel;
+        fetch(modelRemoveURl, {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => {
+            return response.json()
+          })
+          .catch(err => console.log(err));
+      }
     })
 
   //model drop down start
@@ -1122,22 +1138,22 @@ function visualize(unknown, autistic, control, gridX, gridY) {
     },
   })
 
-    for (var i = 0; i < gridY - 1; i++) {
-      index = index - 4;
-      e.push({
-        from: (index),
-        to: (index - 4),
-        width: 4,
-        arrows: {
-          to: {
-            enabled: false,
-          }
-        },
-        color: {
-          color: "#606F74",
-        },
-      })
-    }
+  for (var i = 0; i < gridY - 1; i++) {
+    index = index - 4;
+    e.push({
+      from: (index),
+      to: (index - 4),
+      width: 4,
+      arrows: {
+        to: {
+          enabled: false,
+        }
+      },
+      color: {
+        color: "#606F74",
+      },
+    })
+  }
   index++;
   startNode[4] = index;
 
