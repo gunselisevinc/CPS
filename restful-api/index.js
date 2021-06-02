@@ -3,10 +3,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const mysql = require('mysql');
 const path = require('path');
- 
+
 // parse application/json
 app.use(bodyParser.json());
- 
+
 //Server listening
 app.listen(5000,() =>{
   console.log('Server started on port 5000...');
@@ -30,10 +30,10 @@ app.use(function(req, res, next) {
 const con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '12345',
+  password: '',
   database: 'cps'
 });
- 
+
 //connect to database
 con.connect((err) =>{
   if(err) throw err;
@@ -76,6 +76,3 @@ app.delete('/modelRemove/:model_name',(req, res) => {
       res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
   });
 });
-
-
-

@@ -1110,7 +1110,7 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   })
   e.push({
     from: (index),
-    to: (index - parseInt(gridY)),
+    to: (index - 4),
     width: 4,
     arrows: {
       to: {
@@ -1122,22 +1122,22 @@ function visualize(unknown, autistic, control, gridX, gridY) {
     },
   })
 
-  for (var i = 0; i < parseInt(gridY) - 1; i++) {
-    index = index - parseInt(gridY);
-    e.push({
-      from: (index),
-      to: (index - (parseInt(gridY))),
-      width: 4,
-      arrows: {
-        to: {
-          enabled: false,
-        }
-      },
-      color: {
-        color: "#606F74",
-      },
-    })
-  }
+    for (var i = 0; i < gridY - 1; i++) {
+      index = index - 4;
+      e.push({
+        from: (index),
+        to: (index - 4),
+        width: 4,
+        arrows: {
+          to: {
+            enabled: false,
+          }
+        },
+        color: {
+          color: "#606F74",
+        },
+      })
+    }
   index++;
   startNode[4] = index;
 
@@ -1448,7 +1448,7 @@ function displayCustomizedPaths() {
   })
   ee.push({
     from: (index),
-    to: (index - parseInt(gridY)),
+    to: (index - 4),
     width: 4,
     arrows: {
       to: {
@@ -1459,12 +1459,11 @@ function displayCustomizedPaths() {
       color: "#606F74",
     },
   })
-
-  for (var i = 0; i < parseInt(gridY) - 1; i++) {
-    index = index - parseInt(gridY);
+  for (var i = 0; i < gridY - 1; i++) {
+    index = index - 4;
     ee.push({
       from: (index),
-      to: (index - (parseInt(gridY))),
+      to: (index - 4),
       width: 4,
       arrows: {
         to: {
@@ -1476,6 +1475,7 @@ function displayCustomizedPaths() {
       },
     })
   }
+
   //}
 
   nodes = new vis.DataSet(nn);
@@ -1591,9 +1591,10 @@ function animation() {
     }]);
   }
   tmp_index++;
+
   network.body.data.edges.add([{
     from: tmp_index,
-    to: (parseInt(tmp_index) - parseInt(gridY_c)),
+    to: (parseInt(tmp_index) - 4),
     color: {
       color: "#606F74"
     },
@@ -1605,11 +1606,11 @@ function animation() {
       }
     },
   }]);
-  for (var i = 0; i < parseInt(gridY_c) - 1; i++) {
-    tmp_index = tmp_index - parseInt(gridY_c);
+  for (var i = 0; i < gridY_c - 1; i++) {
+    tmp_index = tmp_index - 4;
     network.body.data.edges.add([{
       from: tmp_index,
-      to: (parseInt(tmp_index) - parseInt(gridY_c)),
+      to: (parseInt(tmp_index) - 4),
       color: {
         color: "#606F74"
       },
