@@ -8,7 +8,7 @@ const path = require('path');
 app.use(bodyParser.json());
 
 //Server listening
-app.listen(5000,() =>{
+app.listen(5000, () => {
   console.log('Server started on port 5000...');
 });
 
@@ -36,44 +36,68 @@ const con = mysql.createConnection({
 });
 
 //connect to database
-con.connect((err) =>{
-  if(err) throw err;
+con.connect((err) => {
+  if (err) throw err;
   console.log('Mysql Connected...');
 });
 
 //show all models
-app.get('/models',(req, res) => {
+app.get('/models', (req, res) => {
   let sql = "SELECT * FROM models";
   let query = con.query(sql, (err, results) => {
-    if(err) throw err;
-    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+    if (err) throw err;
+    res.send(JSON.stringify({
+      "status": 200,
+      "error": null,
+      "response": results
+    }));
   });
 });
 
 //show single model
-app.get('/models/:model_name',(req, res) => {
-  let sql = "SELECT * FROM models WHERE model_name="+"\""+req.params.model_name+"\"";
+app.get('/models/:model_name', (req, res) => {
+  let sql = "SELECT * FROM models WHERE model_name=" + "\"" + req.params.model_name + "\"";
   let query = con.query(sql, (err, results) => {
-    if(err) throw err;
+    if (err) throw err;
     res.send(JSON.stringify(results));
   });
 });
 
 //add new row
-app.post('/newModel',(req, res) => {
-  let data = {width: req.body.width, height: req.body.height, image_path: req.body.image_path, model_name: req.body.model_name, stimuli_name: req.body.stimuli_name, grid_x: req.body.grid_x, grid_y: req.body.grid_y, autistic_path: req.body.autistic_path, control_path: req.body.control_path, flag: req.body.flag, description: req.body.description};
+app.post('/newModel', (req, res) => {
+  let data = {
+    width: req.body.width,
+    height: req.body.height,
+    image_path: req.body.image_path,
+    model_name: req.body.model_name,
+    stimuli_name: req.body.stimuli_name,
+    grid_x: req.body.grid_x,
+    grid_y: req.body.grid_y,
+    autistic_path: req.body.autistic_path,
+    control_path: req.body.control_path,
+    flag: req.body.flag,
+    description: req.body.description
+  };
   let sql = "INSERT INTO models SET ?";
-  let query = con.query(sql, data,(err, results) => {
-    if(err) throw err;
-    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  let query = con.query(sql, data, (err, results) => {
+    if (err) throw err;
+    res.send(JSON.stringify({
+      "status": 200,
+      "error": null,
+      "response": results
+    }));
   });
 });
 
 //delete row with ID
-app.delete('/modelRemove/:model_name',(req, res) => {
-  let sql = "DELETE FROM models WHERE model_name="+"\""+req.params.model_name+"\"";
+app.delete('/modelRemove/:model_name', (req, res) => {
+  let sql = "DELETE FROM models WHERE model_name=" + "\"" + req.params.model_name + "\"";
   let query = con.query(sql, (err, results) => {
-    if(err) throw err;
-      res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+    if (err) throw err;
+    res.send(JSON.stringify({
+      "status": 200,
+      "error": null,
+      "response": results
+    }));
   });
 });
