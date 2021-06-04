@@ -6,18 +6,8 @@
   <link rel="stylesheet" type="text/css" href="css/style.css">
 
   <script src="dependencies/jquery/jquery.min.js"></script>
-
-  <!--      <link rel="stylesheet" href="dependencies/vis/vis-network.min.css"> -->
-  <!--    <link rel="stylesheet" href="dependencies/materialize-css/css/materialize.min.css"> -->
-
-
-  <!--       <link rel="stylesheet" href="dependencies/materialize-css/css/materialize.min.css"> -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="dependencies/vistaplus.css">
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
 </head>
 
 <body>
@@ -62,7 +52,7 @@
             <a href="#main" class="btn" id="backTop">Back To Top</a>
             <a href="indexModelling.html" class="btn" id="backModelling">Create New Model</a>
 
-            <div id="mynetwork" style="width: 50%">
+            <div id="mynetwork">
             </div>
             <br><br>
             <div id="buttons">
@@ -89,36 +79,16 @@
             <script src="dependencies/heatmap.js-2.0.5/build/heatmap.min.js"></script>
         </section>
       </div>
-      <!-- <div class="container">
-   Modal
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    Modal content
-      <div class="modal-content">
-        <div class="modal-header" style="color: #ffff; background-color: #0000008e">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h3 class="modal-title ">Prediction Result</h3>
-        </div>
-        <div class="modal-body" style="padding:40px 50px; color: #ffff; background-color: #0000008e">
-            <h4 id = "result">+</h4>
-        </div>
-      </div>
-    </div>
-</div>
-</div> -->
   </header>
 
   <!-- Jquery CDN Link -->
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script type="text/javascript">
-    //  document.getElementById("autisticBox").style.margin = "0px 0px 0px 267px";
     document.getElementById("autisticLabel").style.margin = "0px 0px 0px 1px";
     document.getElementById("controlBox").style.margin = "0px 0px 0px 50px";
     document.getElementById("controlLabel").style.margin = "20px 0px 0px 1px";
     document.getElementById("unknownBox").style.margin = "0px 0px 0px 50px";
     document.getElementById("unknownLabel").style.margin = "20px 0px 0px 1px";
-
-    //var animation = document.getElementById("animatebtn");
 
     backTop.addEventListener("click", function() {
       function scrollTopAnimated() {
@@ -151,16 +121,7 @@
         displayCustomizedPaths();
       }
     });
-
-    // $(function(){
-    //   $("backTop").on('click', function(){
-    //     $(html, body).animate({
-    //       scrollTop: $($.attr(this, 'href')).offset().top
-    //     }, 500); //500 = 0.5 second
-    //   });
-    // });
   </script>
 
 </body>
-
 </html>

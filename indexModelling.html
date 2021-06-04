@@ -4,7 +4,6 @@
   <title>Modelling</title>
   <link rel="icon" href="logo.jpg" type="image/png">
   <script src="dependencies/jquery/jquery.min.js"></script>
-  <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>   -->
   <script src="dependencies/vis/vis-network.min.js"></script>
   <script src="dependencies/jquery/jquery.min.js"></script>
   <script src="dependencies/html2canvas/html2canvas.min.js"></script>
@@ -63,10 +62,6 @@
 
           <label>Model: </label>
           <input type="text" id="model" name="model" disabled><br><br>
-          <!--         <label for="width">Width:   </label>
-                       <input type="text" id="width" name="width" disabled ><br><br>
-                       <label for="height">Height:  </label>
-                       <input type="text" id="height" name="height" disabled ><br><br> -->
           <input type="checkbox" id="permission" name="permission" value="permission" checked>
           <label for="permission" id="permissionLabel"> I allow this model to be stored permanently.</label><br><br>
           <button class="btn" id="myBtn" style="height: 41px; width: 155px; font-size: 16px; background-color: #000000"> Other Settings </button>
@@ -87,19 +82,6 @@
           <p style="color:black">Manage Advanced Settings</p>
         </div>
         <form id="staSettings" method="post" action="#">
-          <!--      <br>
-            <br>
-            <div>
-            <label for="rWidth" id="widthLabel">Resolution Width</label>
-            <label for="tab8">        </label>
-            <label for="rHeight" id="heightLabel">Resolution Height</label>
-            <br>
-            <input type="number" id="rWidth" value=1280 min=0>
-            <input type="number" id="rHeight" value=1024 min=0>
-            </div>
-            <br>
-            <br>
-            <div> -->
           <br><br><br>
           <div>
             <label for="screenSize" id="inchLabel">Screen Inch</label>
@@ -130,7 +112,6 @@
           </div>
           <br>
           <br>
-          <!-- <input type="submit" value="Save" id="saveButton"> -->
           <br><br>
       </div>
       </form>
@@ -140,10 +121,6 @@
 
     <!-- Modal and model inputs' placements and open close functions  -->
     <script>
-      //document.getElementById("widthLabel").style.margin = "0px 0px 0px 46px";
-      //document.getElementById("heightLabel").style.margin = "0px 0px 0px 129px";
-      //document.getElementById("rWidth").style.margin = "0px 0px 0px 46px";
-      //document.getElementById("rHeight").style.margin = "0px 0px 0px 81px";
       document.getElementById("permission").style.margin = "0px 0px 0px -20px";
       document.getElementById("myBtn").style.margin = "0px 0px 0px -30px";
       document.getElementById("inchLabel").style.margin = "0px 0px 0px 46px";
@@ -156,7 +133,6 @@
       document.getElementById("Tolarance").style.margin = "0px 0px 0px 82px";
       document.getElementById("fidelity").style.margin = "0px 0px 0px 172px";
       document.getElementById("fidelityLabel").style.margin = "0px 0px 0px 2px";
-      //document.getElementById("saveButton").style.margin = "0px 0px 0px 215px";
       document.getElementById("gridLabel").style.margin = "0px 0px 0px 46px";
       document.getElementById("gridX").style.margin = "0px 0px 0px 47px";
       document.getElementById("gridY").style.margin = "0px 0px 0px 0px";
@@ -189,5 +165,4 @@
     </script>
   </header>
 </body>
-
 </html>
