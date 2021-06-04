@@ -213,8 +213,6 @@ var FileDone2 = function(event) {
   enable_autistic = enable_autistic + 1;
   if (enable_control >= 1) {
     document.getElementById("model").disabled = false;
-    //  document.getElementById("height").disabled = false;
-    //  document.getElementById("width").disabled = false;}
   }
   //enable input end
 
@@ -684,7 +682,6 @@ function sendSta(grid, stimuli, arr) {
   if ($(fidelity).is(':checked')) {
     h_fidelity = true;
   }
-
   var setting = {
     sta: {
       daccuracy: daccuracy,
@@ -693,7 +690,7 @@ function sendSta(grid, stimuli, arr) {
       resX: width,
       resY: height,
       tlevel: tlevel,
-      hfidelity: hfidelity
+      hfidelity: h_fidelity
     },
     staAddress: "http://127.0.0.1:5000"
   };
@@ -780,13 +777,12 @@ function levenshtein(a, b) {
   return matrix[b.length][a.length];
 }
 
-
-
+var result = '';
 function prediction(unknown, autistic, control, gridX, gridY) {
+  result = '';
   var comparisonUnknownAutistic = levenshtein(unknown, autistic);
   var comparisonUnknownControl = levenshtein(unknown, control);
   var similarityRate;
-  var result = '';
   if (comparisonUnknownControl < comparisonUnknownAutistic) {
     similarityRate = 1 - (comparisonUnknownControl / Math.max(unknown.length, control.length));
     console.log("NOT AUTISTIC " + similarityRate);
@@ -808,7 +804,6 @@ function prediction(unknown, autistic, control, gridX, gridY) {
   //    $(document).ready(function(){
   //      $("#myModal").modal();
   //      $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
-  result = "";
   //    });
   visualize(unknown, autistic, control, gridX, gridY);
 }
@@ -879,8 +874,12 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   var startEdge = new Array();
   container = document.getElementById("mynetwork");
   container.style.backgroundImage = "url('test.png')";
-  var h = height / 2;
-  var w = width / 2;
+  var h = height;
+  var w = width;
+  if(w > 1000){
+    h = h / 2;
+    w = w / 2;
+  }
   container.style.height = h;
   container.style.width = w;
 
@@ -1205,6 +1204,25 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   };
 
   network = new vis.Network(container, data, options);
+  var element = document.createElement("div");
+  element.setAttribute("id", "element");
+  var tempArray = result.split(",");
+  element.appendChild(document.createTextNode("Result: " + tempArray[0]));
+  element.appendChild(document.createElement('br'));
+  tempArray2 = tempArray[1].split(".");
+  element.appendChild(document.createTextNode("Certainty: %" + tempArray2[0] + "." + tempArray2[1][0] + tempArray2[1][1]));
+  element.style.color = "white";
+  element.style.fontSize = "24px";
+  if(parseInt(objectDB[0].width) > 1000){
+    var pl = parseInt(objectDB[0].width) / 2 + 100;
+    var pl2 = - parseInt(objectDB[0].height) / 4 - 130;;
+  } else {
+    var pl = parseInt(objectDB[0].width) + 100;
+    var pl2 = - parseInt(objectDB[0].height) / 2 - 130;;
+  }
+  console.log(pl + " " + pl2);
+  element.style.margin = pl2.toString() +"px 0px 0px " + pl.toString() + "px";
+  document.getElementById('output').appendChild(element);
 }
 
 function displayCustomizedPaths() {
@@ -1213,8 +1231,12 @@ function displayCustomizedPaths() {
   var i_tracker = 0;
   index = 1;
   StopInterval();
-  var h = objectDB[0].height / 2;
-  var w = objectDB[0].width / 2;
+  var h = objectDB[0].height;
+  var w = objectDB[0].width;
+  if(w > 1000){
+    h = h / 2;
+    w = w / 2;
+  }
   var rowLength = h / parseInt(objectDB[0].grid_x);
   var columnLength = w / parseInt(objectDB[0].grid_y);
   var gridX = objectDB[0].grid_x;
@@ -1245,7 +1267,6 @@ function displayCustomizedPaths() {
           color: "#D20606",
           border: '#6E1515',
           size: 10,
-          //        label: String.fromCharCode(num+65),
         });
       } else {
         nn.push({
@@ -1254,7 +1275,6 @@ function displayCustomizedPaths() {
           y: y,
           color: "#D20606",
           size: 5,
-          //        label: String.fromCharCode(num+65),
         });
       }
       ee.push({
@@ -1360,7 +1380,6 @@ function displayCustomizedPaths() {
   }
   startNode[3] = index;
 
-  //if($(unknownCheckBox).is(':checked') || $(controlCheckBox).is(':checked') || $(autisticCheckBox).is(':checked')){
   for (var i = 0; i < parseInt(gridX); i++) {
     for (var j = 0; j < parseInt(gridY); j++) {
       index++;
@@ -1492,8 +1511,6 @@ function displayCustomizedPaths() {
     })
   }
 
-  //}
-
   nodes = new vis.DataSet(nn);
   edges = new vis.DataSet(ee);
 
@@ -1539,9 +1556,28 @@ function displayCustomizedPaths() {
       dragView: false // do not allow dragging
     }
   };
-
-
   network = new vis.Network(container, data, options);
+  var tempElem = document.getElementById("element");
+  tempElem.remove();
+  var element = document.createElement("div");
+  element.setAttribute("id", "element");
+  var tempArray = result.split(",");
+  element.appendChild(document.createTextNode("Result: " + tempArray[0]));
+  element.appendChild(document.createElement('br'));
+  tempArray2 = tempArray[1].split(".");
+  element.appendChild(document.createTextNode("Certainty: %" + tempArray2[0] + "." + tempArray2[1][0] + tempArray2[1][1]));
+  element.style.color = "white";
+  element.style.fontSize = "24px";
+  if(parseInt(objectDB[0].width) > 1000){
+    var pl = parseInt(objectDB[0].width) / 2 + 100;
+    var pl2 = - parseInt(objectDB[0].height) / 4 - 130;;
+  } else {
+    var pl = parseInt(objectDB[0].width) + 100;
+    var pl2 = - parseInt(objectDB[0].height) / 2 - 130;
+  }
+  console.log(pl + " " + pl2);
+  element.style.margin = pl2.toString() +"px 0px 0px " + pl.toString() + "px";
+  document.getElementById('output').appendChild(element);
 }
 
 function animation() {
