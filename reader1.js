@@ -1204,6 +1204,10 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   };
 
   network = new vis.Network(container, data, options);
+  if(document.getElementById("element")){
+    var tempElem = document.getElementById("element");
+    tempElem.remove();
+  }
   var element = document.createElement("div");
   element.setAttribute("id", "element");
   var tempArray = result.split(",");
