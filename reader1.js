@@ -841,6 +841,7 @@ function validate() {
 }
 
 document.getElementById("screenshot").addEventListener('change', function() {
+  alert("Sitmuli Image: Collected");
   //Read the contents of Image File.
   var reader = new FileReader();
 
