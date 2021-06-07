@@ -189,6 +189,7 @@ var FileDone = function(event) {
 
 //Triggerred when a file is uploaded to Autistic Group, Input File Read
 document.getElementById('inputfile1').addEventListener('change', function() {
+  alert("FileRead function for Control Group: Started");
   control_stimulis = [];
   for (var z = 0; this.files.length > z; z++) {
     var reader = new FileReader();
@@ -196,6 +197,7 @@ document.getElementById('inputfile1').addEventListener('change', function() {
     reader.onload = FileDone2;
     reader.readAsText(this.files[z]);
   }
+  alert("FileRead function for Control Group: Data Collected");
   //dropdown print start
   if (dropdown_autistic == 1) {
     var select = document.getElementById("selectStimuli");
@@ -300,6 +302,7 @@ var FileDone2 = function(event) {
     counter_control = counter_control - 1;
   }
   ID_finder = 1;
+  alert("FileRead function for Control Group: DONE SUCCESSFULLY with " + fileData_Control.length + " stimuli for participant-" + counter_control);
   //dropdown stimuli array start
   dropdown_control = 1;
   for (var i = 0; i < control_stimulis.length; i++) {
