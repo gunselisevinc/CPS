@@ -171,6 +171,7 @@ var FileDone = function(event) {
   alert("FileRead function for ASD Group: DONE SUCCESSFULLY with " + fileData_Autistic.length + " stimuli for participant-" + counter_autistic);
 
   //dropdown stimuli array start
+  testIfEnteredLoop = 0
   dropdown_autistic = 1;
   for (var i = 0; i < autistic_stimulis.length; i++) {
     var found = 0;
@@ -183,6 +184,10 @@ var FileDone = function(event) {
       var tempo = stimuli_array.length;
       stimuli_array[tempo] = autistic_stimulis[i];
     }
+    testIfEnteredLoop++
+  }
+  if (testIfEnteredLoop > 0) {
+    alert("All stimulis for ASD Participant-" + counter_autistic + " added to combobox");
   }
   //dropdown stimuli array end
 }
@@ -304,19 +309,23 @@ var FileDone2 = function(event) {
   ID_finder = 1;
   alert("FileRead function for Control Group: DONE SUCCESSFULLY with " + fileData_Control.length + " stimuli for participant-" + counter_control);
   //dropdown stimuli array start
+  testIfEnteredLoop = 0
   dropdown_control = 1;
   for (var i = 0; i < control_stimulis.length; i++) {
     var found = 0;
     for (var j = 0; j < stimuli_array.length; j++) {
       if (control_stimulis[i] === stimuli_array[j]) {
         found = 1;
-
       }
     }
     if (found == 0) {
       var tempo = stimuli_array.length;
       stimuli_array[tempo] = control_stimulis[i];
     }
+    testIfEnteredLoop++
+  }
+  if (testIfEnteredLoop > 0) {
+    alert("All stimulis for Control Participant-" + counter_autistic + " added to combobox");
   }
   //dropdown stimuli array end
 }
