@@ -863,6 +863,7 @@ var ImageDone = function(event) {
     console.log(height + " " + width);
   };
   image.src = event.target.result;
+  alert("Stimuli Image: Read");
 };
 var myInterval;
 
