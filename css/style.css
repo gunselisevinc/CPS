@@ -357,8 +357,7 @@ section .btn a{
 /*  background-image: url("../1.jpg");*/
 /*  width: 512;
   height: 640;*/
-  background-size: cover;
-  height: 80%;
+  background-size: contain;
   background-repeat: no-repeat;
   margin: 38px -1px -10px 20px;
 
