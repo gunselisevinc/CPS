@@ -325,7 +325,7 @@ var FileDone2 = function(event) {
     testIfEnteredLoop++
   }
   if (testIfEnteredLoop > 0) {
-    alert("All stimulis for Control Participant-" + counter_autistic + " added to combobox");
+    alert("All stimulis for Control Participant-" + counter_control + " added to combobox");
   }
   //dropdown stimuli array end
 }
