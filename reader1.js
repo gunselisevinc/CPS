@@ -421,7 +421,7 @@ var myModel = "";
 function newComerRead(file) {
   unknownPath = "";
   StopInterval();
-  myModel = document.getElementById("model").value;
+  myModel = document.getElementById("selectModel").value;
   var reader = new FileReader();
   reader.onload = function(event) {
     var fileContent = event.target.result;
@@ -468,7 +468,7 @@ function newComerRead(file) {
   };
   reader.readAsText(file.files[0]);
   document.getElementById("inputfile3").value = "";
-  document.getElementById("model").value = "";
+  document.getElementById("selectModel").value = "";
 
   var getDataURl = 'http://localhost:5000/models/' + myModel;
   console.log(getDataURl);
