@@ -873,7 +873,23 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   startNode = new Array();
   var startEdge = new Array();
   container = document.getElementById("mynetwork");
-  container.style.backgroundImage = "url('test.png')";
+  var bckgrnd = objectDB[0].image_path;
+  bckgrnd = bckgrnd.split("\\");
+  var wrtPrmt = 0;
+  var backgroundSet = '';
+  for(var qw = 0; qw < bckgrnd.length; qw++){
+    if(bckgrnd[qw] === "CPS"){
+      backgroundSet = backgroundSet.concat("\\localhost/CPS");
+      wrtPrmt = 1;
+    }
+    if(wrtPrmt & bckgrnd[qw] != "CPS"){
+      backgroundSet = backgroundSet.concat(bckgrnd[qw]);
+    }
+    if(qw != bckgrnd.length - 1){
+      backgroundSet = backgroundSet.concat("/");
+    }
+  }
+  container.style.backgroundImage = "url('" + backgroundSet + "')";
   var h = height;
   var w = width;
   if (w > 1000) {
