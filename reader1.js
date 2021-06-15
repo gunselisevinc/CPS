@@ -384,28 +384,26 @@ function read() {
 
     var flag = 0;
     if (storePermit === true) flag = 1;
-    var image_path = "";
     var desc = "";
+    const mymodel_image = document.querySelector('input[id="screenshot"]');
+
+    var formData = new FormData();
+
+    formData.append('width', width);
+    formData.append('height', height);
+    formData.append('mymodel_image', mymodel_image.files[0]);
+    formData.append('model_name', model_name);
+    formData.append('stimuli_name', stimuli_name);
+    formData.append('grid_x', gridSizeX);
+    formData.append('grid_y', gridSizeY);
+    formData.append('autistic_path', path_autistic);
+    formData.append('control_path', path_control);
+    formData.append('flag', flag);
+    formData.append('description', desc);
 
     fetch('http://localhost:5000/newModel', {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          width: width,
-          height: height,
-          image_path: image_path,
-          model_name: model_name,
-          stimuli_name: stimuli_name,
-          grid_x: gridSizeX,
-          grid_y: gridSizeY,
-          autistic_path: path_autistic,
-          control_path: path_control,
-          flag: flag,
-          description: desc
-        })
+        body: formData
       })
       .then(response => {
         return response.json()
@@ -778,6 +776,7 @@ function levenshtein(a, b) {
 }
 
 var result = '';
+
 function prediction(unknown, autistic, control, gridX, gridY) {
   result = '';
   var comparisonUnknownAutistic = levenshtein(unknown, autistic);
@@ -864,6 +863,7 @@ var e = new Array();
 var indexHolder = new Array();
 var gridX_c;
 var gridY_c;
+
 //Visualisation
 function visualize(unknown, autistic, control, gridX, gridY) {
   n = [];
@@ -876,7 +876,7 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   container.style.backgroundImage = "url('test.png')";
   var h = height;
   var w = width;
-  if(w > 1000){
+  if (w > 1000) {
     h = h / 2;
     w = w / 2;
   }
@@ -1204,7 +1204,7 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   };
 
   network = new vis.Network(container, data, options);
-  if(document.getElementById("element")){
+  if (document.getElementById("element")) {
     var tempElem = document.getElementById("element");
     tempElem.remove();
   }
@@ -1217,15 +1217,15 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   element.appendChild(document.createTextNode("Certainty: %" + tempArray2[0] + "." + tempArray2[1][0] + tempArray2[1][1]));
   element.style.color = "white";
   element.style.fontSize = "24px";
-  if(parseInt(objectDB[0].width) > 1000){
+  if (parseInt(objectDB[0].width) > 1000) {
     var pl = parseInt(objectDB[0].width) / 2 + 100;
-    var pl2 = - parseInt(objectDB[0].height) / 4 - 130;;
+    var pl2 = -parseInt(objectDB[0].height) / 4 - 130;;
   } else {
     var pl = parseInt(objectDB[0].width) + 100;
-    var pl2 = - parseInt(objectDB[0].height) / 2 - 130;;
+    var pl2 = -parseInt(objectDB[0].height) / 2 - 130;;
   }
   console.log(pl + " " + pl2);
-  element.style.margin = pl2.toString() +"px 0px 0px " + pl.toString() + "px";
+  element.style.margin = pl2.toString() + "px 0px 0px " + pl.toString() + "px";
   document.getElementById('output').appendChild(element);
 }
 
@@ -1237,7 +1237,7 @@ function displayCustomizedPaths() {
   StopInterval();
   var h = objectDB[0].height;
   var w = objectDB[0].width;
-  if(w > 1000){
+  if (w > 1000) {
     h = h / 2;
     w = w / 2;
   }
@@ -1572,15 +1572,15 @@ function displayCustomizedPaths() {
   element.appendChild(document.createTextNode("Certainty: %" + tempArray2[0] + "." + tempArray2[1][0] + tempArray2[1][1]));
   element.style.color = "white";
   element.style.fontSize = "24px";
-  if(parseInt(objectDB[0].width) > 1000){
+  if (parseInt(objectDB[0].width) > 1000) {
     var pl = parseInt(objectDB[0].width) / 2 + 100;
-    var pl2 = - parseInt(objectDB[0].height) / 4 - 130;;
+    var pl2 = -parseInt(objectDB[0].height) / 4 - 130;;
   } else {
     var pl = parseInt(objectDB[0].width) + 100;
-    var pl2 = - parseInt(objectDB[0].height) / 2 - 130;
+    var pl2 = -parseInt(objectDB[0].height) / 2 - 130;
   }
   console.log(pl + " " + pl2);
-  element.style.margin = pl2.toString() +"px 0px 0px " + pl.toString() + "px";
+  element.style.margin = pl2.toString() + "px 0px 0px " + pl.toString() + "px";
   document.getElementById('output').appendChild(element);
 }
 

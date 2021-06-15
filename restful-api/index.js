@@ -5,11 +5,18 @@ const mysql = require('mysql');
 const path = require('path');
 
 // parse application/json
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(bodyParser.json());
 
 //Server listening
 app.listen(5000, () => {
   console.log('Server started on port 5000...');
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/', (req, res) => {
@@ -26,6 +33,33 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Methods", "*");
   next();
 });
+
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'C:\\Users\\senas\\github\\xampp\\htdocs\\CPS\\restful-api\\model-image');
+  },
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + file.originalname);
+  }
+});
+//C:\\Users\\senas\\github\\xampp\\htdocs\\CPS\\restful-api\\model-image
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "image/jpg") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter
+});
+
+app.use(express.static('model-image'));
 
 //create database connection
 const con = mysql.createConnection({
@@ -64,11 +98,12 @@ app.get('/models/:model_name', (req, res) => {
 });
 
 //add new row
-app.post('/newModel', (req, res) => {
+app.post('/newModel', upload.single('mymodel_image'), (req, res) => {
+  console.log(JSON.stringify(req.file));
   let data = {
     width: req.body.width,
     height: req.body.height,
-    image_path: req.body.image_path,
+    image_path: req.file.path,
     model_name: req.body.model_name,
     stimuli_name: req.body.stimuli_name,
     grid_x: req.body.grid_x,
