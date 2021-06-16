@@ -34,18 +34,43 @@
             <input type="text" id="inputfile" style="display:none">
             <input type="text" id="inputfile1" style="display:none">
             <input type="text" id="screenshot" style="display:none">
-            <form id="demo" method="post" action="javascript:newComerRead(inputfile3)">
-              <label class="new-button"> Upload Files-Unknown User <input type="file" accept=".txt" name="inputfile3" id="inputfile3"></label>
-              <br><br>
-              <label>Model: </label>
-              <input type="text" id="model" name="model" style="background-color:white"><br><br>
-              <input type="submit" value="Submit"> <!-- Click the "Submit" button and the form-data will be sent to a page on the server called "action_page.php". -->
-            </form>
+            <label class="new-button"> Upload Files-Unknown User <input type="file" accept=".txt" name="inputfile3" id="inputfile3"></label>
+            <br><br>
+            <div class="dropdown">
+              <button class="new-button" style='width: 175px; height: 41px; background-color: white; color: black'>Select Model</button>
+              <div class="dropdown-content">
+                <select id="selectModel" style="background-color:white">
+                  <option>Choose a StimuliName</option>
+                </select>
+              </div>
+            </div>
 
+            <button id="myBtn" style="height: 36px; width: 70px; font-size: 16px"> Models</button><br><br>
+            <button class="btn" id="myBtn1" style="height: 41px; width: 120px; font-size: 16px; background-color: #000000" onclick="javascript:newComerRead(inputfile3)"> Submit </button>
             <div>
             </div>
             <script src="reader1.js" type="text/javascript"></script>
           </div>
+        </div>
+        <div id="myModal" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+            <div class="modal-header">
+              <span class="close">&times;</span>
+            </div>
+            <br><br>
+            <div id="list"></div>
+            <br><br>
+            <div id="noRecord" style='display: none'>
+              <h2 id="noRecord_h"style="margin: -80px 0px 0px 0px; color: black"></h2>
+              <br><br><br>
+              <br><br><br>
+              <br><br><br>
+              <div>
+              </div>
+            </div>
+        </div>
+
         </div>
         <section id="output" class="section" style="display: none">
           <h5>Output</h1>
@@ -89,6 +114,23 @@
     document.getElementById("controlLabel").style.margin = "20px 0px 0px 1px";
     document.getElementById("unknownBox").style.margin = "0px 0px 0px 50px";
     document.getElementById("unknownLabel").style.margin = "20px 0px 0px 1px";
+    document.getElementById("myBtn1").style.margin = "0px 0px 0px 56px";
+
+    var select = document.getElementById("selectModel");
+    var getDataURl = 'http://localhost:5000/models/';
+    fetch(getDataURl)
+      .then(model => model.json())
+      .then((json) => {
+        objectStr = JSON.stringify(json)
+        var objectList = JSON.parse(objectStr);
+        for (var i = 0; i < objectList.response.length; i++) {
+          var opt = objectList.response[i].model_name;
+          var el = document.createElement("option");
+          el.textContent = opt;
+          el.value = opt;
+          select.appendChild(el);
+        }
+      });
 
     backTop.addEventListener("click", function() {
       function scrollTopAnimated() {
@@ -97,7 +139,6 @@
         }, 500);
       }
     });
-
     $('input[name=autisticBox]').change(function() {
       if ($(this).is(':checked')) {
         displayCustomizedPaths();
@@ -121,6 +162,82 @@
         displayCustomizedPaths();
       }
     });
+
+    var visit = 0;
+    var size;
+    var btn = document.getElementById("myBtn");
+    // Get the modal
+    var modal = document.getElementById("myModal");
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    btn.onclick = function() {
+      var modelsArray = new Array();
+      var objectStr = '';
+      var json = new Object();
+      modal.style.display = "block";
+      var getDataURl = 'http://localhost:5000/models/';
+      fetch(getDataURl)
+        .then(model => model.json())
+        .then((json) => {
+          objectStr = JSON.stringify(json)
+          var objectDB = JSON.parse(objectStr);
+          if(visit == 0){
+            size = objectDB.response.length;
+            visit++;
+          }
+          for(var i = 0; i < size; i++){
+            modelsArray.push(objectDB.response[i]);
+          }
+          var element = document.getElementById("list");
+          while(element.firstChild) {
+                element.removeChild(element.firstChild);
+            }
+          if(modelsArray.length == 0){
+            document.getElementById("noRecord").style.display = "inline-block";
+            document.getElementById("noRecord_h").innerHTML = "No Record Found!";
+          }
+          else{
+            modal.style.paddingTop = "100px";
+            for(var i = 0; i < modelsArray.length; i++){
+              var bold = document.createElement('b')
+              var myTmp = document.createTextNode("Model Name: ");
+              bold.appendChild(myTmp);
+              list.appendChild(bold);
+              list.appendChild(document.createTextNode(modelsArray[i].model_name));
+              list.appendChild(document.createElement('br'));
+              var bold = document.createElement('b')
+              var myTmp = document.createTextNode("Stimuli Name: ");
+              bold.appendChild(myTmp);
+              list.appendChild(bold);
+              list.appendChild(document.createTextNode(modelsArray[i].stimuli_name));
+              list.appendChild(document.createElement('br'));
+              var bold = document.createElement('b')
+              var myTmp = document.createTextNode("Grid (X / Y): ");
+              bold.appendChild(myTmp);
+              list.appendChild(bold);
+              list.appendChild(document.createTextNode(modelsArray[i].grid_x + "/" + modelsArray[i].grid_y));
+              list.appendChild(document.createElement('br'));
+              var bold = document.createElement('b')
+              var myTmp = document.createTextNode("Image Size (Width / Height): ");
+              bold.appendChild(myTmp);
+              list.appendChild(bold);
+              list.appendChild(document.createTextNode(modelsArray[i].width + "/" + modelsArray[i].height));
+              list.appendChild(document.createElement('br'));
+              list.appendChild(document.createElement('br'));
+            }
+          }
+        });
+    }
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
   </script>
 
 </body>
