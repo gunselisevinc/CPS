@@ -362,3 +362,67 @@ section .btn a{
   margin: 38px -1px -10px 20px;
 
 }
+
+select {
+                appearance: none;
+                outline: 0;
+                background: #343632;
+                background-image: none;
+                width: 100%;
+                height: 100%;
+                color: black;
+                cursor: pointer;
+                border:1px solid #343632;
+                border-radius:3px;
+                color: white;
+                font-size: 15px;
+                text-align: center;
+            }
+            .select {
+                position: relative;
+                display: block;
+                width: 10em;
+                align-items: center;
+                height: 3em;
+                line-height: 2.6;
+                overflow: hidden;
+              /*  border-radius: .25em;*/
+                padding-bottom:10px;
+                text-align: center;
+
+
+            }
+            .select::after {
+                content: '\02C5';
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                border:1px solid #343632;
+                border-radius:3px;
+                /*padding: -1em 0.45em;*/
+                padding: -2em 0.4em;
+                height: 40%;
+                background: #343632;
+                color: white;
+                pointer-events: none;
+            }
+            table{
+                border:1px solid #414141;
+                margin:20px;
+                border-collapse:collapse;
+                float:left;
+            }
+            th{
+                border-bottom:1px solid #414141;
+            }
+            td,th{
+                padding:10px;
+            }
+            thead tr{
+                color:white;
+                background:#616161;
+            }
+            tbody tr:nth-child(odd){
+                   background:#f1f1f1;
+            }
