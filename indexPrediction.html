@@ -119,8 +119,8 @@
       .then((json) => {
         objectStr = JSON.stringify(json)
         var objectList = JSON.parse(objectStr);
-        for (var i = 0; i < objectList.response.length; i++) {
-          var opt = objectList.response[i].model_name;
+        for (var i = 0; i < objectList.length; i++) {
+          var opt = objectList[i].model_name;
           var el = document.createElement("option");
           el.textContent = opt;
           el.value = opt;
@@ -197,11 +197,11 @@
           objectStr = JSON.stringify(json)
           var objectDB = JSON.parse(objectStr);
           if(visit == 0){
-            size = objectDB.response.length;
+            size = objectDB.length;
             visit++;
           }
           for(var i = 0; i < size; i++){
-            modelsArray.push(objectDB.response[i]);
+            modelsArray.push(objectDB[i]);
           }
           var element = document.getElementById("list");
           while(element.firstChild) {
