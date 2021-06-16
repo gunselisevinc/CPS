@@ -393,7 +393,7 @@ select {
 
             }
             .select::after {
-                content: '\02C5';
+                content: '\25BC';
                 position: absolute;
                 top: 0;
                 right: 0;

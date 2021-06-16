@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const mysql = require('mysql');
 const path = require('path');
+const fs = require('fs');
 
 // parse application/json
 app.use(bodyParser.urlencoded({
@@ -80,11 +81,7 @@ app.get('/models', (req, res) => {
   let sql = "SELECT * FROM models";
   let query = con.query(sql, (err, results) => {
     if (err) throw err;
-    res.send(JSON.stringify({
-      "status": 200,
-      "error": null,
-      "response": results
-    }));
+    res.send(JSON.stringify(results));
   });
 });
 
@@ -111,7 +108,7 @@ app.post('/newModel', upload.single('mymodel_image'), (req, res) => {
     autistic_path: req.body.autistic_path,
     control_path: req.body.control_path,
     flag: req.body.flag,
-    description: req.body.description
+    description: req.file.filename
   };
   let sql = "INSERT INTO models SET ?";
   let query = con.query(sql, data, (err, results) => {
@@ -135,4 +132,15 @@ app.delete('/modelRemove/:model_name', (req, res) => {
       "response": results
     }));
   });
+});
+
+app.get('/imageRemove/:image_name/:extension', (req, res) => {
+  let name = req.params.image_name;
+  let extension = req.params.extension;
+  let path = "C:/Users/senas/github/xampp/htdocs/CPS/restful-api/model-image/" + name + "." + extension;
+  fs.unlinkSync(path);
+  res.send(JSON.stringify({
+    "status": 200,
+    "error": null
+  }));
 });

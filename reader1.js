@@ -401,14 +401,43 @@ function read() {
     formData.append('flag', flag);
     formData.append('description', desc);
 
-    fetch('http://localhost:5000/newModel', {
-        method: 'POST',
-        body: formData
+    fetch('http://localhost:5000/models', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
-      .then(response => {
-        return response.json()
+      .then(models => models.json())
+      .then((json) => {
+        var modelStr = JSON.stringify(json)
+        const modelDB = JSON.parse(modelStr);
+        console.log(modelDB);
+        //console.log(modelDB[1].model_name);
+
+        var check = 0;
+        var len = modelDB.length;
+        console.log(len);
+
+        for(var i = 0; i < len; i++){
+            if(modelDB[i].model_name === model_name){
+                check = 1;
+                break;
+            }
+        }
+
+        if(check === 0){
+          fetch('http://localhost:5000/newModel', {
+              method: 'POST',
+              body: formData
+            })
+            .then(response => {
+              return response.json()
+            })
+            .then(data => console.log(data))
+            .catch(err => console.log(err));
+        }
+
       })
-      .then(data => console.log(data))
       .catch(err => console.log(err));
   }
 }
@@ -483,6 +512,24 @@ function newComerRead(file) {
       prediction(unknownPath, objectDB[0].autistic_path, objectDB[0].control_path, objectDB[0].grid_x, objectDB[0].grid_y);
 
       if (objectDB[0].flag === 0) {
+        var deleteImage = objectDB[0].description;
+        var index = deleteImage.lastIndexOf(".");
+        var deleteImageName = deleteImage.substring(0, index);
+        var deleteImageNameExtension = deleteImage.substring(index + 1);
+        var imageRemoveUrl = 'http://localhost:5000/imageRemove/' + deleteImageName + "/" + deleteImageNameExtension;
+
+        fetch(imageRemoveUrl, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => {
+            return response.json()
+          })
+          .catch(err => console.log(err));
+
         var modelRemoveURl = 'http://localhost:5000/modelRemove/' + myModel;
         fetch(modelRemoveURl, {
             method: 'DELETE',
