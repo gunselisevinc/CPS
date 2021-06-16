@@ -36,16 +36,12 @@
             <input type="text" id="screenshot" style="display:none">
             <label class="new-button"> Upload Files-Unknown User <input type="file" accept=".txt" name="inputfile3" id="inputfile3"></label>
             <br><br>
-            <div class="dropdown">
-              <button class="new-button" style='width: 175px; height: 41px; background-color: white; color: black'>Select Model</button>
-              <div class="dropdown-content">
-                <select id="selectModel" style="background-color:white">
-                  <option>Choose a StimuliName</option>
+            <div class="select">
+                <select id="selectModel">
+                  <option>&nbspChoose a Model</option>
                 </select>
-              </div>
             </div>
-
-            <button id="myBtn" style="height: 36px; width: 70px; font-size: 16px"> Models</button><br><br>
+            <button id="myBtn" style="height: 36px; width: 70px; font-size: 16px; margin: -47px 0px 0px 170px"> Models</button><br><br>
             <button class="btn" id="myBtn1" style="height: 41px; width: 120px; font-size: 16px; background-color: #000000" onclick="javascript:newComerRead(inputfile3)"> Submit </button>
             <div>
             </div>
@@ -54,7 +50,7 @@
         </div>
         <div id="myModal" class="modal">
           <!-- Modal content -->
-          <div class="modal-content">
+          <div class="modal-content" id="widthChange">
             <div class="modal-header">
               <span class="close">&times;</span>
             </div>
@@ -163,8 +159,27 @@
       }
     });
 
+    function TableAdd(table, data) {
+      var row = "<tr>";
+      for (var i = 0; i < data.length; i++) {
+        row = row + "<td>" + data[i] + "</td>";
+      }
+      row = row + "</tr>";
+      document.getElementById(table).getElementsByTagName("tbody")[0].innerHTML += row;
+    }
+
+    function CreateTable(id, where, data) {
+      var table = "<table id='" + id + "'><thead><tr>";
+      for (var i = 0; i < data.length; i++) {
+        table = table + "<th>" + data[i] + "</th>";
+      }
+      table = table + "</tr></thead><tbody></tbody></table>";
+      where.innerHTML += table;
+    }
+
     var visit = 0;
     var size;
+    var prop = 0;
     var btn = document.getElementById("myBtn");
     // Get the modal
     var modal = document.getElementById("myModal");
@@ -198,30 +213,16 @@
           }
           else{
             modal.style.paddingTop = "100px";
+            document.getElementById("widthChange").style.width = "70%";
+            CreateTable("myTable", element, ["Model Name","Stimuli Name","Grid(X)","Grid(Y)", "Image Size (Width)", "Image Size (Height)"]);
+            list.appendChild(document.createElement('br'));
+            list.appendChild(document.createElement('br'));
+            list.appendChild(document.createElement('br'));
+            list.appendChild(document.createElement('br'));
             for(var i = 0; i < modelsArray.length; i++){
-              var bold = document.createElement('b')
-              var myTmp = document.createTextNode("Model Name: ");
-              bold.appendChild(myTmp);
-              list.appendChild(bold);
-              list.appendChild(document.createTextNode(modelsArray[i].model_name));
-              list.appendChild(document.createElement('br'));
-              var bold = document.createElement('b')
-              var myTmp = document.createTextNode("Stimuli Name: ");
-              bold.appendChild(myTmp);
-              list.appendChild(bold);
-              list.appendChild(document.createTextNode(modelsArray[i].stimuli_name));
-              list.appendChild(document.createElement('br'));
-              var bold = document.createElement('b')
-              var myTmp = document.createTextNode("Grid (X / Y): ");
-              bold.appendChild(myTmp);
-              list.appendChild(bold);
-              list.appendChild(document.createTextNode(modelsArray[i].grid_x + "/" + modelsArray[i].grid_y));
-              list.appendChild(document.createElement('br'));
-              var bold = document.createElement('b')
-              var myTmp = document.createTextNode("Image Size (Width / Height): ");
-              bold.appendChild(myTmp);
-              list.appendChild(bold);
-              list.appendChild(document.createTextNode(modelsArray[i].width + "/" + modelsArray[i].height));
+              prop += 1500*(i+1);
+              modal.style.height = prop;
+              TableAdd("myTable", [modelsArray[i].model_name, modelsArray[i].stimuli_name, modelsArray[i].grid_x, modelsArray[i].grid_y, modelsArray[i].width, modelsArray[i].height]);
               list.appendChild(document.createElement('br'));
               list.appendChild(document.createElement('br'));
             }
