@@ -823,22 +823,24 @@ function levenshtein(a, b) {
 }
 
 var result = '';
+var similarityRate_A, similarityRate_C;
 
 function prediction(unknown, autistic, control, gridX, gridY) {
   result = '';
+  printResult='';
   var comparisonUnknownAutistic = levenshtein(unknown, autistic);
   var comparisonUnknownControl = levenshtein(unknown, control);
   var similarityRate;
+  similarityRate_A = 1 - (comparisonUnknownAutistic / Math.max(unknown.length, autistic.length));
+  similarityRate_C = 1 - (comparisonUnknownControl / Math.max(unknown.length, control.length));
   if (comparisonUnknownControl < comparisonUnknownAutistic) {
-    similarityRate = 1 - (comparisonUnknownControl / Math.max(unknown.length, control.length));
-    console.log("NOT AUTISTIC " + similarityRate);
-    similarityRate = 100 * similarityRate;
-    result = result.concat("Not Autistic," + similarityRate);
+    console.log("CONTROL " + similarityRate_C);
+    similarityRate_C = 100 * similarityRate_C;
+    result = result.concat("Control," + similarityRate_C);
   } else if (comparisonUnknownAutistic < comparisonUnknownControl) {
-    similarityRate = 1 - (comparisonUnknownAutistic / Math.max(unknown.length, autistic.length));
-    console.log("AUTISTIC " + similarityRate);
-    similarityRate = 100 * similarityRate;
-    result = result.concat("Autistic," + similarityRate);
+    console.log("AUTISTIC " + similarityRate_A);
+    similarityRate_A = 100 * similarityRate_A;
+    result = result.concat("Autistic," + similarityRate_A);
   } else {
     similarityRate = 1 - (comparisonUnknownAutistic / Math.max(unknown.length, autistic.length));
     console.log("SYSTEM CANNOT DECIDE " + similarityRate);
@@ -847,10 +849,6 @@ function prediction(unknown, autistic, control, gridX, gridY) {
   }
   tmp = result.split(",");
   tmp[1] = tmp[1].substring(0, 4);
-  //    $(document).ready(function(){
-  //      $("#myModal").modal();
-  //      $('#result').html("Closer Group: " + tmp[0] + " -- Certainty(%): " + tmp[1]);
-  //    });
   visualize(unknown, autistic, control, gridX, gridY);
 }
 
@@ -915,6 +913,9 @@ var gridY_c;
 function visualize(unknown, autistic, control, gridX, gridY) {
   n = [];
   e = [];
+  document.getElementById("autisticBox").checked = true;
+  document.getElementById("controlBox").checked = true;
+  document.getElementById("unknownBox").checked = true;
   document.getElementById("output").style.display = "block";
   window.scrollTo(1000, document.body.scrollHeight);
   startNode = new Array();
@@ -957,6 +958,7 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   index = 1;
   startNode[0] = index;
   indexHolder[0] = index;
+
   for (var i = 0; i < autistic.length; i++) {
     var num = autistic.charCodeAt(i);
     num = num - 65;
@@ -1219,6 +1221,7 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   index++;
   startNode[4] = index;
 
+
   nodes = new vis.DataSet(n);
   edges = new vis.DataSet(e);
 
@@ -1260,13 +1263,16 @@ function visualize(unknown, autistic, control, gridX, gridY) {
 
     physics: false,
     interaction: {
-      dragNodes: false, // do not allow dragging nodes
+      dragNodes: true, // do not allow dragging nodes
       zoomView: false, // do not allow zooming
       dragView: false // do not allow dragging
     }
   };
 
   network = new vis.Network(container, data, options);
+  var scaleOption = { scale : 1 };
+  network.moveTo(scaleOption);
+
   if (document.getElementById("element")) {
     var tempElem = document.getElementById("element");
     tempElem.remove();
@@ -1274,10 +1280,14 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   var element = document.createElement("div");
   element.setAttribute("id", "element");
   var tempArray = result.split(",");
-  element.appendChild(document.createTextNode("Result: " + tempArray[0]));
+  element.appendChild(document.createTextNode("Result: " + tempArray[0] + " Group"));
   element.appendChild(document.createElement('br'));
-  tempArray2 = tempArray[1].split(".");
-  element.appendChild(document.createTextNode("Certainty: %" + tempArray2[0] + "." + tempArray2[1][0] + tempArray2[1][1]));
+  element.appendChild(document.createElement('br'));
+  element.appendChild(document.createTextNode("Similarity to Control Group: %" + similarityRate_C.toFixed(2)));
+  element.appendChild(document.createElement('br'));
+  element.appendChild(document.createTextNode("Similarity to Autistic Group: %" + similarityRate_A.toFixed(2)));
+  //tempArray2 = tempArray[1].split(".");
+  //element.appendChild(document.createTextNode("Certainty: %" + tempArray2[0] + "." + tempArray2[1][0] + tempArray2[1][1]));
   element.style.color = "white";
   element.style.fontSize = "24px";
   if (parseInt(objectDB[0].width) > 1000) {
@@ -1587,6 +1597,8 @@ function displayCustomizedPaths() {
     edges: edges,
   }
   var options = {
+    width: w + 'px',
+    height: h + 'px',
     nodes: {
       shape: "dot",
       //  color: '#cc00ff',
@@ -1624,15 +1636,19 @@ function displayCustomizedPaths() {
     }
   };
   network = new vis.Network(container, data, options);
+  var scaleOption = { scale : 1 };
+  network.moveTo(scaleOption);
   var tempElem = document.getElementById("element");
   tempElem.remove();
   var element = document.createElement("div");
   element.setAttribute("id", "element");
   var tempArray = result.split(",");
-  element.appendChild(document.createTextNode("Result: " + tempArray[0]));
+  element.appendChild(document.createTextNode("Result: " + tempArray[0] + " Group"));
   element.appendChild(document.createElement('br'));
-  tempArray2 = tempArray[1].split(".");
-  element.appendChild(document.createTextNode("Certainty: %" + tempArray2[0] + "." + tempArray2[1][0] + tempArray2[1][1]));
+  element.appendChild(document.createElement('br'));
+  element.appendChild(document.createTextNode("Similarity to Control Group: %" + similarityRate_C.toFixed(2)));
+  element.appendChild(document.createElement('br'));
+  element.appendChild(document.createTextNode("Similarity to Autistic Group: %" + similarityRate_A.toFixed(2)));
   element.style.color = "white";
   element.style.fontSize = "24px";
   if (parseInt(objectDB[0].width) > 1000) {
