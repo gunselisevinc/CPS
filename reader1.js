@@ -444,9 +444,11 @@ function read() {
 
 var newComerData = new Array();
 var myModel = "";
+var unknownPathPrediction = "";
 
 function newComerRead(file) {
   unknownPath = "";
+  unknownPathPrediction = "";
   StopInterval();
   myModel = document.getElementById("selectModel").value;
   var reader = new FileReader();
@@ -509,7 +511,7 @@ function newComerRead(file) {
       width = objectDB[0].width;
       height = objectDB[0].height;
       singlePathCreator(width, height, objectDB[0].stimuli_name, objectDB[0].grid_x, objectDB[0].grid_y);
-      prediction(unknownPath, objectDB[0].autistic_path, objectDB[0].control_path, objectDB[0].grid_x, objectDB[0].grid_y);
+      prediction(unknownPathPrediction, objectDB[0].autistic_path, objectDB[0].control_path, objectDB[0].grid_x, objectDB[0].grid_y);
 
       if (objectDB[0].flag === 0) {
         var deleteImage = objectDB[0].description;
@@ -670,11 +672,21 @@ function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY) {
         var op_x = Grids[j].startX + Grids[j].lengthX;
         if ((Grids[j].startY <= newComerData[indexP][i].y) & (newComerData[indexP][i].y <= op_y) & (Grids[j].startX <= newComerData[indexP][i].x) & (newComerData[indexP][i].x <= op_x)) {
           unknownPath = unknownPath.concat(Grids[j].index);
+          if(unknownPathPrediction.length > 0){
+            var lastChar = unknownPathPrediction.length - 1;
+            if(unknownPathPrediction[lastChar] != Grids[j].index){
+              unknownPathPrediction = unknownPathPrediction.concat(Grids[j].index);
+            }
+          }
+          else{
+            unknownPathPrediction = unknownPathPrediction.concat(Grids[j].index);
+          }
         }
       }
     }
   }
-  console.log(unknownPath);
+  console.log("unknown path with rep. " + unknownPath);
+  console.log("unknown path without rep. " + unknownPathPrediction);
 }
 var durationsStr = '';
 
@@ -849,7 +861,7 @@ function prediction(unknown, autistic, control, gridX, gridY) {
   }
   tmp = result.split(",");
   tmp[1] = tmp[1].substring(0, 4);
-  visualize(unknown, autistic, control, gridX, gridY);
+  visualize(unknownPath, autistic, control, gridX, gridY);
 }
 
 $(document).ready(function() {
