@@ -91,7 +91,7 @@ var FileDone = function(event) {
   var lines = fileContent.split(/\n/);
 
   var fileHeaders = new Array();
-  fileHeaders = lines[0].split(/\t/);
+  fileHeaders = lines[0].split(/\t/); //Stores (FixationIndex,Timestamp,FixationDuration,MappedFixationPointX,MappedFixationPointY,StimuliName)
 
   var tmp = -1;
   for (var i = 1; lines.length > i; i++) {
@@ -331,7 +331,7 @@ function read() {
 
   document.getElementById("model").value = "";
   document.getElementById("selectStimuli").value = "";
-
+  /*
   if (control_stimulis.length > autistic_stimulis.length) {
     for (var i = 0; i < control_stimulis.length; i++) {
       for (var j = 0; j < autistic_stimulis.length; j++) {
@@ -350,18 +350,18 @@ function read() {
         }
       }
     }
-  }
+  }*/
 
   if (fileData_Autistic.length) {
-    fileWrite = fileWrite.concat(model_name);
-    fileWrite = fileWrite.concat(",");
+    //fileWrite = fileWrite.concat(model_name);
+    //fileWrite = fileWrite.concat(",");
     var grid = addGrid(1);
     var path_autistic = sendSta(grid, stimuli_name, fileData_Autistic);
     console.log("Autistic path: " + path_autistic);
-    fileWrite = fileWrite.concat(stimuli_name);
-    fileWrite = fileWrite.concat(",");
-    fileWrite = fileWrite.concat(path_autistic);
-    fileWrite = fileWrite.concat(",");
+  //  fileWrite = fileWrite.concat(stimuli_name);
+  //  fileWrite = fileWrite.concat(",");
+  //  fileWrite = fileWrite.concat(path_autistic);
+  //  fileWrite = fileWrite.concat(",");
     //  fileWrite = fileWrite.concat(durationsStr);
     //  fileWrite = fileWrite.concat(",");
     durationsStr = '';
@@ -370,17 +370,17 @@ function read() {
     var grid = addGrid(0);
     var path_control = sendSta(grid, stimuli_name, fileData_Control);
     console.log("Control path: " + path_control);
-    fileWrite = fileWrite.concat(path_control);
-    fileWrite = fileWrite.concat(",");
+//    fileWrite = fileWrite.concat(path_control);
+//    fileWrite = fileWrite.concat(",");
     //  fileWrite = fileWrite.concat(durationsStr);
     //  fileWrite = fileWrite.concat(",");
-    fileWrite = fileWrite.concat(gridSizeX);
-    fileWrite = fileWrite.concat(",");
-    fileWrite = fileWrite.concat(gridSizeY);
-    fileWrite = fileWrite.concat(",\n");
+//    fileWrite = fileWrite.concat(gridSizeX);
+//    fileWrite = fileWrite.concat(",");
+//    fileWrite = fileWrite.concat(gridSizeY);
+//    fileWrite = fileWrite.concat(",\n");
     durationsStr = '';
-    console.log(fileWrite);
-    console.log(storePermit);
+//    console.log(fileWrite);
+//    console.log(storePermit);
 
     var flag = 0;
     if (storePermit === true) flag = 1;
@@ -449,9 +449,11 @@ var unknownPathPrediction = "";
 function newComerRead(file) {
   unknownPath = "";
   unknownPathPrediction = "";
+  //If animation is running when new prediction is requested, it first stops the animation
   StopInterval();
   myModel = document.getElementById("selectModel").value;
   var reader = new FileReader();
+  //newFile reading
   reader.onload = function(event) {
     var fileContent = event.target.result;
     var lines = fileContent.split(/\n/);
@@ -685,8 +687,8 @@ function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY) {
       }
     }
   }
-  console.log("unknown path with rep. " + unknownPath);
-  console.log("unknown path without rep. " + unknownPathPrediction);
+//  console.log("unknown path with rep. " + unknownPath);
+//  console.log("unknown path without rep. " + unknownPathPrediction);
 }
 var durationsStr = '';
 
@@ -697,7 +699,7 @@ function sendSta(grid, stimuli, arr) {
   var t;
   for (var i = 0; i < arr.length; i++) {
     arr[i][0][0].stimuliName = arr[i][0][0].stimuliName.replace("\r", "");
-    if (arr[i][0][0].stimuliName === stimuli) {
+    if (arr[i][0][0].stimuliName === stimuli) { //Finds stimuli index in the array
       indx = i;
     }
   }
@@ -776,6 +778,7 @@ function sendSta(grid, stimuli, arr) {
   });
   dataResponse = JSON.parse(dataResponse);
   dataResponse = JSON.stringify(dataResponse);
+  //Creates path string and durations array from the STA response
   if (dataResponse != " ") {
     var respond = dataResponse;
     respond = respond.split('[');
@@ -899,14 +902,14 @@ var ImageDone = function(event) {
   image.onload = function() {
     height = image.height;
     width = image.width;
-    console.log(height + " " + width);
+  //  console.log(height + " " + width);
   };
   image.src = event.target.result;
 };
 var myInterval;
 
 function StopInterval() {
-  clearInterval(myInterval);
+  clearInterval(myInterval);  //Stops visualization animation
 }
 
 
@@ -1292,10 +1295,15 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   var element = document.createElement("div");
   element.setAttribute("id", "element");
   var tempArray = result.split(",");
-  element.appendChild(document.createTextNode("Result: " + tempArray[0] + " Group"));
+  if(tempArray[0] === "Control"){
+    element.appendChild(document.createTextNode("Result: " + tempArray[0] + " (Not-Autistic)"));
+  }
+  else{
+    element.appendChild(document.createTextNode("Result: " + tempArray[0]));
+  }
   element.appendChild(document.createElement('br'));
   element.appendChild(document.createElement('br'));
-  element.appendChild(document.createTextNode("Similarity to Control Group: %" + similarityRate_C.toFixed(2)));
+  element.appendChild(document.createTextNode("Similarity to Control (Not Autistic) Group: %" + similarityRate_C.toFixed(2)));
   element.appendChild(document.createElement('br'));
   element.appendChild(document.createTextNode("Similarity to Autistic Group: %" + similarityRate_A.toFixed(2)));
   //tempArray2 = tempArray[1].split(".");
