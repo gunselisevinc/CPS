@@ -1,3 +1,4 @@
+// Define needed frameworks
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -5,17 +6,18 @@ const mysql = require('mysql');
 const path = require('path');
 const fs = require('fs');
 
-// parse application/json
+// Parse application/json
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
 
-//Server listening
+// Server listening
 app.listen(5000, () => {
   console.log('Server started on port 5000...');
 });
 
+// Routing
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -28,6 +30,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'indexPrediction.html'));
 });
 
+// Escape from the CORS Errors
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -37,16 +40,17 @@ app.use(function(req, res, next) {
 
 const multer = require('multer');
 
+// Destination of the uploaded image with a new name
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, 'C:\\Users\\senas\\github\\xampp\\htdocs\\CPS\\restful-api\\model-image');
+    cb(null, 'C:\\Users\\senas\\github\\htdocs\\CPS\\restful-api\\model-image');
   },
   filename: function(req, file, cb) {
     cb(null, Date.now() + file.originalname);
   }
 });
-//C:\\Users\\senas\\github\\xampp\\htdocs\\CPS\\restful-api\\model-image
 
+// Accept only image type inputs
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "image/jpg") {
     cb(null, true);
@@ -55,14 +59,16 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+// Store the image
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter
 });
 
+// Make the destination folder static to access directly
 app.use(express.static('model-image'));
 
-//create database connection
+// Create database connection
 const con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -70,13 +76,13 @@ const con = mysql.createConnection({
   database: 'cps'
 });
 
-//connect to database
+// Connect to database
 con.connect((err) => {
   if (err) throw err;
   console.log('Mysql Connected...');
 });
 
-//show all models
+// Show all models
 app.get('/models', (req, res) => {
   let sql = "SELECT * FROM models";
   let query = con.query(sql, (err, results) => {
@@ -85,7 +91,7 @@ app.get('/models', (req, res) => {
   });
 });
 
-//show single model
+// Show single model
 app.get('/models/:model_name', (req, res) => {
   let sql = "SELECT * FROM models WHERE model_name=" + "\"" + req.params.model_name + "\"";
   let query = con.query(sql, (err, results) => {
@@ -94,7 +100,7 @@ app.get('/models/:model_name', (req, res) => {
   });
 });
 
-//add new row
+// Add new row and store the image
 app.post('/newModel', upload.single('mymodel_image'), (req, res) => {
   console.log(JSON.stringify(req.file));
   let data = {
@@ -121,7 +127,7 @@ app.post('/newModel', upload.single('mymodel_image'), (req, res) => {
   });
 });
 
-//delete row with ID
+// Delete row with ID
 app.delete('/modelRemove/:model_name', (req, res) => {
   let sql = "DELETE FROM models WHERE model_name=" + "\"" + req.params.model_name + "\"";
   let query = con.query(sql, (err, results) => {
@@ -134,10 +140,11 @@ app.delete('/modelRemove/:model_name', (req, res) => {
   });
 });
 
+// Delete image from model-image folder
 app.get('/imageRemove/:image_name/:extension', (req, res) => {
   let name = req.params.image_name;
   let extension = req.params.extension;
-  let path = "C:/Users/senas/github/xampp/htdocs/CPS/restful-api/model-image/" + name + "." + extension;
+  let path = "C:/Users/senas/github/htdocs/CPS/restful-api/model-image/" + name + "." + extension;
   fs.unlinkSync(path);
   res.send(JSON.stringify({
     "status": 200,
