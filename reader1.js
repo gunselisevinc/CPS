@@ -8,22 +8,7 @@ var data = {
   partID: -1
 };
 
-/*
-var model = {
-  id: -1,
-  width: -1,
-  height: -1,
-  image_path:	'',
-  model_name:	'',
-  stimuli_name:	'',
-  grid_x:	-1,
-  grid_y:	-1,
-  autistic_path: '',
-  control_path:	'',
-  flag: -1,
-  description: ''
-};
-*/
+//this variable is used for returned object from database requests
 var objectDB;
 
 var fileData_Autistic = new Array();
@@ -358,10 +343,10 @@ function read() {
     var grid = addGrid(1);
     var path_autistic = sendSta(grid, stimuli_name, fileData_Autistic);
     console.log("Autistic path: " + path_autistic);
-  //  fileWrite = fileWrite.concat(stimuli_name);
-  //  fileWrite = fileWrite.concat(",");
-  //  fileWrite = fileWrite.concat(path_autistic);
-  //  fileWrite = fileWrite.concat(",");
+    //  fileWrite = fileWrite.concat(stimuli_name);
+    //  fileWrite = fileWrite.concat(",");
+    //  fileWrite = fileWrite.concat(path_autistic);
+    //  fileWrite = fileWrite.concat(",");
     //  fileWrite = fileWrite.concat(durationsStr);
     //  fileWrite = fileWrite.concat(",");
     durationsStr = '';
@@ -370,25 +355,28 @@ function read() {
     var grid = addGrid(0);
     var path_control = sendSta(grid, stimuli_name, fileData_Control);
     console.log("Control path: " + path_control);
-//    fileWrite = fileWrite.concat(path_control);
-//    fileWrite = fileWrite.concat(",");
+    //    fileWrite = fileWrite.concat(path_control);
+    //    fileWrite = fileWrite.concat(",");
     //  fileWrite = fileWrite.concat(durationsStr);
     //  fileWrite = fileWrite.concat(",");
-//    fileWrite = fileWrite.concat(gridSizeX);
-//    fileWrite = fileWrite.concat(",");
-//    fileWrite = fileWrite.concat(gridSizeY);
-//    fileWrite = fileWrite.concat(",\n");
+    //    fileWrite = fileWrite.concat(gridSizeX);
+    //    fileWrite = fileWrite.concat(",");
+    //    fileWrite = fileWrite.concat(gridSizeY);
+    //    fileWrite = fileWrite.concat(",\n");
     durationsStr = '';
-//    console.log(fileWrite);
-//    console.log(storePermit);
+    //    console.log(fileWrite);
+    //    console.log(storePermit);
 
+    //create a flag for whether we store the model permanently or not
     var flag = 0;
     if (storePermit === true) flag = 1;
+
+    //description column is used for image name
     var desc = "";
     const mymodel_image = document.querySelector('input[id="screenshot"]');
 
+    //Create a FormData object to store all required data
     var formData = new FormData();
-
     formData.append('width', width);
     formData.append('height', height);
     formData.append('mymodel_image', mymodel_image.files[0]);
@@ -401,6 +389,7 @@ function read() {
     formData.append('flag', flag);
     formData.append('description', desc);
 
+    //check model names from CPS database to be sure about uniqueness
     fetch('http://localhost:5000/models', {
         method: 'GET',
         headers: {
@@ -418,14 +407,15 @@ function read() {
         var len = modelDB.length;
         console.log(len);
 
-        for(var i = 0; i < len; i++){
-            if(modelDB[i].model_name === model_name){
-                check = 1;
-                break;
-            }
+        for (var i = 0; i < len; i++) {
+          if (modelDB[i].model_name === model_name) {
+            check = 1;
+            break;
+          }
         }
 
-        if(check === 0){
+        // if model name is unique, add a new row to CPS database Models table
+        if (check === 0) {
           fetch('http://localhost:5000/newModel', {
               method: 'POST',
               body: formData
@@ -435,6 +425,8 @@ function read() {
             })
             .then(data => console.log(data))
             .catch(err => console.log(err));
+        } else {
+          alert("Model name is not unique!");
         }
 
       })
@@ -501,6 +493,21 @@ function newComerRead(file) {
   document.getElementById("inputfile3").value = "";
   document.getElementById("selectModel").value = "";
 
+  // check the text file to see whether selected model's stimuli name exists in it or not
+  function isExist(stimuli) {
+    var existence = 0;
+    for (var i = 0; i < newComerData.length; i++) {
+      var txt_stimuli = newComerData[i][0].stimuliName;
+      console.log(txt_stimuli);
+      if (stimuli.trim() === txt_stimuli.trim()) {
+        existence = 1;
+        break;
+      }
+    }
+    return existence;
+  }
+
+  // get the requested model object from database by using its name
   var getDataURl = 'http://localhost:5000/models/' + myModel;
   console.log(getDataURl);
   fetch(getDataURl)
@@ -512,40 +519,57 @@ function newComerRead(file) {
       console.log(objectDB[0].model_name);
       width = objectDB[0].width;
       height = objectDB[0].height;
-      singlePathCreator(width, height, objectDB[0].stimuli_name, objectDB[0].grid_x, objectDB[0].grid_y);
-      prediction(unknownPathPrediction, objectDB[0].autistic_path, objectDB[0].control_path, objectDB[0].grid_x, objectDB[0].grid_y);
 
-      if (objectDB[0].flag === 0) {
-        var deleteImage = objectDB[0].description;
-        var index = deleteImage.lastIndexOf(".");
-        var deleteImageName = deleteImage.substring(0, index);
-        var deleteImageNameExtension = deleteImage.substring(index + 1);
-        var imageRemoveUrl = 'http://localhost:5000/imageRemove/' + deleteImageName + "/" + deleteImageNameExtension;
+      var checkStimuli = isExist(objectDB[0].stimuli_name);
+      console.log(checkStimuli);
+      console.log(objectDB[0].stimuli_name);
 
-        fetch(imageRemoveUrl, {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            }
-          })
-          .then(response => {
-            return response.json()
-          })
-          .catch(err => console.log(err));
+      // if it does not exist, inform the user
+      if (!checkStimuli) {
+        var warning_msg = "Uploaded file does not contain " + myModel + "'s stimuli name."
+        alert(warning_msg);
+      }
 
-        var modelRemoveURl = 'http://localhost:5000/modelRemove/' + myModel;
-        fetch(modelRemoveURl, {
-            method: 'DELETE',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            }
-          })
-          .then(response => {
-            return response.json()
-          })
-          .catch(err => console.log(err));
+      //if it exists, create its path and send it to the prediction
+      else {
+        singlePathCreator(width, height, objectDB[0].stimuli_name, objectDB[0].grid_x, objectDB[0].grid_y);
+        prediction(unknownPathPrediction, objectDB[0].autistic_path, objectDB[0].control_path, objectDB[0].grid_x, objectDB[0].grid_y);
+
+        // if model is not stored permanently, it will be deleted after the first use.
+        if (objectDB[0].flag === 0) {
+          var deleteImage = objectDB[0].description;
+          var index = deleteImage.lastIndexOf(".");
+          var deleteImageName = deleteImage.substring(0, index);
+          var deleteImageNameExtension = deleteImage.substring(index + 1);
+          var imageRemoveUrl = 'http://localhost:5000/imageRemove/' + deleteImageName + "/" + deleteImageNameExtension;
+
+          // its stored image should also be deleted from the model-image file
+          fetch(imageRemoveUrl, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => {
+              return response.json()
+            })
+            .catch(err => console.log(err));
+
+          // delete the model from CPS database Models table
+          var modelRemoveURl = 'http://localhost:5000/modelRemove/' + myModel;
+          fetch(modelRemoveURl, {
+              method: 'DELETE',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => {
+              return response.json()
+            })
+            .catch(err => console.log(err));
+        }
       }
     })
 
@@ -584,6 +608,7 @@ var grid = {
   stimuli: ' '
 };
 
+// Creating Grids based on requested size
 function addGrid(checker) {
   var gridSizeX = document.getElementById("gridX").value;
   var gridSizeY = document.getElementById("gridY").value;
@@ -604,6 +629,7 @@ function addGrid(checker) {
 
   var Grids = [];
 
+  // height and width values are calculated from uploaded image.
   for (var i = 0; i < gridSizeY; i++) {
     for (var j = 0; j < gridSizeX; j++) {
       startX = width * j / gridSizeX;
@@ -612,6 +638,7 @@ function addGrid(checker) {
       lengthY = height * 1 / gridSizeY;
       index = String.fromCharCode(indexCounter);
 
+      // Our AoI's are Grids that are created as objects. We keep them in an object array.
       Grids.push({
         index: index,
         startX: startX,
@@ -640,6 +667,7 @@ function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY) {
 
   var Grids = [];
 
+  // Same process for generating the Grids array for unknown person's data process
   for (var i = 0; i < gridSizeY; i++) {
     for (var j = 0; j < gridSizeX; j++) {
       startX = width * j / gridSizeX;
@@ -674,21 +702,20 @@ function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY) {
         var op_x = Grids[j].startX + Grids[j].lengthX;
         if ((Grids[j].startY <= newComerData[indexP][i].y) & (newComerData[indexP][i].y <= op_y) & (Grids[j].startX <= newComerData[indexP][i].x) & (newComerData[indexP][i].x <= op_x)) {
           unknownPath = unknownPath.concat(Grids[j].index);
-          if(unknownPathPrediction.length > 0){
+          if (unknownPathPrediction.length > 0) {
             var lastChar = unknownPathPrediction.length - 1;
-            if(unknownPathPrediction[lastChar] != Grids[j].index){
+            if (unknownPathPrediction[lastChar] != Grids[j].index) {
               unknownPathPrediction = unknownPathPrediction.concat(Grids[j].index);
             }
-          }
-          else{
+          } else {
             unknownPathPrediction = unknownPathPrediction.concat(Grids[j].index);
           }
         }
       }
     }
   }
-//  console.log("unknown path with rep. " + unknownPath);
-//  console.log("unknown path without rep. " + unknownPathPrediction);
+  //  console.log("unknown path with rep. " + unknownPath);
+  //  console.log("unknown path without rep. " + unknownPathPrediction);
 }
 var durationsStr = '';
 
@@ -799,6 +826,7 @@ function sendSta(grid, stimuli, arr) {
   return path;
 }
 
+// calculating the difference between two strings
 function levenshtein(a, b) {
   if (a.length === 0) {
     return b.length;
@@ -840,14 +868,19 @@ function levenshtein(a, b) {
 var result = '';
 var similarityRate_A, similarityRate_C;
 
+// We make the path comparisons between unknown-autistic and unknown-control.
+// Then we compare these two results to make a prediction. Result is sent to the visualization.
 function prediction(unknown, autistic, control, gridX, gridY) {
   result = '';
-  printResult='';
+  printResult = '';
   var comparisonUnknownAutistic = levenshtein(unknown, autistic);
   var comparisonUnknownControl = levenshtein(unknown, control);
+
+  // Similarity rate is calculated based on the necessary changes and longer string's length
   var similarityRate;
   similarityRate_A = 1 - (comparisonUnknownAutistic / Math.max(unknown.length, autistic.length));
   similarityRate_C = 1 - (comparisonUnknownControl / Math.max(unknown.length, control.length));
+
   if (comparisonUnknownControl < comparisonUnknownAutistic) {
     console.log("CONTROL " + similarityRate_C);
     similarityRate_C = 100 * similarityRate_C;
@@ -867,6 +900,7 @@ function prediction(unknown, autistic, control, gridX, gridY) {
   visualize(unknownPath, autistic, control, gridX, gridY);
 }
 
+// Disable the submit button of Modeling until all boxes are filled and all inputs are selected
 $(document).ready(function() {
   validate();
   $('#inputfile, #inputfile1, #model, #stimuli').change(validate);
@@ -883,6 +917,7 @@ function validate() {
   }
 }
 
+// Calculate the size of the uploaded image before submit
 document.getElementById("screenshot").addEventListener('change', function() {
   //Read the contents of Image File.
   var reader = new FileReader();
@@ -902,14 +937,14 @@ var ImageDone = function(event) {
   image.onload = function() {
     height = image.height;
     width = image.width;
-  //  console.log(height + " " + width);
+    //  console.log(height + " " + width);
   };
   image.src = event.target.result;
 };
 var myInterval;
 
 function StopInterval() {
-  clearInterval(myInterval);  //Stops visualization animation
+  clearInterval(myInterval); //Stops visualization animation
 }
 
 
@@ -940,15 +975,15 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   bckgrnd = bckgrnd.split("\\");
   var wrtPrmt = 0;
   var backgroundSet = '';
-  for(var qw = 0; qw < bckgrnd.length; qw++){
-    if(bckgrnd[qw] === "CPS"){
+  for (var qw = 0; qw < bckgrnd.length; qw++) {
+    if (bckgrnd[qw] === "CPS") {
       backgroundSet = backgroundSet.concat("\\localhost/CPS");
       wrtPrmt = 1;
     }
-    if(wrtPrmt & bckgrnd[qw] != "CPS"){
+    if (wrtPrmt & bckgrnd[qw] != "CPS") {
       backgroundSet = backgroundSet.concat(bckgrnd[qw]);
     }
-    if(qw != bckgrnd.length - 1){
+    if (qw != bckgrnd.length - 1) {
       backgroundSet = backgroundSet.concat("/");
     }
   }
@@ -1285,7 +1320,9 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   };
 
   network = new vis.Network(container, data, options);
-  var scaleOption = { scale : 1 };
+  var scaleOption = {
+    scale: 1
+  };
   network.moveTo(scaleOption);
 
   if (document.getElementById("element")) {
@@ -1295,10 +1332,9 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   var element = document.createElement("div");
   element.setAttribute("id", "element");
   var tempArray = result.split(",");
-  if(tempArray[0] === "Control"){
+  if (tempArray[0] === "Control") {
     element.appendChild(document.createTextNode("Result: " + tempArray[0] + " (Not-Autistic)"));
-  }
-  else{
+  } else {
     element.appendChild(document.createTextNode("Result: " + tempArray[0]));
   }
   element.appendChild(document.createElement('br'));
@@ -1656,7 +1692,9 @@ function displayCustomizedPaths() {
     }
   };
   network = new vis.Network(container, data, options);
-  var scaleOption = { scale : 1 };
+  var scaleOption = {
+    scale: 1
+  };
   network.moveTo(scaleOption);
   var tempElem = document.getElementById("element");
   tempElem.remove();
