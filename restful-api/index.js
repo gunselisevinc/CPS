@@ -43,7 +43,7 @@ const multer = require('multer');
 // Destination of the uploaded image with a new name
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, 'C:\\Users\\senas\\github\\htdocs\\CPS\\restful-api\\model-image');
+    cb(null, 'FILL HERE WITH THE PATH OF ......htdocs//CPS//.... FOR STIMULI IMAGE SAVING FILE');
   },
   filename: function(req, file, cb) {
     cb(null, Date.now() + file.originalname);
@@ -144,7 +144,7 @@ app.delete('/modelRemove/:model_name', (req, res) => {
 app.get('/imageRemove/:image_name/:extension', (req, res) => {
   let name = req.params.image_name;
   let extension = req.params.extension;
-  let path = "C:/Users/senas/github/htdocs/CPS/restful-api/model-image/" + name + "." + extension;
+  let path = "FILL HERE WITH THE PATH OF ......htdocs//CPS//.... FOR STIMULI IMAGE SAVING FILE" + name + "." + extension;
   fs.unlinkSync(path);
   res.send(JSON.stringify({
     "status": 200,

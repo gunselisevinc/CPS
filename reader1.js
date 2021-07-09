@@ -35,7 +35,7 @@ var dropdown_control = 0;
 var dropdown_stimulis = new Array();
 var stimuli_array = new Array();
 
-//Triggerred when a file is uploaded to Autistic Group, Input File Read
+//Triggerred when a file is uploaded to Autistic Group in Modelling page, Input File Read
 document.getElementById('inputfile').addEventListener('change', function() {
   autistic_stimulis = [];
   for (var z = 0; this.files.length > z; z++) {
@@ -65,8 +65,6 @@ var FileDone = function(event) {
   enable_control = enable_control + 1;
   if (enable_autistic >= 1) {
     document.getElementById("model").disabled = false;
-    //      document.getElementById("height").disabled = false;
-    //      document.getElementById("width").disabled = false;}
     //enable inputs end
   }
 
@@ -91,7 +89,7 @@ var FileDone = function(event) {
           addedAlready = 0;
         }
       }
-      if (addedAlready & temp[5].startsWith("http")) {
+      if (addedAlready) {
         var len = autistic_stimulis.length;
         autistic_stimulis[len] = temp[5];
       }
@@ -145,6 +143,7 @@ var FileDone = function(event) {
         fileData_Autistic[tmp][0][0].timeStamp = temp[1];
       }
     }
+    console.log(fileData_Autistic);
   }
   if (ID_finder === 1) {
     counter_autistic = counter_autistic - 1;
@@ -168,7 +167,7 @@ var FileDone = function(event) {
   //dropdown stimuli array end
 }
 
-//Triggerred when a file is uploaded to Autistic Group, Input File Read
+//Triggerred when a file is uploaded to Control Group in Modelling page, Input File Read
 document.getElementById('inputfile1').addEventListener('change', function() {
   control_stimulis = [];
   for (var z = 0; this.files.length > z; z++) {
@@ -221,13 +220,14 @@ var FileDone2 = function(event) {
           addedAlready = 0;
         }
       }
-      if (addedAlready & temp[5].startsWith("http")) {
+      if (addedAlready) {
         var len = control_stimulis.length;
         control_stimulis[len] = temp[5];
       }
 
       ID_finder = 0;
       Part_finder = 0;
+      //Array for input data starts
       for (var j = 0; fileData_Control.length > j; j++) {
         if (fileData_Control[j][0][0].stimuliName === temp[5]) {
           for (var a = 0; a < fileData_Control[j].length; a++) {
@@ -281,6 +281,7 @@ var FileDone2 = function(event) {
     counter_control = counter_control - 1;
   }
   ID_finder = 1;
+  //Array for input data ends
   //dropdown stimuli array start
   dropdown_control = 1;
   for (var i = 0; i < control_stimulis.length; i++) {
@@ -300,9 +301,10 @@ var FileDone2 = function(event) {
 }
 
 
-
+//Comes here when create button is pressed in Modelling page
 function read() {
   var stimuli_array = new Array();
+  //Takes the inputs from the Modelling page
   var stimuli_name = document.getElementById("selectStimuli").value;
   var model_name = document.getElementById("model").value;
   var gridSizeX = document.getElementById("gridX").value;
@@ -312,60 +314,20 @@ function read() {
   if ($(permission).is(':checked')) {
     storePermit = true;
   }
-  console.log(storePermit);
-
+  //Clears the input boxes contents in the Modelling page
   document.getElementById("model").value = "";
   document.getElementById("selectStimuli").value = "";
-  /*
-  if (control_stimulis.length > autistic_stimulis.length) {
-    for (var i = 0; i < control_stimulis.length; i++) {
-      for (var j = 0; j < autistic_stimulis.length; j++) {
-        if (control_stimulis[i] === autistic_stimulis[j]) {
-          var tempo = stimuli_array.length;
-          stimuli_array[tempo] = control_stimulis[i];
-        }
-      }
-    }
-  } else {
-    for (var i = 0; i < autistic_stimulis.length; i++) {
-      for (var j = 0; j < control_stimulis.length; j++) {
-        if (control_stimulis[j] === autistic_stimulis[i]) {
-          var tempo = stimuli_array.length;
-          stimuli_array[tempo] = control_stimulis[j];
-        }
-      }
-    }
-  }*/
 
   if (fileData_Autistic.length) {
-    //fileWrite = fileWrite.concat(model_name);
-    //fileWrite = fileWrite.concat(",");
     var grid = addGrid(1);
     var path_autistic = sendSta(grid, stimuli_name, fileData_Autistic);
-    console.log("Autistic path: " + path_autistic);
-    //  fileWrite = fileWrite.concat(stimuli_name);
-    //  fileWrite = fileWrite.concat(",");
-    //  fileWrite = fileWrite.concat(path_autistic);
-    //  fileWrite = fileWrite.concat(",");
-    //  fileWrite = fileWrite.concat(durationsStr);
-    //  fileWrite = fileWrite.concat(",");
     durationsStr = '';
   }
+  //If grid is already created, it is not created again. For this it sends 0.
   if (fileData_Control.length) {
     var grid = addGrid(0);
     var path_control = sendSta(grid, stimuli_name, fileData_Control);
-    console.log("Control path: " + path_control);
-    //    fileWrite = fileWrite.concat(path_control);
-    //    fileWrite = fileWrite.concat(",");
-    //  fileWrite = fileWrite.concat(durationsStr);
-    //  fileWrite = fileWrite.concat(",");
-    //    fileWrite = fileWrite.concat(gridSizeX);
-    //    fileWrite = fileWrite.concat(",");
-    //    fileWrite = fileWrite.concat(gridSizeY);
-    //    fileWrite = fileWrite.concat(",\n");
     durationsStr = '';
-    //    console.log(fileWrite);
-    //    console.log(storePermit);
 
     //create a flag for whether we store the model permanently or not
     var flag = 0;
@@ -400,12 +362,9 @@ function read() {
       .then((json) => {
         var modelStr = JSON.stringify(json)
         const modelDB = JSON.parse(modelStr);
-        console.log(modelDB);
-        //console.log(modelDB[1].model_name);
 
         var check = 0;
         var len = modelDB.length;
-        console.log(len);
 
         for (var i = 0; i < len; i++) {
           if (modelDB[i].model_name === model_name) {
@@ -438,9 +397,12 @@ var newComerData = new Array();
 var myModel = "";
 var unknownPathPrediction = "";
 
+
+//Comes here when submit button is pressed in the Prediction page
 function newComerRead(file) {
-  unknownPath = "";
+  unknownPath = '';
   unknownPathPrediction = "";
+  newComerData = new Array();
   //If animation is running when new prediction is requested, it first stops the animation
   StopInterval();
   myModel = document.getElementById("selectModel").value;
@@ -450,14 +412,14 @@ function newComerRead(file) {
     var fileContent = event.target.result;
     var lines = fileContent.split(/\n/);
 
-    var fileHeaders = new Array();
+    var fileHeaders = new Array(); //Stores (FixationIndex,Timestamp,FixationDuration,MappedFixationPointX,MappedFixationPointY,StimuliName)
     fileHeaders = lines[0].split(/\t/);
 
     for (var i = 1; lines.length > i; i++) {
       var temp = lines[i].split(/\t/);
       if (temp != "") {
         var stimuliFound = 1;
-        if (newComerData.length === 0) {
+        if (newComerData.length === 0) { //If array is empty
           newComerData[0] = new Array();
           newComerData[0][0] = new Object();
           newComerData[0][0].x = temp[3];
@@ -466,7 +428,7 @@ function newComerRead(file) {
           newComerData[0][0].stimuliName = temp[5];
         } else {
           for (var j = 0; j < newComerData.length; j++) {
-            if (newComerData[j][0].stimuliName === temp[5]) {
+            if (newComerData[j][0].stimuliName === temp[5]) {   //If array for this stimuli alread created
               tmp = newComerData[j].length;
               newComerData[j][tmp] = new Object();
               newComerData[j][tmp].x = temp[3];
@@ -655,8 +617,11 @@ function addGrid(checker) {
 
 var unknownPath = '';
 
+
+//Creates single path for the new comer user
 function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY) {
 
+  unknownPath = '';
   var startX = 0;
   var startY = 0;
   var lengthX = 0;
@@ -689,8 +654,9 @@ function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY) {
   var indexP;
   var indexFound = 0;
   for (var i = 0; i < newComerData.length; i++) {
+    //REmoves new line at the end of the line
     newComerData[i][0].stimuliName = newComerData[i][0].stimuliName.replace('\r', '');
-    if (newComerData[i][0].stimuliName === stimuliUsed) {
+    if (newComerData[i][0].stimuliName === stimuliUsed) { //Finds the model stimuli's index in the new comer array
       indexP = i;
       indexFound = 1;
     }
@@ -698,11 +664,12 @@ function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY) {
   if (indexFound) {
     for (var i = 0; i < newComerData[indexP].length; i++) {
       for (var j = 0; j < Grids.length; j++) {
+        //Finds which x-y pair is in the which index one by one and creates a string path
         var op_y = Grids[j].startY + Grids[j].lengthY;
         var op_x = Grids[j].startX + Grids[j].lengthX;
         if ((Grids[j].startY <= newComerData[indexP][i].y) & (newComerData[indexP][i].y <= op_y) & (Grids[j].startX <= newComerData[indexP][i].x) & (newComerData[indexP][i].x <= op_x)) {
           unknownPath = unknownPath.concat(Grids[j].index);
-          if (unknownPathPrediction.length > 0) {
+          if (unknownPathPrediction.length > 0) { //Removes repetations
             var lastChar = unknownPathPrediction.length - 1;
             if (unknownPathPrediction[lastChar] != Grids[j].index) {
               unknownPathPrediction = unknownPathPrediction.concat(Grids[j].index);
@@ -714,11 +681,10 @@ function singlePathCreator(width, height, stimuliUsed, gridSizeX, gridSizeY) {
       }
     }
   }
-  //  console.log("unknown path with rep. " + unknownPath);
-  //  console.log("unknown path without rep. " + unknownPathPrediction);
 }
 var durationsStr = '';
 
+//STA connection and response function
 function sendSta(grid, stimuli, arr) {
   var indx = -1;
   var points = new Array();
@@ -730,6 +696,7 @@ function sendSta(grid, stimuli, arr) {
       indx = i;
     }
   }
+  //Creates STA's required default data
   for (var i = 0; i < arr[indx].length; i++) {
     for (var j = 0; j < arr[indx][i].length; j++) {
       var test = new vis.DataSet();
@@ -758,7 +725,7 @@ function sendSta(grid, stimuli, arr) {
     rwData[t] = points;
     points = [];
   }
-
+  //Sets parameters for STA
   var daccuracy = document.getElementById("daccuracy").value;
   var sizeOfScreen = document.getElementById("screenSize").value;
   var distance = document.getElementById("distance").value;
@@ -791,6 +758,7 @@ function sendSta(grid, stimuli, arr) {
 
 
   var dataResponse;
+  //STA connection
   $.ajax({
     type: "POST",
     url: setting["staAddress"],
@@ -803,6 +771,7 @@ function sendSta(grid, stimuli, arr) {
     },
     async: false
   });
+  //Takes STA response
   dataResponse = JSON.parse(dataResponse);
   dataResponse = JSON.stringify(dataResponse);
   //Creates path string and durations array from the STA response
@@ -820,7 +789,6 @@ function sendSta(grid, stimuli, arr) {
     durations[t_mp] = durations[t_mp].replaceAll(']', '');
     for (var xr = 0; xr < durations.length; xr++) {
       durationsStr = durationsStr.concat(String(durations[xr]) + " ");
-      console.log(durations[xr]);
     }
   }
   return path;
@@ -828,6 +796,7 @@ function sendSta(grid, stimuli, arr) {
 
 // calculating the difference between two strings
 function levenshtein(a, b) {
+  console.log("a: " + a);
   if (a.length === 0) {
     return b.length;
   }
@@ -937,7 +906,6 @@ var ImageDone = function(event) {
   image.onload = function() {
     height = image.height;
     width = image.width;
-    //  console.log(height + " " + width);
   };
   image.src = event.target.result;
 };
@@ -961,19 +929,21 @@ var gridY_c;
 
 //Visualisation
 function visualize(unknown, autistic, control, gridX, gridY) {
-  n = [];
-  e = [];
+  n = [];   //nodes array
+  e = [];   //edges array
+  //Sets checkboxes under the visualization as checked
   document.getElementById("autisticBox").checked = true;
   document.getElementById("controlBox").checked = true;
   document.getElementById("unknownBox").checked = true;
   document.getElementById("output").style.display = "block";
-  window.scrollTo(1000, document.body.scrollHeight);
+  window.scrollTo(1000, document.body.scrollHeight);  //scrolls the window for result
   startNode = new Array();
   var startEdge = new Array();
   container = document.getElementById("mynetwork");
   var bckgrnd = objectDB[0].image_path;
   bckgrnd = bckgrnd.split("\\");
   var wrtPrmt = 0;
+  //Edits for background path coming from database
   var backgroundSet = '';
   for (var qw = 0; qw < bckgrnd.length; qw++) {
     if (bckgrnd[qw] === "CPS") {
@@ -987,10 +957,16 @@ function visualize(unknown, autistic, control, gridX, gridY) {
       backgroundSet = backgroundSet.concat("/");
     }
   }
+  //Sets visualization background
   container.style.backgroundImage = "url('" + backgroundSet + "')";
   var h = height;
   var w = width;
+  //If background image is too big
   if (w > 1000) {
+    h = h / 2;
+    w = w / 2;
+  }
+  if (h > 1000) {
     h = h / 2;
     w = w / 2;
   }
@@ -998,6 +974,8 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   container.style.width = w;
 
   var margin = w / 2;
+
+  //Sets checkboxes posisitons
   document.getElementById("autisticBox").style.margin = "0px 0px 0px " + (margin - 180) + "px";
   document.getElementById("speedLabel").style.margin = "0px 0px 0px " + (margin - 122) + "px";
 
@@ -1006,10 +984,12 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   gridX_c = parseInt(gridX);
   gridY_c = parseInt(gridY);
   index = 1;
-  startNode[0] = index;
+  startNode[0] = index; //Holds autistic path start node index
   indexHolder[0] = index;
 
+  //Creates visual path for autistic
   for (var i = 0; i < autistic.length; i++) {
+    //Converts string chars to row and column numbers
     var num = autistic.charCodeAt(i);
     num = num - 65;
     var hh = parseInt(gridY);
@@ -1017,9 +997,10 @@ function visualize(unknown, autistic, control, gridX, gridY) {
     row = Math.floor(row);
     var g = parseInt(gridY);
     var column = num % g;
+    //Finds x-y coordinates randomly in an AOI
     var y = row * rowLength + Math.floor(Math.random() * rowLength);
     var x = column * columnLength + Math.floor(Math.random() * columnLength);
-    if (index == startNode[0]) {
+    if (index == startNode[0]) { //Creates node
       n.push({
         id: index,
         x: x,
@@ -1027,7 +1008,6 @@ function visualize(unknown, autistic, control, gridX, gridY) {
         color: "#D20606",
         border: '#6E1515',
         size: 10,
-        //        label: String.fromCharCode(num+65),
       });
     } else {
       n.push({
@@ -1036,10 +1016,9 @@ function visualize(unknown, autistic, control, gridX, gridY) {
         y: y,
         color: "#D20606",
         size: 5,
-        //        label: String.fromCharCode(num+65),
       });
     }
-    e.push({
+    e.push({  //Creates edge
       id: index,
       from: (index - 1),
       to: index,
@@ -1049,8 +1028,9 @@ function visualize(unknown, autistic, control, gridX, gridY) {
     });
     index++;
   }
-  startNode[1] = index;
+  startNode[1] = index; //Holds control path start node index
   indexHolder[1] = index;
+  //Does the same steps as autistic path
   for (var i = 0; i < control.length; i++) {
     var num = control.charCodeAt(i);
     num = num - 65;
@@ -1092,8 +1072,9 @@ function visualize(unknown, autistic, control, gridX, gridY) {
     }
     index++;
   }
-  startNode[2] = index;
+  startNode[2] = index; //Holds control path start node index
   indexHolder[2] = index;
+  //Does the same steps as autistic path
   for (var i = 0; i < unknown.length; i++) {
     var num = unknown.charCodeAt(i);
     num = num - 65;
@@ -1134,9 +1115,9 @@ function visualize(unknown, autistic, control, gridX, gridY) {
     }
     index++;
   }
-  startNode[3] = index;
+  startNode[3] = index; //Holds grid start node index
   indexHolder[3] = index;
-
+  //Creates the grid
   for (var i = 0; i < parseInt(gridX); i++) {
     for (var j = 0; j < parseInt(gridY); j++) {
       index++;
@@ -1146,7 +1127,7 @@ function visualize(unknown, autistic, control, gridX, gridY) {
         id: index,
         x: x,
         y: y,
-        color: "#ffffff00",
+        color: "#ffffff00", //Grids nodes are invisible
         size: 25,
       })
       index++;
@@ -1156,10 +1137,10 @@ function visualize(unknown, autistic, control, gridX, gridY) {
         id: index,
         x: x,
         y: y,
-        color: "#ffffff00",
+        color: "#ffffff00", //Grids nodes are invisible
         size: 25,
       })
-      e.push({
+      e.push({    //Only the edges are visible
         from: (index - 1),
         to: (index),
         width: 4,
@@ -1175,6 +1156,7 @@ function visualize(unknown, autistic, control, gridX, gridY) {
       index++;
       var y = i * rowLength;
       var x = j * columnLength;
+      //Last column of the grid starts
       n.push({
         id: index,
         x: x,
@@ -1269,6 +1251,7 @@ function visualize(unknown, autistic, control, gridX, gridY) {
     })
   }
   index++;
+  //Last column of the grid ends
   startNode[4] = index;
 
 
@@ -1277,15 +1260,14 @@ function visualize(unknown, autistic, control, gridX, gridY) {
 
   container = document.getElementById("mynetwork");
 
-  var data = {
+  var data = {    //Creates visualization data
     nodes: nodes,
     edges: edges,
   }
-  var options = {
+  var options = {   //Creates visualization settings
     nodes: {
       shape: "dot",
       size: 5,
-      //color: "#cc00ff",
       fixed: {
         y: true,
         x: true,
@@ -1318,13 +1300,13 @@ function visualize(unknown, autistic, control, gridX, gridY) {
       dragView: false // do not allow dragging
     }
   };
-
+  //Puts visualization
   network = new vis.Network(container, data, options);
   var scaleOption = {
     scale: 1
   };
   network.moveTo(scaleOption);
-
+  //Prediction result writing to HTML part starts
   if (document.getElementById("element")) {
     var tempElem = document.getElementById("element");
     tempElem.remove();
@@ -1342,8 +1324,6 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   element.appendChild(document.createTextNode("Similarity to Control (Not Autistic) Group: %" + similarityRate_C.toFixed(2)));
   element.appendChild(document.createElement('br'));
   element.appendChild(document.createTextNode("Similarity to Autistic Group: %" + similarityRate_A.toFixed(2)));
-  //tempArray2 = tempArray[1].split(".");
-  //element.appendChild(document.createTextNode("Certainty: %" + tempArray2[0] + "." + tempArray2[1][0] + tempArray2[1][1]));
   element.style.color = "white";
   element.style.fontSize = "24px";
   if (parseInt(objectDB[0].width) > 1000) {
@@ -1353,20 +1333,26 @@ function visualize(unknown, autistic, control, gridX, gridY) {
     var pl = parseInt(objectDB[0].width) + 100;
     var pl2 = -parseInt(objectDB[0].height) / 2 - 130;;
   }
-  console.log(pl + " " + pl2);
   element.style.margin = pl2.toString() + "px 0px 0px " + pl.toString() + "px";
   document.getElementById('output').appendChild(element);
+  //Prediction result writing to HTML part ends
 }
 
+//Comes here when a checkbox is checked or unchecked
 function displayCustomizedPaths() {
   var nn = new Array();
   var ee = new Array();
   var i_tracker = 0;
   index = 1;
-  StopInterval();
+  StopInterval(); //If animation is running, stops it first
+  //Same settings as before
   var h = objectDB[0].height;
   var w = objectDB[0].width;
   if (w > 1000) {
+    h = h / 2;
+    w = w / 2;
+  }
+  if (h > 1000) {
     h = h / 2;
     w = w / 2;
   }
@@ -1376,12 +1362,15 @@ function displayCustomizedPaths() {
   gridX_c = gridX;
   var gridY = objectDB[0].grid_y;
   gridY_c = gridY;
+
+  //Takes checkbox values
   var autisticCheckBox = document.getElementById("autisticBox");
   var controlCheckBox = document.getElementById("controlBox");
   var unknownCheckBox = document.getElementById("unknownBox");
   startNode[0] = -1;
   if ($(autisticCheckBox).is(':checked')) {
     startNode[0] = index;
+    //Same as the visualize() function
     for (var i = 0; i < objectDB[0].autistic_path.length; i++) {
       var num = objectDB[0].autistic_path.charCodeAt(i);
       num = num - 65;
@@ -1422,6 +1411,7 @@ function displayCustomizedPaths() {
     }
   }
   startNode[1] = -1;
+  //Same as the visualize() function
   if ($(controlCheckBox).is(':checked')) {
     startNode[1] = index;
     for (var i = 0; i < objectDB[0].control_path.length; i++) {
@@ -1468,6 +1458,7 @@ function displayCustomizedPaths() {
     }
   }
   startNode[2] = -1;
+  //Same as the visualize() function
   if ($(unknownCheckBox).is(':checked')) {
     startNode[2] = index;
     for (var i = 0; i < unknownPath.length; i++) {
@@ -1512,7 +1503,7 @@ function displayCustomizedPaths() {
     }
   }
   startNode[3] = index;
-
+//Same as the visualize() function
   for (var i = 0; i < parseInt(gridX); i++) {
     for (var j = 0; j < parseInt(gridY); j++) {
       index++;
@@ -1657,7 +1648,6 @@ function displayCustomizedPaths() {
     height: h + 'px',
     nodes: {
       shape: "dot",
-      //  color: '#cc00ff',
       size: 5,
       fixed: {
         y: true,
@@ -1691,11 +1681,12 @@ function displayCustomizedPaths() {
       dragView: false // do not allow dragging
     }
   };
-  network = new vis.Network(container, data, options);
+  network = new vis.Network(container, data, options); //Creates visualization
   var scaleOption = {
     scale: 1
   };
   network.moveTo(scaleOption);
+  //Same as the visualize() function
   var tempElem = document.getElementById("element");
   tempElem.remove();
   var element = document.createElement("div");
@@ -1721,7 +1712,10 @@ function displayCustomizedPaths() {
   document.getElementById('output').appendChild(element);
 }
 
+
+//Comes here when animate button is pressed in the prediction page
 function animation() {
+  //First makes all nodes and edges invisible
   for (t = 1; t < startNode[3]; t++) {
     nodes.update({
       id: t,
@@ -1732,6 +1726,8 @@ function animation() {
     });
   }
   var tmp_index = startNode[3];
+  //Only grid is invisible
+  //Grid creation starts
   for (var i = 0; i < parseInt(gridX_c); i++) {
     for (var j = 0; j < parseInt(gridY_c); j++) {
       tmp_index++;
@@ -1816,7 +1812,9 @@ function animation() {
       },
     }]);
   }
-  StopInterval();
+  //Grid creation ends
+  StopInterval(); //Stops if there is a running animation
+  //Takes and stores autistic, control, unknown nodes start indexes
   var i = startNode[0];
   var j = startNode[1];
   var k = startNode[2];
@@ -1832,6 +1830,7 @@ function animation() {
   var mySpeed = document.getElementById("speedValue").value;
   mySpeed = mySpeed * 1000 //Convert to milliseconds
   myInterval = setInterval(function() {
+    //Animation stop condition
     if (((i === i_end) || (i == -1)) && ((j === j_end) || (j == -1)) && ((k === startNode[3]) || (k == -1))) {
       nodes.update({
         id: i,
@@ -1851,7 +1850,7 @@ function animation() {
       StopInterval();
     } else {
       if ((i != i_end - 1) && (i != -1)) {
-        if (i == startNode[0])
+        if (i == startNode[0])   //Makes nodes visible one by one and creates edges for autistic until control start node index is reached
           nodes.update({
             id: i,
             color: "#D20606",
@@ -1879,7 +1878,7 @@ function animation() {
         i = i + 1;
       }
       if ((j != j_end - 1) && (j != -1)) {
-        if (j == startNode[1])
+        if (j == startNode[1])  //Makes nodes visible one by one and creates edges for control until unknown start node index is reached
           nodes.update({
             id: j,
             color: "#093E91",
@@ -1907,7 +1906,7 @@ function animation() {
         j = j + 1;
       }
       if ((k != startNode[3] - 1) && (k != -1)) {
-        if (k == startNode[2])
+        if (k == startNode[2])  //Makes nodes visible one by one and creates edges for unknown until grid start node index is reached
           nodes.update({
             id: k,
             color: "#15910A",
@@ -1936,5 +1935,5 @@ function animation() {
       }
       network.redraw;
     }
-  }, mySpeed);
+  }, mySpeed);  //Runs this part every mySpeed seconds until StopInterval() is called.
 }
