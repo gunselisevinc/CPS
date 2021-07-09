@@ -190,6 +190,7 @@
       var objectStr = '';
       var json = new Object();
       modal.style.display = "block";
+      //Gets the model list from the database and puts them in tabular format
       var getDataURl = 'http://localhost:5000/models/';
       fetch(getDataURl)
         .then(model => model.json())
