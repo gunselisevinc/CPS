@@ -118,10 +118,10 @@
       .then(model => model.json())
       .then((json) => {
         objectStr = JSON.stringify(json);
-        console.log(objectStr);
+        //console.log(objectStr);
         var objectList0 = JSON.parse(objectStr);
         var objectList = objectList0.results;
-        console.log(objectList[0]);
+        //console.log(objectList[0]);
         for (var i = 0; i < objectList.length; i++) {
           console.log(objectList[i]);
           var opt = objectList[i].model_name;
@@ -198,8 +198,13 @@
       fetch(getDataURl)
         .then(model => model.json())
         .then((json) => {
-          objectStr = JSON.stringify(json)
-          var objectDB = JSON.parse(objectStr);
+          console.log(json);
+          objectStr = JSON.stringify(json);
+          console.log(objectStr);
+          var objectDB0 = JSON.parse(objectStr);
+          console.log(objectDB);
+          var objectDB = objectDB0.results;
+          console.log(objectDB);
           if(visit == 0){
             size = objectDB.length;
             visit++;

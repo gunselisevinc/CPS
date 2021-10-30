@@ -143,7 +143,7 @@ var FileDone = function(event) {
         fileData_Autistic[tmp][0][0].timeStamp = temp[1];
       }
     }
-    console.log(fileData_Autistic);
+    //console.log(fileData_Autistic);
   }
   if (ID_finder === 1) {
     counter_autistic = counter_autistic - 1;
@@ -364,7 +364,7 @@ function read() {
 
         const modelDB0 = JSON.parse(modelStr);
         var modelDB = modelDB0.results;
-        console.log(modelDB);
+        //console.log(modelDB);
         //console.log(modelDB[1].model_name);
 
 
@@ -480,11 +480,9 @@ function newComerRead(file) {
   fetch(getDataURl)
     .then(model => model.json())
     .then((json) => {
-      var objectStr = JSON.stringify(json)
+      var objectStr = JSON.stringify(json);
       var objectDB0 = JSON.parse(objectStr);
-      objectDB = objectDB0.results;
-      console.log(objectDB);
-      console.log(objectDB[0].model_name);
+      objectDB = objectDB0;
       width = objectDB[0].width;
       height = objectDB[0].height;
 
@@ -511,17 +509,15 @@ function newComerRead(file) {
           var deleteImageNameExtension = deleteImage.substring(index + 1);
           var imageRemoveUrl = 'https://cpsrestfulapi.herokuapp.com/imageRemove/' + deleteImageName + "/" + deleteImageNameExtension;*/
 
-          var imageRemoveUrl = "https://cpsrestfulapi.herokuapp.com/deleteClouinaryImage";
+          var public_id = objectDB[0].description.toString();
+          var imageRemoveUrl = "https://cpsrestfulapi.herokuapp.com/deleteCloudinaryImage/" + public_id;
 
           // its stored image should also be deleted from the model-image file
           fetch(imageRemoveUrl, {
-              method: 'GET',
+              method: 'POST',
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-              },
-              body: {
-                'public_id': objectDB[0].description
               }
             })
             .then(response => {
@@ -952,7 +948,7 @@ function visualize(unknown, autistic, control, gridX, gridY) {
   var startEdge = new Array();
   container = document.getElementById("mynetwork");
   var bckgrnd = objectDB[0].image_path;
-  bckgrnd = bckgrnd.split("\\");
+  /*bckgrnd = bckgrnd.split("\\");
   var wrtPrmt = 0;
   //Edits for background path coming from database
   var backgroundSet = '';
@@ -967,9 +963,9 @@ function visualize(unknown, autistic, control, gridX, gridY) {
     if (qw != bckgrnd.length - 1) {
       backgroundSet = backgroundSet.concat("/");
     }
-  }
+  }*/
   //Sets visualization background
-  container.style.backgroundImage = "url('" + backgroundSet + "')";
+  container.style.backgroundImage = "url('" + bckgrnd + "')";
   var h = height;
   var w = width;
   //If background image is too big
