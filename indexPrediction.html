@@ -113,13 +113,17 @@
     document.getElementById("myBtn1").style.margin = "0px 0px 0px 56px";
 
     var select = document.getElementById("selectModel");
-    var getDataURl = 'http://localhost:5000/models/';
+    var getDataURl = 'https://cpsrestfulapi.herokuapp.com/models/';
     fetch(getDataURl)
       .then(model => model.json())
       .then((json) => {
-        objectStr = JSON.stringify(json)
-        var objectList = JSON.parse(objectStr);
+        objectStr = JSON.stringify(json);
+        console.log(objectStr);
+        var objectList0 = JSON.parse(objectStr);
+        var objectList = objectList0.results;
+        console.log(objectList[0]);
         for (var i = 0; i < objectList.length; i++) {
+          console.log(objectList[i]);
           var opt = objectList[i].model_name;
           var el = document.createElement("option");
           el.textContent = opt;
@@ -190,7 +194,7 @@
       var objectStr = '';
       var json = new Object();
       modal.style.display = "block";
-      var getDataURl = 'http://localhost:5000/models/';
+      var getDataURl = 'https://cpsrestfulapi.herokuapp.com/models/';
       fetch(getDataURl)
         .then(model => model.json())
         .then((json) => {
