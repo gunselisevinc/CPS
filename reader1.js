@@ -387,10 +387,10 @@ function read() {
     formData.append('autistic_path', path_autistic);
     formData.append('control_path', path_control);
     formData.append('flag', flag);
-    formData.append('description', desc);
+    //formData.append('description', desc);
 
     //check model names from CPS database to be sure about uniqueness
-    fetch('http://localhost:5000/models', {
+    fetch('https://cpsrestfulapi.herokuapp.com/models', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -399,7 +399,8 @@ function read() {
       .then(models => models.json())
       .then((json) => {
         var modelStr = JSON.stringify(json)
-        const modelDB = JSON.parse(modelStr);
+        const modelDB0 = JSON.parse(modelStr);
+        var modelDB = modelDB0.results;
         console.log(modelDB);
         //console.log(modelDB[1].model_name);
 
@@ -416,7 +417,7 @@ function read() {
 
         // if model name is unique, add a new row to CPS database Models table
         if (check === 0) {
-          fetch('http://localhost:5000/newModel', {
+          fetch('https://cpsrestfulapi.herokuapp.com/newModel', {
               method: 'POST',
               body: formData
             })
@@ -508,13 +509,14 @@ function newComerRead(file) {
   }
 
   // get the requested model object from database by using its name
-  var getDataURl = 'http://localhost:5000/models/' + myModel;
+  var getDataURl = 'https://cpsrestfulapi.herokuapp.com/models/' + myModel;
   console.log(getDataURl);
   fetch(getDataURl)
     .then(model => model.json())
     .then((json) => {
       var objectStr = JSON.stringify(json)
-      objectDB = JSON.parse(objectStr);
+      var objectDB0 = JSON.parse(objectStr);
+      objectDB = objectDB0.results;
       console.log(objectDB);
       console.log(objectDB[0].model_name);
       width = objectDB[0].width;
@@ -537,11 +539,13 @@ function newComerRead(file) {
 
         // if model is not stored permanently, it will be deleted after the first use.
         if (objectDB[0].flag === 0) {
-          var deleteImage = objectDB[0].description;
+          /*var deleteImage = objectDB[0].description;
           var index = deleteImage.lastIndexOf(".");
           var deleteImageName = deleteImage.substring(0, index);
           var deleteImageNameExtension = deleteImage.substring(index + 1);
-          var imageRemoveUrl = 'http://localhost:5000/imageRemove/' + deleteImageName + "/" + deleteImageNameExtension;
+          var imageRemoveUrl = 'https://cpsrestfulapi.herokuapp.com/imageRemove/' + deleteImageName + "/" + deleteImageNameExtension;*/
+
+          var imageRemoveUrl = "https://cpsrestfulapi.herokuapp.com/deleteClouinaryImage";
 
           // its stored image should also be deleted from the model-image file
           fetch(imageRemoveUrl, {
@@ -549,6 +553,9 @@ function newComerRead(file) {
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
+              },
+              body: {
+                'public_id': objectDB[0].description
               }
             })
             .then(response => {
@@ -557,7 +564,7 @@ function newComerRead(file) {
             .catch(err => console.log(err));
 
           // delete the model from CPS database Models table
-          var modelRemoveURl = 'http://localhost:5000/modelRemove/' + myModel;
+          var modelRemoveURl = 'https://cpsrestfulapi.herokuapp.com/deleteModel/' + myModel;
           fetch(modelRemoveURl, {
               method: 'DELETE',
               headers: {
@@ -778,7 +785,7 @@ function sendSta(grid, stimuli, arr) {
       tlevel: tlevel,
       hfidelity: h_fidelity
     },
-    staAddress: "http://127.0.0.1:5000"
+    staAddress: "https://senasunar.pythonanywhere.com"
   };
 
   var postData = {
